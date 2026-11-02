@@ -1,4 +1,5 @@
 "use client";
+import VehicleCards from "../VehicleCards";
 import ReviewsList from "../ReviewsList";
 import { useLanguage } from "../site-context";
 export default function Page() {
@@ -29,70 +30,7 @@ export default function Page() {
   <div className="wrap">
     <h2 data-k="carsH">{t("carsH")}</h2>
 
-    <div className="ctiles">
-      <a
-        className="ctile"
-        href="/cars"
-        style={{
-          backgroundImage:
-            "linear-gradient(to top, rgba(0,0,0,.72), rgba(0,0,0,.05)), url('/images/photo-099.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <span>Subaru Crosstrek 4x4</span>
-      </a>
-
-      <a
-        className="ctile"
-        href="/cars"
-        style={{
-          backgroundImage:
-            "linear-gradient(to top, rgba(0,0,0,.72), rgba(0,0,0,.05)), url('/images/photo-102.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <span>Jeep Wrangler</span>
-      </a>
-
-      <a
-        className="ctile"
-        href="/cars"
-        style={{
-          backgroundImage:
-            "linear-gradient(to top, rgba(0,0,0,.72), rgba(0,0,0,.05)), url('/images/photo-108.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <span data-k="carMini">{t("carMini")}</span>
-      </a>
-
-      <a
-        className="ctile"
-        href="/cars"
-        style={{
-          background: "linear-gradient(135deg,#37474f,#90a4ae)",
-        }}
-      >
-        <i>🚘</i>
-        <span data-k="carLux">{t("carLux")}</span>
-      </a>
-
-      <a
-        className="ctile"
-        href="/cars"
-        style={{
-          background: "linear-gradient(135deg,#8e24aa,#ce93d8)",
-        }}
-      >
-        <i>🚗</i>
-        <span data-k="carClassic">{t("carClassic")}</span>
-      </a>
-    </div>
-
-    <p style={{ marginTop: "14px" }}>
+    <VehicleCards /><p style={{ marginTop: "14px" }}>
       <a className="btn" href="/cars" data-k="nCars">
         {t("nCars")}
       </a>

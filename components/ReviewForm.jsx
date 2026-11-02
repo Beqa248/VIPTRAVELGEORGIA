@@ -1,0 +1,7 @@
+"use client";
+import {useState} from 'react';
+import {supabase} from '../lib/supabase';
+export default function ReviewForm(){const [message,setMessage]=useState('');const [busy,setBusy]=useState(false);
+ async function submit(e){e.preventDefault();if(!supabase){setMessage('Review submission is not configured yet.');return;}setBusy(true);setMessage('');const form=e.currentTarget;const f=new FormData(form);const payload={name:String(f.get('name')).trim(),country:String(f.get('country')).trim(),tour:String(f.get('tour')).trim(),rating:Number(f.get('rating')),text:String(f.get('text')).trim(),approved:false};const {error}=await supabase.from('reviews').insert(payload);setBusy(false);if(error)setMessage('Unable to submit review: '+error.message);else{form.reset();setMessage('Thank you! Your review was submitted for approval.');}}
+ return <form onSubmit={submit} className="guest-review-form"><h3>Leave a review</h3><p>Share your experience. Reviews appear after moderation.</p><label>Your name<input name="name" required maxLength={80}/></label><label>Country<input name="country" maxLength={80}/></label><label>Tour<input name="tour" maxLength={120}/></label><label>Rating<select name="rating" defaultValue="5">{[5,4,3,2,1].map(n=><option key={n} value={n}>{n} stars</option>)}</select></label><label>Your review<textarea name="text" required minLength={10} maxLength={1500} rows={4}/></label><button className="btn" disabled={busy}>{busy?'Submitting…':'Submit review'}</button>{message&&<p role="status">{message}</p>}</form>
+}

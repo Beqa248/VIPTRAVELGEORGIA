@@ -2,6 +2,7 @@
 "use client";
 
 import ReviewsList from "../ReviewsList";
+import ReviewForm from "../ReviewForm";
 import { useLanguage } from "../site-context";
 
 export default function Page() {
@@ -12,7 +13,7 @@ export default function Page() {
       <section id="rev" className="why">
         <div className="wrap">
           <h2 data-k="revH">{t("revH")}</h2>
-          <ReviewsList />
+          <ReviewsList /><ReviewForm />
           <p id="gyg" style={{ marginTop: "16px" }}></p>
         </div>
       </section>
