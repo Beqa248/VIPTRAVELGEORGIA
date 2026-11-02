@@ -1,7 +1,0 @@
-// @ts-nocheck
-import Link from 'next/link';
-export const colors = { orange: '#f58200', teal: '#007f73', ink: '#173e39', cream: '#fffaf1' };
-export const card = { background: '#fff', padding: 22, borderRadius: 12, border: '1px solid #eadfcf', marginBottom: 16 };
-export const field = { padding: 12, borderRadius: 8, border: '1px solid #d8c9b9', width: '100%', boxSizing: 'border-box', margin: '7px 0 14px' };
-export const button = { background: colors.orange, color: 'white', border: 0, padding: '12px 17px', borderRadius: 8, cursor: 'pointer', fontWeight: 600 };
-export function Shell({ children, title, lang = 'en' }) { return <main dir={lang === 'he' ? 'rtl' : 'ltr'} style={{ background: colors.cream, minHeight: '100vh', fontFamily: 'Arial,sans-serif', color: colors.ink }}><header style={{ padding: '18px 5%', background: 'white', borderBottom: '3px solid #f58200', display: 'flex', justifyContent: 'space-between', gap: 14, flexWrap: 'wrap' }}><Link href="/" style={{ fontSize: 22, fontWeight: 800, color: colors.orange, textDecoration: 'none' }}>VIPTravelGeorgia</Link><nav style={{ display: 'flex', gap: 15, flexWrap: 'wrap' }}><Link href="/planner">AI Planner</Link><Link href="/custom-tour">Custom tour</Link><Link href="/booking">Booking</Link><Link href="/admin">Admin</Link></nav></header><div style={{ maxWidth: 1020, margin: '0 auto', padding: '35px 18px' }}><h1>{title}</h1>{children}</div></main>; }

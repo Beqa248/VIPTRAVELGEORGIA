@@ -4,7 +4,7 @@ export default function Page() {
     const { t } = useLanguage();
     return (<>
     <div className="" data-p="kazbegi">
-    <div className="banner" id="bn-kazbegi"><div className="wrap"><a className="bk" href="/tours" data-k="back">{t("back")}</a><div><h1 data-k="t11">{t("t11")}</h1><p className="sub" data-k="d11">{t("d11")}</p></div></div></div>
+    <div className="banner" id="bn-kazbegi" style={{ backgroundImage: "url(/images/photo-078.jpg)" }}><div className="wrap"><a className="bk" href="/tours" data-k="back">{t("back")}</a><div><h1 data-k="t11">{t("t11")}</h1><p className="sub" data-k="d11">{t("d11")}</p></div></div></div>
     <section style={{ "paddingTop": "30px" }}><div className="wrap"><div className="gal soft" id="gal10">
     <img src="/images/photo-078.jpg" alt="Green Juta valley with hammocks and the Chaukhi peaks ahead" loading="lazy"/>
     <img src="/images/photo-079.jpg" alt="Trail signpost in Juta pointing to Chaukhi Lake and the pass" loading="lazy"/>

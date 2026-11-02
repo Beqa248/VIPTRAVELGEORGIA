@@ -4,7 +4,7 @@ export default function Page() {
     const { t } = useLanguage();
     return (<>
     <div className="" data-p="tusheti">
-    <div className="banner" id="bn-tusheti"><div className="wrap"><a className="bk" href="/tours" data-k="back">{t("back")}</a><div><h1 data-k="t9">{t("t9")}</h1><p className="sub" data-k="d9">{t("d9")}</p></div></div></div>
+    <div className="banner" id="bn-tusheti" style={{ backgroundImage: "url(/images/photo-063.jpg)" }}><div className="wrap"><a className="bk" href="/tours" data-k="back">{t("back")}</a><div><h1 data-k="t9">{t("t9")}</h1><p className="sub" data-k="d9">{t("d9")}</p></div></div></div>
     <section style={{ "paddingTop": "30px" }}><div className="wrap"><div className="gal soft" id="gal8">
     <img src="/images/photo-063.jpg" alt="Dartlo village with stone towers below a mountain peak" loading="lazy"/>
     <img src="/images/photo-064.jpg" alt="Stone tower village with wooden balconies in the misty Tusheti mountains" loading="lazy"/>

@@ -4,7 +4,7 @@ export default function Page() {
     const { t } = useLanguage();
     return (<>
     <div className="" data-p="kobuleti">
-    <div className="banner" id="bn-kobuleti"><div className="wrap"><a className="bk" href="/tours" data-k="back">{t("back")}</a><div><h1 data-k="t6">{t("t6")}</h1><p className="sub" data-k="d6">{t("d6")}</p></div></div></div>
+    <div className="banner" id="bn-kobuleti" style={{ backgroundImage: "url(/images/photo-043.jpg)" }}><div className="wrap"><a className="bk" href="/tours" data-k="back">{t("back")}</a><div><h1 data-k="t6">{t("t6")}</h1><p className="sub" data-k="d6">{t("d6")}</p></div></div></div>
     <section style={{ "paddingTop": "30px" }}><div className="wrap"><div className="gal soft" id="gal5">
     <img src="/images/photo-043.jpg" alt="Hilltop ruins with green terraces above the Black Sea" loading="lazy"/>
     <img src="/images/photo-044.jpg" alt="Pink flamingos wading in a green pond" loading="lazy"/>

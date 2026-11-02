@@ -94,3 +94,20 @@ details{background:var(--card);border:1px solid var(--bd);border-radius:10px;pad
 
 /* React navigation additions */
 .vtg-active{background:#00897b!important;color:white!important}.vtg-extras{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}.vtg-extras a{background:#00897b;color:#fff;padding:9px 14px;border-radius:9px;text-decoration:none;font:600 14px system-ui}.vtg-shell{min-height:65vh}.vtg-form{display:grid;gap:12px;max-width:620px}.vtg-form button{width:max-content}.vtg-admin{padding:30px 20px}.vtg-admin .card{padding:20px}.vtg-note{color:#5d6b7a;font-size:14px}
+
+/* Repairs: responsive layout, original review cards and photo tiles */
+.vtg-extras{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:10px;margin:20px auto 0;max-width:1160px}
+.vtg-extras a{background:#008c80;color:#fff;text-decoration:none;border-radius:10px;padding:12px 16px;font:600 15px system-ui,sans-serif}
+.review-card{min-width:0}.review-card .t{padding:20px}.review-card p{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.55}.review-card small{color:#526576}.stars{color:#f59e0b;font-size:19px;letter-spacing:2px}.trbtn{margin-top:10px;border:1px solid #008c80;background:white;color:#008c80;border-radius:8px;padding:7px 12px;cursor:pointer}
+.rtile{background-size:cover;background-position:center}.card .pic{background-size:cover;background-position:center}
+@media(max-width:650px){.vtg-extras{padding:0 16px}.vtg-extras a{font-size:13px}}
+
+/* Gallery behavior restored as a React lightbox, without changing original card design. */
+.vtg-lightbox{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.94);display:flex;align-items:center;justify-content:center;padding:55px 60px;color:#fff}
+.vtg-lightbox img{max-width:100%;max-height:calc(100vh - 110px);object-fit:contain;border-radius:8px}
+.vtg-lightbox button{position:absolute;border:0;background:rgba(255,255,255,.16);color:#fff;border-radius:100px;cursor:pointer;font-size:36px;width:46px;height:46px}
+.vtg-lightbox-close{right:18px;top:16px}.vtg-lightbox-prev{left:10px;top:48%}.vtg-lightbox-next{right:10px;top:48%}
+.vtg-lightbox-count{position:absolute;bottom:15px;font-size:13px}.gal img{cursor:zoom-in}
+@media(max-width:600px){.vtg-lightbox{padding:50px 36px}.vtg-lightbox button{width:34px;height:34px;font-size:26px}}
+
+.card .pic{cursor:zoom-in}

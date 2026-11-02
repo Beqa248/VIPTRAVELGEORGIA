@@ -4,7 +4,7 @@ export default function Page() {
     const { t } = useLanguage();
     return (<>
     <div className="" data-p="martvili">
-    <div className="banner" id="bn-martvili"><div className="wrap"><a className="bk" href="/tours" data-k="back">{t("back")}</a><div><h1 data-k="t2">{t("t2")}</h1><p className="sub" data-k="d2">{t("d2")}</p></div></div></div>
+    <div className="banner" id="bn-martvili" style={{ backgroundImage: "url(/images/photo-009.jpg)" }}><div className="wrap"><a className="bk" href="/tours" data-k="back">{t("back")}</a><div><h1 data-k="t2">{t("t2")}</h1><p className="sub" data-k="d2">{t("d2")}</p></div></div></div>
     <section id="martvili" style={{ "paddingTop": "30px" }}><div className="wrap"><div className="gal soft" id="gal2">
     <img src="/images/photo-009.jpg" alt="Turquoise water in Martvili canyon" loading="lazy"/>
     <img src="/images/photo-010.jpg" alt="Martvili canyon with a walkway bridge" loading="lazy"/>

@@ -4,7 +4,7 @@ export default function Page() {
     const { t } = useLanguage();
     return (<>
     <div className="" data-p="vardzia">
-    <div className="banner" id="bn-vardzia"><div className="wrap"><a className="bk" href="/tours" data-k="back">{t("back")}</a><div><h1 data-k="t8">{t("t8")}</h1><p className="sub" data-k="d8">{t("d8")}</p></div></div></div>
+    <div className="banner" id="bn-vardzia" style={{ backgroundImage: "url(/images/photo-056.jpg)" }}><div className="wrap"><a className="bk" href="/tours" data-k="back">{t("back")}</a><div><h1 data-k="t8">{t("t8")}</h1><p className="sub" data-k="d8">{t("d8")}</p></div></div></div>
     <section style={{ "paddingTop": "30px" }}><div className="wrap"><div className="gal soft" id="gal7">
     <img src="/images/photo-056.jpg" alt="Rabati Castle towers, gardens and courtyards in Akhaltsikhe" loading="lazy"/>
     <img src="/images/photo-057.jpg" alt="Vardzia cave city carved into a rock face" loading="lazy"/>

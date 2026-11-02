@@ -4,7 +4,7 @@ export default function Page() {
     const { t } = useLanguage();
     return (<>
     <div className="" data-p="highlights">
-    <div className="banner" id="bn-highlights"><div className="wrap"><a className="bk" href="/tours" data-k="back">{t("back")}</a><div><h1 data-k="t12">{t("t12")}</h1><p className="sub" data-k="d12">{t("d12")}</p></div></div></div>
+    <div className="banner" id="bn-highlights" style={{ backgroundImage: "url(/images/photo-086.jpg)" }}><div className="wrap"><a className="bk" href="/tours" data-k="back">{t("back")}</a><div><h1 data-k="t12">{t("t12")}</h1><p className="sub" data-k="d12">{t("d12")}</p></div></div></div>
     <section style={{ "paddingTop": "30px" }}><div className="wrap"><div className="gal soft" id="gal11">
     <img src="/images/photo-086.jpg" alt="Jvari Monastery above the river in Mtskheta at sunset" loading="lazy"/>
     <img src="/images/photo-087.jpg" alt="Svaneti village of stone towers below snowy peaks" loading="lazy"/>

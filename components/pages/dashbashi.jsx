@@ -4,7 +4,7 @@ export default function Page() {
     const { t } = useLanguage();
     return (<>
     <div className="" data-p="dashbashi">
-    <div className="banner" id="bn-dashbashi"><div className="wrap"><a className="bk" href="/tours" data-k="back">{t("back")}</a><div><h1 data-k="t7">{t("t7")}</h1><p className="sub" data-k="d7">{t("d7")}</p></div></div></div>
+    <div className="banner" id="bn-dashbashi" style={{ backgroundImage: "url(/images/photo-050.jpg)" }}><div className="wrap"><a className="bk" href="/tours" data-k="back">{t("back")}</a><div><h1 data-k="t7">{t("t7")}</h1><p className="sub" data-k="d7">{t("d7")}</p></div></div></div>
     <section style={{ "paddingTop": "30px" }}><div className="wrap"><div className="gal soft" id="gal6">
     <img src="/images/photo-050.jpg" alt="Waterfalls streaming down a mossy rock wall at Dashbashi Canyon" loading="lazy"/>
     <img src="/images/photo-051.jpg" alt="Glass Diamond Bridge spanning the Dashbashi canyon" loading="lazy"/>

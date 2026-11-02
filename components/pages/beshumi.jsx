@@ -4,7 +4,7 @@ export default function Page() {
     const { t } = useLanguage();
     return (<>
     <div className="" data-p="beshumi">
-    <div className="banner" id="bn-beshumi"><div className="wrap"><a className="bk" href="/tours" data-k="back">{t("back")}</a><div><h1 data-k="t10">{t("t10")}</h1><p className="sub" data-k="d10">{t("d10")}</p></div></div></div>
+    <div className="banner" id="bn-beshumi" style={{ backgroundImage: "url(/images/photo-068.jpg)" }}><div className="wrap"><a className="bk" href="/tours" data-k="back">{t("back")}</a><div><h1 data-k="t10">{t("t10")}</h1><p className="sub" data-k="d10">{t("d10")}</p></div></div></div>
     <section style={{ "paddingTop": "30px" }}><div className="wrap"><div className="gal soft" id="gal9">
     <img src="/images/photo-068.jpg" alt="Beshumi mountain village of wooden houses among pines and green meadows" loading="lazy"/>
     <img src="/images/photo-069.jpg" alt="Colorful wooden houses on a green Beshumi hillside" loading="lazy"/>
