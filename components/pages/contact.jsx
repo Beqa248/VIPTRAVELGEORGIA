@@ -9,6 +9,7 @@ export default function Contact(){ const {t}=useLanguage(); return <div data-p="
     <label><span data-k="fMsg">{t("fMsg")}</span><textarea id="m" rows="3"></textarea></label>
     <button className="btn" type="submit" data-k="send">{t("send")}</button>
     </form>
+
     
 <div className="links">
   <a
@@ -47,5 +48,10 @@ export default function Contact(){ const {t}=useLanguage(); return <div data-p="
     Instagram
   </a>
 </div>
+
+=======
+    <div className="links">
+    <a id="wa" href="https://wa.me/995558176108" target="_blank" rel="noopener">WhatsApp</a><a id="tg" href="https://t.me/" target="_blank" rel="noopener">Telegram</a><a id="fb" href="https://facebook.com/" target="_blank" rel="noopener">Facebook</a>
+    </div>
 
     <p className="cinfo"><b data-k="cPhone">{t("cPhone")}</b>: +995 558 17 61 08<br /><b data-k="cMail">{t("cMail")}</b>: SubTravelGeorgia@gmail.com</p></div></section></div>; }

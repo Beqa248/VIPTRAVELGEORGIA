@@ -111,7 +111,6 @@ details{background:var(--card);border:1px solid var(--bd);border-radius:10px;pad
 @media(max-width:600px){.vtg-lightbox{padding:50px 36px}.vtg-lightbox button{width:34px;height:34px;font-size:26px}}
 
 .card .pic{cursor:zoom-in}
-
 /* Homepage vehicle photo previews */
 #hCars .ctile {
   background-size: cover;
@@ -181,3 +180,4 @@ footer .footer-socials a:hover {
 
 /* CMS additions */
 #hCars .ctile{background-size:cover!important;background-position:center!important;overflow:hidden}#hCars .ctile span{color:white;text-shadow:0 2px 5px #0009}.guest-review-form{max-width:620px;margin:35px 0;padding:22px;border:1px solid #e6d6bd;border-radius:12px;background:#fffaf1}.guest-review-form label{display:block;margin:12px 0;font-weight:600}.guest-review-form input,.guest-review-form select,.guest-review-form textarea{display:block;width:100%;box-sizing:border-box;padding:10px;margin-top:6px;border:1px solid #d8c9b6;border-radius:8px}.guest-review-form .btn{margin-top:10px}
+
