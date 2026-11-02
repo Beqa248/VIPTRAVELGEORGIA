@@ -18,7 +18,7 @@ import Plan from "../../components/pages/plan";
 import Cars from "../../components/pages/cars";
 import Videos from "../../components/pages/videos";
 import Reviews from "../../components/pages/reviews";
-const pages = { "home": Home, "tours": Tours, "adjara": Adjara, "martvili": Martvili, "gomis": Gomis, "svaneti": Svaneti, "kobuleti": Kobuleti, "dashbashi": Dashbashi, "vardzia": Vardzia, "tusheti": Tusheti, "beshumi": Beshumi, "kazbegi": Kazbegi, "highlights": Highlights, "travel": Travel, "plan": Plan, "cars": Cars, "videos": Videos, "reviews": Reviews };
+const pages = { "home": Home, "tours": Tours, "adjara": Adjara, "martvili": Martvili, "gomis": Gomis, "svaneti": Svaneti, "kobuleti": Kobuleti, "dashbashi": Dashbashi, "vardzia": Vardzia, "tusheti": Tusheti, "beshumi": Beshumi, "kazbegi": Kazbegi, "highlights": Highlights, "travel": Travel, "plan": Plan, "cars": Cars, "videos": Videos, "reviews": Reviews, "contact": Contact };
 export function generateStaticParams() { return Object.keys(pages).filter(x => x !== "home").map(slug => ({ slug })); }
 export default async function DynamicPage({ params }) { const { slug } = await params; const Page = pages[slug]; if (!Page)
     notFound(); return <Page />; }
