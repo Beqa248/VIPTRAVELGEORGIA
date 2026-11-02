@@ -1,4 +1,5 @@
 "use client";
+import ReviewsList from "../ReviewsList";
 import { useLanguage } from "../site-context";
 export default function Page() {
     const { t } = useLanguage();
@@ -25,11 +26,11 @@ export default function Page() {
     <ul><li data-k="w1">{t("w1")}</li><li data-k="w2">{t("w2")}</li><li data-k="w3">{t("w3")}</li><li data-k="w4">{t("w4")}</li></ul></div></section>
     <section id="hCars"><div className="wrap"><h2 data-k="carsH">{t("carsH")}</h2><div className="ctiles"><a className="ctile" href="/cars" style={{ "background": "linear-gradient(135deg,#00897b,#80cbc4)" }}><i>🚙</i><span>Subaru Crosstrek 4x4</span></a><a className="ctile" href="/cars" style={{ "background": "linear-gradient(135deg,#6d4c41,#bcaaa4)" }}><i>🚙</i><span>Jeep Wrangler</span></a><a className="ctile" href="/cars" style={{ "background": "linear-gradient(135deg,#3949ab,#9fa8da)" }}><i>🚐</i><span data-k="carMini">{t("carMini")}</span></a><a className="ctile" href="/cars" style={{ "background": "linear-gradient(135deg,#37474f,#90a4ae)" }}><i>🚘</i><span data-k="carLux">{t("carLux")}</span></a><a className="ctile" href="/cars" style={{ "background": "linear-gradient(135deg,#8e24aa,#ce93d8)" }}><i>🚗</i><span data-k="carClassic">{t("carClassic")}</span></a></div><p style={{ "marginTop": "14px" }}><a className="btn" href="/cars" data-k="nCars">{t("nCars")}</a></p></div></section>
     <section id="hPrice" style={{ "background": "#fff1d0" }}><div className="wrap"><h2 data-k="priceH">{t("priceH")}</h2><p data-k="priceT" style={{ "maxWidth": "640px" }}>{t("priceT")}</p><a className="btn" id="priceBtn" href="#" target="_blank" rel="noopener" data-k="priceBtn">{t("priceBtn")}</a></div></section>
-    <section id="hRev" style={{ "display": "none" }}><div className="wrap"><h2 data-k="revH">{t("revH")}</h2><div className="grid" id="hRevList"></div><p style={{ "marginTop": "14px" }}><a className="btn" href="/reviews" data-k="allRev">{t("allRev")}</a></p><p id="hGyg" style={{ "marginTop": "12px" }}></p></div></section>
+    <section id="hRev"><div className="wrap"><h2 data-k="revH">{t("revH")}</h2><ReviewsList limit={3} /><p style={{ "marginTop": "14px" }}><a className="btn" href="/reviews" data-k="allRev">{t("allRev")}</a></p><p id="hGyg" style={{ "marginTop": "12px" }}></p></div></section>
     <section id="hSeason" className="why"><div className="wrap"><h2 data-k="seasonH">{t("seasonH")}</h2><div className="seas"><p data-k="s1">{t("s1")}</p><p data-k="s2">{t("s2")}</p><p data-k="s3">{t("s3")}</p><p data-k="s4">{t("s4")}</p><p data-k="s5">{t("s5")}</p></div><p data-k="seasonNote" style={{ "color": "var(--mut)", "fontSize": "14px", "marginTop": "12px" }}>{t("seasonNote")}</p></div></section>
     <section id="hFaq"><div className="wrap"><h2 data-k="faqH">{t("faqH")}</h2><details><summary data-k="f1q">{t("f1q")}</summary><p data-k="f1a">{t("f1a")}</p></details><details><summary data-k="f2q">{t("f2q")}</summary><p data-k="f2a">{t("f2a")}</p></details><details><summary data-k="f3q">{t("f3q")}</summary><p data-k="f3a">{t("f3a")}</p></details><details><summary data-k="f4q">{t("f4q")}</summary><p data-k="f4a">{t("f4a")}</p></details><details><summary data-k="f5q">{t("f5q")}</summary><p data-k="f5a">{t("f5a")}</p></details><details><summary data-k="f6q">{t("f6q")}</summary><p data-k="f6a">{t("f6a")}</p></details><details><summary data-k="f7q">{t("f7q")}</summary><p data-k="f7a">{t("f7a")}</p></details><details><summary data-k="f8q">{t("f8q")}</summary><p data-k="f8a">{t("f8a")}</p></details></div></section>
     <section id="contact"><div className="wrap"><h2 data-k="contH">{t("contH")}</h2>
-    <form id="f">
+    <form id="f" onSubmit={(e) => { e.preventDefault(); const f=e.currentTarget; const msg=["VIP Travel Georgia inquiry", "Name: "+f.querySelector("#n").value,"Tour: "+f.querySelector("#t").value,"Car: "+f.querySelector("#v").value,"Dates: "+f.querySelector("#d").value,"Message: "+f.querySelector("#m").value].join("\n"); window.open("https://wa.me/995558176108?text="+encodeURIComponent(msg),"_blank","noopener,noreferrer"); }}>
     <label><span data-k="fName">{t("fName")}</span><input id="n" required={true}/></label>
     <label><span data-k="fTour">{t("fTour")}</span><select id="t"><option>Adjarian mountains</option><option>Martvili &amp; Prometheus</option><option>Gomis Mta</option><option>Svaneti</option><option>Kobuleti coast</option><option>Dashbashi Canyon &amp; Diamond Bridge</option><option>Vardzia &amp; Rabati</option><option>Tusheti</option><option>Beshumi &amp; Green Lake</option><option>Kazbegi &amp; Juta</option><option>Georgia Highlights</option><option>Airport transfer</option><option>Other / custom</option></select></label>
     <label><span data-k="fCar">{t("fCar")}</span><select id="v"><option>Subaru Crosstrek 4x4</option><option>Jeep Wrangler</option><option>Minivan</option><option>Mercedes Luxury</option><option>Classic Mercedes Charlotte</option><option>Not sure yet</option></select></label>
@@ -38,7 +39,7 @@ export default function Page() {
     <button className="btn" type="submit" data-k="send">{t("send")}</button>
     </form>
     <div className="links">
-    <a id="wa" href="#" target="_blank" rel="noopener">WhatsApp</a><a id="tg" href="#" target="_blank" rel="noopener">Telegram</a><a id="fb" href="#" target="_blank" rel="noopener">Facebook</a>
+    <a id="wa" href="https://wa.me/995558176108" target="_blank" rel="noopener">WhatsApp</a><a id="tg" href="https://t.me/" target="_blank" rel="noopener">Telegram</a><a id="fb" href="https://facebook.com/" target="_blank" rel="noopener">Facebook</a>
     </div>
     <p className="cinfo"><b data-k="cPhone">{t("cPhone")}</b>: +995 558 17 61 08<br /><b data-k="cMail">{t("cMail")}</b>: SubTravelGeorgia@gmail.com</p></div></section>
     </div>

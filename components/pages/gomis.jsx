@@ -4,7 +4,7 @@ export default function Page() {
     const { t } = useLanguage();
     return (<>
     <div className="" data-p="gomis">
-    <div className="banner" id="bn-gomis"><div className="wrap"><a className="bk" href="/tours" data-k="back">{t("back")}</a><div><h1 data-k="t3">{t("t3")}</h1><p className="sub" data-k="d3">{t("d3")}</p></div></div></div>
+    <div className="banner" id="bn-gomis" style={{ backgroundImage: "url(/images/photo-018.jpg)" }}><div className="wrap"><a className="bk" href="/tours" data-k="back">{t("back")}</a><div><h1 data-k="t3">{t("t3")}</h1><p className="sub" data-k="d3">{t("d3")}</p></div></div></div>
     <section id="gomis" style={{ "paddingTop": "30px" }}><div className="wrap"><div className="gal soft" id="gal3">
     <img src="/images/photo-018.jpg" alt="Sunset above a sea of clouds at Gomis Mta" loading="lazy"/>
     <img src="/images/photo-019.jpg" alt="Golden sky and clouds below the Gomis Mta ridge" loading="lazy"/>

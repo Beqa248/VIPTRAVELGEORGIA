@@ -1,66 +1,15 @@
-
 "use client";
-
-import { useState } from "react";
-
-export default function Contact() {
-  const [name, setName] = useState("");
-  const [message, setMessage] = useState("");
-
-  function handleSubmit(event) {
-    event.preventDefault();
-
-    const text = `Hello! My name is ${name}.\n\n${message}`;
-    const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
-
-    window.open(url, "_blank", "noopener,noreferrer");
-  }
-
-  return (
-    <section style={{ maxWidth: 1100, margin: "0 auto", padding: "48px 20px" }}>
-      <h1>Contact us</h1>
-      <p>
-        Planning a private tour in Georgia? Send us your travel plans
-        and we'll help you organize your trip.
-      </p>
-
-      <form
-        onSubmit={handleSubmit}
-        style={{ display: "grid", gap: 16, maxWidth: 560, marginTop: 24 }}
-      >
-        <input
-          type="text"
-          placeholder="Your name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          style={{ padding: 14, borderRadius: 8, border: "1px solid #ddd" }}
-        />
-
-        <textarea
-          placeholder="Tell us about your travel plans"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          required
-          rows={5}
-          style={{ padding: 14, borderRadius: 8, border: "1px solid #ddd" }}
-        />
-
-        <button
-          type="submit"
-          style={{
-            background: "#008e83",
-            color: "white",
-            border: "none",
-            borderRadius: 8,
-            padding: 14,
-            cursor: "pointer",
-            fontWeight: 700
-          }}
-        >
-          Continue to WhatsApp
-        </button>
-      </form>
-    </section>
-  );
-}
+import { useLanguage } from "../site-context";
+export default function Contact(){ const {t}=useLanguage(); return <div data-p="contact">    <section id="contact"><div className="wrap"><h2 data-k="contH">{t("contH")}</h2>
+    <form id="f" onSubmit={(e) => { e.preventDefault(); const f=e.currentTarget; const msg=["VIP Travel Georgia inquiry", "Name: "+f.querySelector("#n").value,"Tour: "+f.querySelector("#t").value,"Car: "+f.querySelector("#v").value,"Dates: "+f.querySelector("#d").value,"Message: "+f.querySelector("#m").value].join("\n"); window.open("https://wa.me/995558176108?text="+encodeURIComponent(msg),"_blank","noopener,noreferrer"); }}>
+    <label><span data-k="fName">{t("fName")}</span><input id="n" required={true}/></label>
+    <label><span data-k="fTour">{t("fTour")}</span><select id="t"><option>Adjarian mountains</option><option>Martvili &amp; Prometheus</option><option>Gomis Mta</option><option>Svaneti</option><option>Kobuleti coast</option><option>Dashbashi Canyon &amp; Diamond Bridge</option><option>Vardzia &amp; Rabati</option><option>Tusheti</option><option>Beshumi &amp; Green Lake</option><option>Kazbegi &amp; Juta</option><option>Georgia Highlights</option><option>Airport transfer</option><option>Other / custom</option></select></label>
+    <label><span data-k="fCar">{t("fCar")}</span><select id="v"><option>Subaru Crosstrek 4x4</option><option>Jeep Wrangler</option><option>Minivan</option><option>Mercedes Luxury</option><option>Classic Mercedes Charlotte</option><option>Not sure yet</option></select></label>
+    <label><span data-k="fDates">{t("fDates")}</span><input id="d" placeholder="e.g. 12–16 June, 3 people"/></label>
+    <label><span data-k="fMsg">{t("fMsg")}</span><textarea id="m" rows="3"></textarea></label>
+    <button className="btn" type="submit" data-k="send">{t("send")}</button>
+    </form>
+    <div className="links">
+    <a id="wa" href="https://wa.me/995558176108" target="_blank" rel="noopener">WhatsApp</a><a id="tg" href="https://t.me/" target="_blank" rel="noopener">Telegram</a><a id="fb" href="https://facebook.com/" target="_blank" rel="noopener">Facebook</a>
+    </div>
+    <p className="cinfo"><b data-k="cPhone">{t("cPhone")}</b>: +995 558 17 61 08<br /><b data-k="cMail">{t("cMail")}</b>: SubTravelGeorgia@gmail.com</p></div></section></div>; }
