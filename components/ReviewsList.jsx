@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useLanguage } from "../site-context";
+import { useLanguage } from "./site-context";
 import reviews from "../lib/reviews.json";
 export default function ReviewsList({ limit }) {
  const { lang } = useLanguage();
