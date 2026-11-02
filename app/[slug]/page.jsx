@@ -1,3 +1,4 @@
+import Contact from "../../components/pages/contact";
 import { notFound } from "next/navigation";
 import Home from "../../components/pages/home";
 import Tours from "../../components/pages/tours";
