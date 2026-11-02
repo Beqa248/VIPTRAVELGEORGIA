@@ -14,22 +14,28 @@ export default function Admin(){
  async function refresh(which=tab){if(!client)return;const {data,error}=await client.from(which).select('*').order('created_at',{ascending:false});if(error)setError(error.message);else setRows(data||[])}
  useEffect(()=>{if(authorized){setRows([]);refresh(tab)}},[authorized,tab]);
  
+
 async function login(e) {
   e.preventDefault();
-  setError('');
+  setError("");
+
+  if (!client) {
+    setError("Supabase is not configured.");
+    return;
+  }
 
   const formData = new FormData(e.currentTarget);
-  const email = String(formData.get('email') || '').trim();
-  const password = String(formData.get('password') || '');
+  const loginEmail = String(formData.get("email") || "").trim();
+  const loginPassword = String(formData.get("password") || "");
 
-  if (!email || !password) {
-    setError('Please enter your email and password.');
+  if (!loginEmail || !loginPassword) {
+    setError("Please enter your email and password.");
     return;
   }
 
   const { error } = await client.auth.signInWithPassword({
-    email,
-    password
+    email: loginEmail,
+    password: loginPassword,
   });
 
   if (error) {
