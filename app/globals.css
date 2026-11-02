@@ -111,3 +111,46 @@ details{background:var(--card);border:1px solid var(--bd);border-radius:10px;pad
 @media(max-width:600px){.vtg-lightbox{padding:50px 36px}.vtg-lightbox button{width:34px;height:34px;font-size:26px}}
 
 .card .pic{cursor:zoom-in}
+
+/* Homepage vehicle photo previews */
+#hCars .ctile {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  overflow: hidden;
+}
+
+#hCars .ctile span {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.45);
+}
+
+
+.footer-socials {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-left: 12px;
+}
+
+.footer-socials a {
+  color: inherit;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.footer-socials a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .footer-socials {
+    display: flex;
+    margin: 12px 0 0;
+    gap: 14px;
+  }
+}
+
