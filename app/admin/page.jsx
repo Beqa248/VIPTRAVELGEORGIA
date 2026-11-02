@@ -13,7 +13,29 @@ export default function Admin(){
  useEffect(()=>{let alive=true;setAuthorized(false);setChecking(true);if(!client||!session){setChecking(false);return;}client.from('admin_users').select('user_id').eq('user_id',session.user.id).maybeSingle().then(({data,error})=>{if(alive){setAuthorized(!!data&&!error);setChecking(false);if(error)setError(error.message);}});return()=>{alive=false}},[session]);
  async function refresh(which=tab){if(!client)return;const {data,error}=await client.from(which).select('*').order('created_at',{ascending:false});if(error)setError(error.message);else setRows(data||[])}
  useEffect(()=>{if(authorized){setRows([]);refresh(tab)}},[authorized,tab]);
- async function login(e){e.preventDefault();setError('');const {error}=await client.auth.signInWithPassword({email,password});if(error)setError(error.message)}
+ 
+async function login(e) {
+  e.preventDefault();
+  setError('');
+
+  const formData = new FormData(e.currentTarget);
+  const email = String(formData.get('email') || '').trim();
+  const password = String(formData.get('password') || '');
+
+  if (!email || !password) {
+    setError('Please enter your email and password.');
+    return;
+  }
+
+  const { error } = await client.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    setError(error.message);
+  }
+}
  async function upload(files,kind){const urls=[];for(const file of Array.from(files||[]).filter(f=>f.size)){const video=kind==='video';const allowed=video?['video/mp4','video/webm','video/quicktime']:['image/jpeg','image/png','image/webp'];const max=video?100*1024*1024:6*1024*1024;if(!allowed.includes(file.type)||file.size>max)throw Error(video?'Use MP4/WebM/MOV videos up to 100 MB.':'Use JPG/PNG/WebP images up to 6 MB.');const bucket=video?'tour-videos':'tour-media';const name=`${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,'')}`;const {error}=await client.storage.from(bucket).upload(name,file,{upsert:false,contentType:file.type});if(error)throw error;urls.push(client.storage.from(bucket).getPublicUrl(name).data.publicUrl)}return urls}
  async function save(e){e.preventDefault();setBusy(true);setError('');setNotice('');const form=e.currentTarget;const f=new FormData(form);try{let payload;if(tab==='vehicles'){const newImages=await upload(f.getAll('images'),'image');payload={name:String(f.get('name')).trim(),description:String(f.get('description')||''),passengers:Number(f.get('passengers')||0),published:f.get('published')==='on',images:[...(editing?.images||[]).filter(u=>!removed.includes(u)),...newImages]};}else if(tab==='videos'){const video=(await upload(f.getAll('video'),'video'))[0]||editing?.video_url;const cover=(await upload(f.getAll('cover'),'image'))[0]||editing?.cover_url||null;if(!video)throw Error('Select a video file.');payload={title:String(f.get('title')).trim(),description:String(f.get('description')||''),video_url:video,cover_url:cover,published:f.get('published')==='on'};}else{const images=await upload(f.getAll('images'),'image');payload={title:String(f.get('title')).trim(),description:String(f.get('description')||''),tour_date:f.get('tour_date')||null,images:[...(editing?.images||[]).filter(u=>!removed.includes(u)),...images],published:f.get('published')==='on'};if(!payload.images.length)throw Error('Add at least one tour photograph.');}const {error}=editing?.id?await client.from(tab).update(payload).eq('id',editing.id):await client.from(tab).insert(payload);if(error)throw error;setEditing(null);setRemoved([]);form.reset();setNotice('Saved successfully. Published changes appear on the public site after refresh.');await refresh()}catch(e){setError(e.message)}finally{setBusy(false)}}
  async function change(id,payload){setError('');const {error}=await client.from(tab).update(payload).eq('id',id);if(error)setError(error.message);else refresh()}
