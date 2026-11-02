@@ -1,3 +1,4 @@
+
 "use client";
 
 import ReviewsList from "../ReviewsList";
@@ -17,5 +18,4 @@ export default function Page() {
       </section>
     </div>
   );
-};
 }
