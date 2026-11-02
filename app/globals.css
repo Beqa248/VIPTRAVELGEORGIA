@@ -155,3 +155,26 @@ footer .footer-socials a:hover {
   text-decoration: underline;
 }
 
+
+/* Instagram contact button */
+.links #ig {
+  display: inline-block;
+  background: linear-gradient(
+    45deg,
+    #feda75,
+    #fa7e1e,
+    #d62976,
+    #962fbf,
+    #4f5bd5
+  );
+  color: white;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.links #ig:hover {
+  filter: brightness(1.08);
+}
+
