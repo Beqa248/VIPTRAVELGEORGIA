@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import { useLanguage } from "../site-context";
-import reviews from "../../lib/reviews.json";
+import { useLanguage } from "./site-context";
+import reviews from "../lib/reviews.json";
 export default function ReviewsList({ limit }) {
  const { lang } = useLanguage();
  return <div className="grid">{reviews.slice(0,limit || reviews.length).map((r,i)=><ReviewCard key={i} r={r} lang={lang}/>)}</div>;

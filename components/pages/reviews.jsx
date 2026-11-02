@@ -1,5 +1,5 @@
 "use client";
-import ReviewsList from "../ReviewsList";
+import reviews from "../../lib/reviews.json";
 import { useLanguage } from "../site-context";
 export default function Page() {
     const { t } = useLanguage();
