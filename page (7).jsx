@@ -1,15 +1,21 @@
 // @ts-nocheck
 'use client';
-import { useEffect, useState } from 'react';
-import { supabase } from '../../../lib/supabase';
-import { Shell, card } from '../../../lib/ui';
-export default function Inquiries() { const [session, setSession] = useState(null), [authorized, setAuthorized] = useState(false), [items, setItems] = useState([]), [message, setMessage] = useState(''); useEffect(() => { if (!supabase)
-    return; supabase.auth.getSession().then(({ data }) => setSession(data.session)); const { data: { subscription } } = supabase.auth.onAuthStateChange((_, s) => setSession(s)); return () => subscription.unsubscribe(); }, []); useEffect(() => { if (!session)
-    return; supabase.from('admin_users').select('user_id').eq('user_id', session.user.id).maybeSingle().then(({ data }) => { setAuthorized(!!data); if (data)
-    load(); }); }, [session]); async function load() { let { data, error } = await supabase.from('inquiries').select('*').order('created_at', { ascending: false }); if (error)
-    setMessage(error.message);
-else
-    setItems(data || []); } async function change(id, status) { let { error } = await supabase.from('inquiries').update({ status }).eq('id', id); if (error)
-    setMessage(error.message);
-else
-    load(); } return <Shell title="Admin — inquiries & bookings"><p><a href="/admin">← Content dashboard</a></p>{!supabase ? <p>Configure Supabase first.</p> : !session ? <p>Please sign in at <a href="/admin">/admin</a>.</p> : !authorized ? <p>Administrator authorization required.</p> : <><p>{items.length} requests</p>{message && <p role="alert">{message}</p>}{items.map(x => <article key={x.id} style={card}><h3>{x.name} — {x.status}</h3><p>{x.email} · {x.phone} · {x.travelers} travelers</p><p>{x.start_date || 'Date TBD'} → {x.end_date || 'TBD'} · {x.destinations?.join(', ')}</p><p>Budget: {x.budget || 'Not supplied'} · Vehicle: {x.vehicle || 'Not selected'}</p><p>{x.interests}</p><label>Booking status <select value={x.status} onChange={e => change(x.id, e.target.value)}><option value="new">New</option><option value="contacted">Contacted</option><option value="quoted">Quoted</option><option value="deposit_pending">Deposit pending</option><option value="confirmed">Confirmed</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select></label> <a href={'mailto:' + encodeURIComponent(x.email)}>Email customer</a></article>)}</>}</Shell>; }
+import { useState } from 'react';
+import { Shell, card, field, button } from '../../lib/ui';
+export default function Planner() {
+    const [language, setLanguage] = useState('en'), [days, setDays] = useState(5), [start, setStart] = useState('Tbilisi'), [interests, setInterests] = useState('mountains, nature, culture'), [budget, setBudget] = useState(''), [result, setResult] = useState(null), [error, setError] = useState(''), [loading, setLoading] = useState(false);
+    async function generate(e) { e.preventDefault(); setLoading(true); setError(''); try {
+        let r = await fetch('/api/plan', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ language, days: Number(days), start, interests, budget }) });
+        let data = await r.json();
+        if (!r.ok)
+            throw Error(data.error || 'Could not generate itinerary');
+        setResult(data);
+    }
+    catch (e) {
+        setError(e.message);
+    }
+    finally {
+        setLoading(false);
+    } }
+    return <Shell title="AI Georgia itinerary planner" lang={language}><p>Build a suggested itinerary, then ask us to check real travel times, road conditions and availability. This is a draft, not a confirmed booking.</p><form onSubmit={generate} style={card}><label>Language<select style={field} value={language} onChange={e => setLanguage(e.target.value)}><option value="en">English</option><option value="ru">Русский</option><option value="he">עברית</option></select></label><label>Days<input style={field} type="number" min="1" max="14" value={days} onChange={e => setDays(e.target.value)}/></label><label>Starting city<select style={field} value={start} onChange={e => setStart(e.target.value)}><option>Tbilisi</option><option>Batumi</option><option>Kutaisi</option></select></label><label>Interests<textarea style={field} value={interests} onChange={e => setInterests(e.target.value)}/></label><label>Approximate budget (optional)<input style={field} value={budget} onChange={e => setBudget(e.target.value)}/></label><button disabled={loading} style={button}>{loading ? 'Planning…' : 'Create itinerary'}</button></form>{error && <p role="alert">{error}</p>}{result && <section style={card}><h2>{result.title}</h2><p>{result.summary}</p>{result.days?.map((d, i) => <div key={i} style={{ padding: 12, borderBottom: '1px solid #eee' }}><h3>Day {i + 1}: {d.title}</h3><p>{d.description}</p></div>)}<p style={{ fontSize: 13 }}>AI suggestions require human confirmation. No live road or hotel availability has been checked.</p><button style={button} onClick={() => window.print()}>Print / save PDF</button> <a href="/custom-tour">Request this trip</a></section>}</Shell>;
+}
