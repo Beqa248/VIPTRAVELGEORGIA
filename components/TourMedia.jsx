@@ -17,7 +17,12 @@ export default function TourMedia({ slug }) {
         document.querySelectorAll('[data-p="tours"] .card').forEach(card => {
           const link = card.querySelector('a[href^="/"]');
           const destination = link?.getAttribute("href")?.slice(1);
-          const cover = bySlug[destination]?.cover_url;
+         const isAirportTransfer =
+  link?.getAttribute("data-r") === "Airport transfer";
+
+const cover = isAirportTransfer
+  ? bySlug["airport-transfers"]?.cover_url
+  : bySlug[destination]?.cover_url;
           const picture = card.querySelector(".pic");
           if (cover && picture) picture.style.backgroundImage = `url(${JSON.stringify(cover)})`;
         });
