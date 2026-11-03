@@ -1,0 +1,1 @@
+Run SQL files only if not previously run; run REQUIRED_SUPABASE_ORDERING.sql before uploading. Upload website files preserving their paths. Backup main first. The main admin manages Cars, Videos, Recent Tours, Reviews. Customer Inquiries is separate. Original static reviews may still need migration. Original tour detail pages remain separate.

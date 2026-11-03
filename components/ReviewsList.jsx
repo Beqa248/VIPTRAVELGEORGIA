@@ -71,12 +71,12 @@ function ReviewCard({ review }) {
             (review.created_at
               ? new Date(review.created_at).toLocaleDateString()
               : "")}
-          {!review.id && " · GetYourGuide"}
+          {" · "}{review.source || (!review.id ? "GetYourGuide" : "Website")}
         </small>
 
-        {review.tour && (
+        {(review.tour || review.review_date) && (
           <small style={{ display: "block", marginTop: 5 }}>
-            {review.tour}
+            {review.tour}{review.review_date ? ` · ${review.review_date}` : ""}
           </small>
         )}
 

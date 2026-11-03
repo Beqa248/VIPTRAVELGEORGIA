@@ -83,7 +83,7 @@ export default function Admin() {
     const request = ++requestRef.current;
     setLoadingRows(true);
     let query = client.from(which).select("*");
-    if (which === "vehicles") {
+    if (["vehicles", "videos", "recent_tours"].includes(which)) {
       query = query.order("sort_order", { ascending: true, nullsFirst: false }).order("created_at", { ascending: true });
     } else {
       query = query.order("created_at", { ascending: false });
@@ -141,7 +141,20 @@ export default function Admin() {
     const f = new FormData(form);
     try {
       let payload;
-      if (tab === "vehicles") {
+      if (tab === "reviews") {
+        payload = {
+          name: String(f.get("name") || "").trim(),
+          country: String(f.get("country") || "").trim(),
+          text: String(f.get("text") || "").trim(),
+          rating: Number(f.get("rating") || 5),
+          language: String(f.get("language") || "en"),
+          source: String(f.get("source") || "GetYourGuide"),
+          tour: String(f.get("tour") || "").trim(),
+          review_date: f.get("review_date") || null,
+          approved: f.get("approved") === "on",
+        };
+        if (!payload.name || payload.text.length < 10) throw Error("Enter a guest name and at least 10 characters of review text.");
+      } else if (tab === "vehicles") {
         const newImages = await upload(f.getAll("images"), "image");
         payload = {
           name: String(f.get("name") || "").trim(),
@@ -156,6 +169,7 @@ export default function Admin() {
         const cover = (await upload(f.getAll("cover"), "image"))[0] || editing?.cover_url || null;
         if (!video) throw Error("Select a video file.");
         payload = { title: String(f.get("title") || "").trim(), description: String(f.get("description") || ""), video_url: video, cover_url: cover, published: f.get("published") === "on" };
+        if (!editing) payload.sort_order = Math.max(0, ...rows.map(item => Number(item.sort_order) || 0)) + 1;
       } else {
         const images = await upload(f.getAll("images"), "image");
         payload = {
@@ -165,6 +179,7 @@ export default function Admin() {
           published: f.get("published") === "on",
         };
         if (!payload.images.length) throw Error("Add at least one tour photograph.");
+        if (!editing) payload.sort_order = Math.max(0, ...rows.map(item => Number(item.sort_order) || 0)) + 1;
       }
       if (!payload.name && !payload.title) throw Error("A name or title is required.");
       const result = editing?.id ? await client.from(tab).update(payload).eq("id", editing.id) : await client.from(tab).insert(payload);
@@ -193,8 +208,8 @@ export default function Admin() {
     setDeleteTarget(null); setBusy(false);
   }
 
-  async function moveVehicle(id, direction) {
-    if (busy || tab !== "vehicles") return;
+  async function moveContent(id, direction) {
+    if (busy || !["vehicles", "videos", "recent_tours"].includes(tab)) return;
     const index = rows.findIndex(row => row.id === id);
     const target = index + direction;
     if (index < 0 || target < 0 || target >= rows.length) return;
@@ -205,12 +220,12 @@ export default function Admin() {
       const reordered = [...rows];
       [reordered[index], reordered[target]] = [reordered[target], reordered[index]];
       for (let i = 0; i < reordered.length; i++) {
-        const { error: updateError } = await client.from("vehicles").update({ sort_order: i + 1 }).eq("id", reordered[i].id);
+        const { error: updateError } = await client.from(tab).update({ sort_order: i + 1 }).eq("id", reordered[i].id);
         if (updateError) throw updateError;
       }
-      setNotice("Vehicle order updated.");
-      await refresh("vehicles");
-    } catch (moveError) { setError(moveError.message || "Could not reorder vehicles."); await refresh("vehicles"); }
+      setNotice("Display order updated.");
+      await refresh(tab);
+    } catch (moveError) { setError(moveError.message || "Could not reorder vehicles."); await refresh(tab); }
     finally { setBusy(false); }
   }
 
@@ -257,7 +272,7 @@ export default function Admin() {
           <div className={styles.content}>
             <div className={styles.headingRow}>
               <div><div className={styles.eyebrow}>WEBSITE MANAGEMENT</div><h1>{sectionTitle}</h1><p>Manage content, photographs and visibility from one place.</p></div>
-              {tab !== "reviews" && <button type="button" className={styles.primary} onClick={() => formOpen ? (setFormOpen(false), setEditing(null), setSelectedFiles({})) : openForm()}>{formOpen ? "× Close editor" : `＋ Add ${tab === "vehicles" ? "vehicle" : tab === "videos" ? "video" : "tour"}`}</button>}
+              {<button type="button" className={styles.primary} onClick={() => formOpen ? (setFormOpen(false), setEditing(null), setSelectedFiles({})) : openForm()}>{formOpen ? "× Close editor" : `＋ Add ${tab === "vehicles" ? "vehicle" : tab === "videos" ? "video" : tab === "reviews" ? "review" : "tour"}`}</button>}
             </div>
             <div className={styles.stats}>
               <div className={styles.stat}><small>Total {sectionTitle.toLowerCase()}</small><strong>{rows.length}</strong></div>
@@ -266,9 +281,22 @@ export default function Admin() {
             </div>
             {error && <div role="alert" className={styles.error}>{error}</div>}
             {notice && <div role="status" className={styles.notice}>✓ {notice}</div>}
-            {formOpen && tab !== "reviews" && <section ref={formRef} className={styles.editor}>
-              <div className={styles.editorHeader}><div><h2>{editing ? "Edit" : "Add new"} {tab === "vehicles" ? "vehicle" : tab === "videos" ? "video" : "recent tour"}</h2><p>Changes are saved to your existing Supabase database.</p></div><button type="button" className={styles.iconButton} aria-label="Close editor" onClick={() => { setFormOpen(false); setEditing(null); }}>×</button></div>
+            {formOpen && <section ref={formRef} className={styles.editor}>
+              <div className={styles.editorHeader}><div><h2>{editing ? "Edit" : "Add new"} {tab === "vehicles" ? "vehicle" : tab === "videos" ? "video" : tab === "reviews" ? "guest review" : "recent tour"}</h2><p>Changes are saved to your existing Supabase database.</p></div><button type="button" className={styles.iconButton} aria-label="Close editor" onClick={() => { setFormOpen(false); setEditing(null); }}>×</button></div>
               <form key={`${tab}-${editing?.id || "new"}`} onSubmit={save}>
+                {tab === "reviews" ? <>
+                  <div className={styles.formGrid}>
+                    <label className={styles.formField}>Guest name<input name="name" required maxLength={80} defaultValue={editing?.name || ""} placeholder="Name as shown on GetYourGuide"/></label>
+                    <label className={styles.formField}>Guest country (optional)<input name="country" defaultValue={editing?.country || ""} placeholder="e.g. Germany"/></label>
+                    <label className={styles.formField}>Review source<select name="source" defaultValue={editing?.source || "GetYourGuide"}><option>GetYourGuide</option><option>Google</option><option>Tripadvisor</option><option>Direct guest</option><option>Other</option></select></label>
+                    <label className={styles.formField}>Star rating<select name="rating" defaultValue={editing?.rating ?? 5}>{[5,4,3,2,1].map(n => <option key={n} value={n}>{"★".repeat(n)} ({n}/5)</option>)}</select></label>
+                    <label className={styles.formField}>Tour (optional)<input name="tour" defaultValue={editing?.tour || ""} placeholder="e.g. Gomi Mountain private tour"/></label>
+                    <label className={styles.formField}>Review date (optional)<input type="date" name="review_date" defaultValue={editing?.review_date || ""}/></label>
+                    <label className={styles.formField}>Original language<select name="language" defaultValue={editing?.language || "en"}><option value="en">English</option><option value="ru">Russian</option><option value="he">Hebrew</option></select></label>
+                    <label className={`${styles.formField} ${styles.fullWidth}`}>Guest review<textarea name="text" required minLength={10} maxLength={1500} rows={6} defaultValue={editing?.text || ""} placeholder="Paste the review exactly as the guest wrote it…"/></label>
+                  </div>
+                  <div className={styles.formActions}><label className={styles.publishToggle}><input type="checkbox" name="approved" defaultChecked={editing?.approved ?? true}/> Publish on website</label><div className={styles.actionButtons}><button type="button" className={styles.secondary} onClick={() => { setFormOpen(false); setEditing(null); }}>Cancel</button><button className={styles.primary} type="submit" disabled={busy}>{busy ? "Saving…" : editing ? "Save review" : "Publish review"}</button></div></div>
+                </> : <>
                 <div className={styles.formGrid}>
                   <label className={styles.formField}>{tab === "vehicles" ? "Vehicle name" : "Title"}<input type="text" name={tab === "vehicles" ? "name" : "title"} defaultValue={editing?.name || editing?.title || ""} required placeholder={tab === "vehicles" ? "e.g. Subaru Crosstrek 4x4" : "Enter a title"}/></label>
                   {tab === "vehicles" && <label className={styles.formField}>Passengers<input type="number" name="passengers" min="0" defaultValue={editing?.passengers ?? 0}/></label>}
@@ -283,10 +311,11 @@ export default function Admin() {
                 {editing?.video_url && tab === "videos" && <video controls className={styles.videoPreview} src={editing.video_url}/>}
                 {tab !== "videos" && editing?.images?.length > 0 && <><h3 className={styles.subheading}>Current photographs <small>Tick photos to remove when saving</small></h3><div className={styles.existingPhotos}>{editing.images.map((url, index) => <label key={`${url}-${index}`} className={`${styles.photoTile} ${removed.includes(url) ? styles.photoRemoved : ""}`}><img src={url} alt={`Photo ${index + 1}`} /><span><input type="checkbox" checked={removed.includes(url)} onChange={e => setRemoved(old => e.target.checked ? [...old, url] : old.filter(item => item !== url))}/> Remove</span></label>)}</div></>}
                 <div className={styles.formActions}><label className={styles.publishToggle}><input type="checkbox" name="published" defaultChecked={editing?.published ?? true}/> Published on website</label><div className={styles.actionButtons}><button type="button" className={styles.secondary} onClick={() => { setFormOpen(false); setEditing(null); setRemoved([]); }}>Cancel</button><button type="submit" className={styles.primary} disabled={busy}>{busy ? "Saving / uploading…" : editing ? "Save changes" : "Create content"}</button></div></div>
+                </>}
               </form>
             </section>}
             <section className={styles.listSection}>
-              <div className={styles.listHeading}><div><h2>{tab === "reviews" ? "Review moderation" : "Existing content"}</h2><p>{tab === "vehicles" ? "Use the arrows to change the order displayed on your Cars page." : "Search and manage your existing entries."}</p></div></div>
+              <div className={styles.listHeading}><div><h2>{tab === "reviews" ? "Guest reviews & moderation" : tab === "recent_tours" ? "Recent tour gallery" : "Existing content"}</h2><p>{["vehicles", "videos", "recent_tours"].includes(tab) ? "Use the arrows to change the order shown on the public website." : tab === "reviews" ? "Add verified guest reviews, edit details and approve visitor submissions." : tab === "recent_tours" ? "Add tour stories and photos, edit published galleries or hide older entries." : "Search and manage your existing entries."}</p></div></div>
               <div className={styles.toolbar}><label className={styles.searchBox}><span>⌕</span><input aria-label="Search content" placeholder={`Search ${sectionTitle.toLowerCase()}…`} value={search} onChange={e => setSearch(e.target.value)}/></label><select aria-label="Filter status" value={filter} onChange={e => setFilter(e.target.value)}><option value="all">All statuses</option><option value="visible">{tab === "reviews" ? "Approved" : "Published"}</option><option value="hidden">{tab === "reviews" ? "Pending" : "Hidden"}</option></select></div>
               {loadingRows && <div className={styles.empty}>Loading content…</div>}
               {!loadingRows && !filteredRows.length && <div className={styles.empty}>{rows.length ? "No matching results. Try a different search." : "No records yet. Add your first entry above."}</div>}
@@ -298,12 +327,12 @@ export default function Admin() {
                   <div className={styles.itemPhoto}>{photo ? <img src={photo} alt={row.name || row.title || "Content thumbnail"}/> : <span>{tab === "vehicles" ? "🚙" : tab === "videos" ? "▶" : tab === "reviews" ? "★" : "🏔"}</span>}</div>
                   <div className={styles.itemDetails}><div className={styles.itemTop}><h3>{row.name || row.title || "Guest review"}</h3><span className={`${styles.status} ${visible ? styles.statusOn : styles.statusOff}`}>{visible ? (tab === "reviews" ? "Approved" : "Published") : (tab === "reviews" ? "Pending" : "Hidden")}</span></div>
                     {tab === "reviews" && <p className={styles.reviewText}>{"★".repeat(Math.max(0, Math.min(5, Number(row.rating) || 0)))} · {row.country || ""} · {row.text || ""}</p>}
-                    {row.description && <p className={styles.description}>{row.description}</p>}
+                    {tab === "reviews" && <small className={styles.meta}>{row.source || "Website"}{row.tour ? ` · ${row.tour}` : ""}{row.review_date ? ` · ${row.review_date}` : ""}</small>}{row.description && <p className={styles.description}>{row.description}</p>}{tab === "recent_tours" && <small className={styles.meta}>{row.tour_date || "No tour date"} · {(row.images || []).length} photos</small>}
                     {tab === "vehicles" && <small className={styles.meta}>Position {actualIndex + 1} · {row.passengers || 0} passengers · {(row.images || []).length} photos</small>}
                     <div className={styles.itemActions}>
-                      {tab === "reviews" ? <button type="button" className={styles.secondary} disabled={busy} onClick={() => change(row.id, { approved: !row.approved })}>{row.approved ? "Unapprove" : "✓ Approve"}</button>
+                      {tab === "reviews" ? <><button type="button" className={styles.secondary} disabled={busy} onClick={() => openForm(row)}>✎ Edit review</button><button type="button" className={styles.secondary} disabled={busy} onClick={() => change(row.id, { approved: !row.approved })}>{row.approved ? "◉ Hide" : "✓ Approve"}</button></>
                       : <><button type="button" className={styles.secondary} disabled={busy} onClick={() => openForm(row)}>✎ Edit / Photos</button><button type="button" className={styles.secondary} disabled={busy} onClick={() => change(row.id, { published: !row.published })}>{row.published ? "◉ Hide" : "◉ Publish"}</button></>}
-                      {tab === "vehicles" && <><button type="button" title="Move up" aria-label={`Move ${row.name} up`} className={styles.moveButton} disabled={busy || actualIndex === 0} onClick={() => moveVehicle(row.id, -1)}>↑</button><button type="button" title="Move down" aria-label={`Move ${row.name} down`} className={styles.moveButton} disabled={busy || actualIndex === rows.length - 1} onClick={() => moveVehicle(row.id, 1)}>↓</button></>}
+                      {["vehicles", "videos", "recent_tours"].includes(tab) && <><button type="button" title="Move up" aria-label={`Move ${row.name || row.title} up`} className={styles.moveButton} disabled={busy || actualIndex === 0} onClick={() => moveContent(row.id, -1)}>↑</button><button type="button" title="Move down" aria-label={`Move ${row.name || row.title} down`} className={styles.moveButton} disabled={busy || actualIndex === rows.length - 1} onClick={() => moveContent(row.id, 1)}>↓</button></>}
                       <button type="button" className={styles.deleteButton} disabled={busy} onClick={() => setDeleteTarget(row)}>⌫ Delete</button>
                     </div>
                   </div>

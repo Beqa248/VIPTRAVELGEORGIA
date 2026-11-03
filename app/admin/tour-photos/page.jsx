@@ -4,11 +4,13 @@ import { supabase } from "../../../lib/supabase";
 import AdminSubLayout from "../AdminSubLayout";
 import styles from "../subpages.module.css";
 import studio from "./studio.module.css";
+import NewToursManager from "./NewToursManager";
 
 const tours = ["adjara", "martvili", "gomis", "svaneti", "kobuleti", "dashbashi", "vardzia", "tusheti", "beshumi", "kazbegi", "highlights", "airport-transfers"];
 const tourName = slug => slug === "airport-transfers" ? "Airport Transfers" : slug === "gomis" ? "Gomis Mta" : slug === "highlights" ? "Georgia Highlights" : slug.charAt(0).toUpperCase() + slug.slice(1);
 
 export default function TourPhotosAdmin() {
+  const [mode, setMode] = useState("existing");
   const [session, setSession] = useState(null);
   const [allowed, setAllowed] = useState(false);
   const [checking, setChecking] = useState(true);
@@ -123,6 +125,11 @@ export default function TourPhotosAdmin() {
 
   return <AdminSubLayout active="Tour Photos" title="Tour Media Studio" subtitle="Manage cover photographs and galleries from one place.">
     {!supabase ? <div className={styles.error}>Supabase is not configured.</div> : checking ? <div className={styles.empty}>Checking administrator access…</div> : !session ? <div className={styles.empty}>Please <a href="/admin">sign in</a> first.</div> : !allowed ? <div className={styles.error}>Administrator access required.</div> : <>
+      <div className={studio.modeBar}>
+        <button type="button" className={mode === "existing" ? studio.modeActive : studio.modeButton} onClick={() => setMode("existing")}>Existing tours · Photos</button>
+        <button type="button" className={mode === "new" ? studio.modeActive : studio.modeButton} onClick={() => setMode("new")}>＋ Create & Manage New Tours</button>
+      </div>
+      {mode === "new" ? <NewToursManager /> : <>
       <div className={studio.stats}>
         <div className={studio.stat}><span>Total tours</span><strong>{tours.length}</strong><small>Available to manage</small></div>
         <div className={studio.stat}><span>Custom covers</span><strong>{customCovers}</strong><small>Uploaded main images</small></div>
@@ -152,6 +159,7 @@ export default function TourPhotosAdmin() {
         </div>
         <div className={studio.actions}><label className={studio.check}><input type="checkbox" checked={published} onChange={e => setPublished(e.target.checked)} /> Published on website</label><div className={studio.actionButtons}>{slug !== "airport-transfers" && <a className={studio.secondaryButton} href={`/${slug}`} target="_blank" rel="noreferrer">View tour ↗</a>}<button className={studio.saveButton} type="submit" disabled={busy || loading}>{busy ? "Uploading & saving…" : "Save changes"}</button></div></div>
       </form>
+      </>}
       {error && <div role="alert" className={styles.error}>{error}</div>}{message && <div role="status" className={styles.notice}>{message}</div>}
     </>}
   </AdminSubLayout>;
