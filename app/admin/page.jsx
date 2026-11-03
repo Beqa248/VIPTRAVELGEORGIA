@@ -8,7 +8,11 @@ const card={background:'white',border:'1px solid #e5d8c6',borderRadius:12,paddin
 const field=(label,name,value='',type='text',required=false)=><label style={{display:'block',fontWeight:600}}>{label}<input key={name+String(value)} style={inputStyle} type={type} name={name} defaultValue={value} required={required}/></label>;
 export default function Admin(){
  const [session,setSession]=useState(null),[authorized,setAuthorized]=useState(false),[checking,setChecking]=useState(true),[email,setEmail]=useState(''),[password,setPassword]=useState(''),[tab,setTab]=useState('vehicles'),[rows,setRows]=useState([]),[editing,setEditing]=useState(null),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState(''),[removed,setRemoved]=useState([]);
- useEffect(()=>{if(!client){setChecking(false);return;}client.auth.getSession().then(({data})=>setSession(data.session));const {data:{subscription}}=client.auth.onAuthStateChange((_,s)=>setSession(s));return()=>subscription.unsubscribe()},[]);
+ useEffect(()=>{if(!client){setChecking(false);return;}client.auth.getSession().then(({data})=>setSession(data.session));const {data:{subscription}}=client.auth.onAuthStateChange((event, s) => {
+  if (event === "SIGNED_IN" || event === "SIGNED_OUT") {
+    setSession(s);
+  }
+});return()=>subscription.unsubscribe()},[]);
  useEffect(()=>{let alive=true;setAuthorized(false);setChecking(true);if(!client||!session){setChecking(false);return;}client.from('admin_users').select('user_id').eq('user_id',session.user.id).maybeSingle().then(({data,error})=>{if(alive){setAuthorized(!!data&&!error);setChecking(false);if(error)setError(error.message);}});return()=>{alive=false}},[session]);
  
 async function refresh(which = tab) {
