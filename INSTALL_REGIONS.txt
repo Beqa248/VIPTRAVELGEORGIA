@@ -1,0 +1,18 @@
+VIPTravelGeorgia — Travel Regions Manager + Consistent Admin Navigation
+
+1. BACK UP your currently working GitHub main branch.
+2. Run REQUIRED_SUPABASE_REGIONS.sql in Supabase SQL Editor (after your previous admin SQL scripts).
+3. Upload the files from this ZIP to your repository root, preserving directory paths.
+4. Commit and wait for Vercel Ready.
+5. Visit /admin/regions. Add, edit, publish/hide, delete and reorder cards.
+6. Visit /travel to confirm the same cards appear in your selected order.
+
+Changes:
+- Existing Cars, Videos, Recent Tours, Reviews, Tour Manager and Customer Inquiries logic is preserved.
+- New Regions item in admin navigation on main dashboard and subpages.
+- Removes redundant dark admin branding strip from Customer Inquiries and Tour Photos.
+- Main admin has a slim sign-out row (sign-out remains available).
+- The eight original region cards are seeded only when missing.
+- Editing titles/descriptions in Admin saves English text; the existing language translations are used only as fallback when the database is unavailable.
+
+Note: This is an incremental patch. Do NOT delete other repository files.

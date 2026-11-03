@@ -5,3 +5,6 @@
 .formField select:focus{border-color:#60917c;box-shadow:0 0 0 3px #60917c24}
 .editor .formGrid{max-width:900px}.editor .formField textarea{min-height:125px}
 .editor .uploadGrid{max-width:900px}.editor .existingPhotos{max-width:1000px}
+
+/* Compact, consistent admin navigation */
+.topbar{padding:9px clamp(20px,4vw,48px);border-radius:0}.nav{padding-top:12px}

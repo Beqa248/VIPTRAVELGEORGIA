@@ -250,7 +250,7 @@ export default function Admin() {
     <main className={styles.shell}>
       <div className={styles.dashboard}>
         <header className={styles.topbar}>
-          <div className={styles.brand}><span className={styles.brandIcon}>▲</span><div><strong>VIPTravelGeorgia</strong><small>Content management dashboard</small></div></div>
+          <span style={{fontWeight:700}}>Admin dashboard</span>
           {session && <button type="button" className={styles.signOut} onClick={() => client?.auth.signOut()}>Sign out ↗</button>}
         </header>
         {!client ? <div className={styles.centerCard}>Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in Vercel, then redeploy.</div>
@@ -266,6 +266,7 @@ export default function Admin() {
         : <>
           <nav className={styles.nav} aria-label="Admin sections">
             {tabs.map(item => <button type="button" key={item.id} className={`${styles.navItem} ${tab === item.id ? styles.navActive : ""}`} onClick={() => switchTab(item.id)}><span>{item.icon}</span>{item.label}</button>)}
+            <a className={styles.navItem} href="/admin/regions"><span>🗺</span>Regions</a>
             <a className={styles.navItem} href="/admin/inquiries"><span>✉</span>Customer Inquiries</a>
             <a className={styles.navItem} href="/admin/tour-photos"><span>▧</span>Tour Photos</a>
           </nav>
