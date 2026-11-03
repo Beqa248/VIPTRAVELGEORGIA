@@ -2,7 +2,20 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../../lib/supabase";
 
-const tours = ["adjara", "martvili", "gomis", "svaneti", "kobuleti", "dashbashi", "vardzia", "tusheti", "beshumi", "kazbegi", "highlights"];
+const tours = [
+  "adjara",
+  "martvili",
+  "gomis",
+  "svaneti",
+  "kobuleti",
+  "dashbashi",
+  "vardzia",
+  "tusheti",
+  "beshumi",
+  "kazbegi",
+  "highlights",
+  "airport-transfers"
+];
 const button = { background: "#234B40", color: "white", border: 0, borderRadius: 8, padding: "10px 16px", cursor: "pointer", marginRight: 8 };
 const field = { width: "100%", padding: 10, margin: "8px 0 16px", boxSizing: "border-box" };
 
