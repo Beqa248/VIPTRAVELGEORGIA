@@ -10,14 +10,19 @@ export default function Page() {
   const { t } = useLanguage();
   const { rows } = usePublished("vehicles");
 
-  const cars = [
-    ...defaultVehicles.map(
-      (v) => rows.find((r) => r.name === v.name) || v
-    ),
-    ...rows.filter(
-      (r) => !defaultVehicles.some((v) => v.name === r.name)
-    ),
-  ];
+  const hiddenCars = [
+  "Mercedes Luxury",
+  "Classic Mercedes Charlotte"
+];
+
+const cars = [
+  ...defaultVehicles.map(
+    v => rows.find(r => r.name === v.name) || v
+  ),
+  ...rows.filter(
+    r => !defaultVehicles.some(v => v.name === r.name)
+  )
+].filter(car => !hiddenCars.includes(car.name));
 
   const [active, setActive] = useState(0);
 
