@@ -1,15 +1,21 @@
-// @ts-nocheck
-'use client';
-import { useEffect, useState } from 'react';
-import { supabase } from '../../../lib/supabase';
-import { Shell, card } from '../../../lib/ui';
-export default function Inquiries() { const [session, setSession] = useState(null), [authorized, setAuthorized] = useState(false), [items, setItems] = useState([]), [message, setMessage] = useState(''); useEffect(() => { if (!supabase)
-    return; supabase.auth.getSession().then(({ data }) => setSession(data.session)); const { data: { subscription } } = supabase.auth.onAuthStateChange((_, s) => setSession(s)); return () => subscription.unsubscribe(); }, []); useEffect(() => { if (!session)
-    return; supabase.from('admin_users').select('user_id').eq('user_id', session.user.id).maybeSingle().then(({ data }) => { setAuthorized(!!data); if (data)
-    load(); }); }, [session]); async function load() { let { data, error } = await supabase.from('inquiries').select('*').order('created_at', { ascending: false }); if (error)
-    setMessage(error.message);
-else
-    setItems(data || []); } async function change(id, status) { let { error } = await supabase.from('inquiries').update({ status }).eq('id', id); if (error)
-    setMessage(error.message);
-else
-    load(); } return <Shell title="Admin — inquiries & bookings"><p><a href="/admin">← Content dashboard</a></p>{!supabase ? <p>Configure Supabase first.</p> : !session ? <p>Please sign in at <a href="/admin">/admin</a>.</p> : !authorized ? <p>Administrator authorization required.</p> : <><p>{items.length} requests</p>{message && <p role="alert">{message}</p>}{items.map(x => <article key={x.id} style={card}><h3>{x.name} — {x.status}</h3><p>{x.email} · {x.phone} · {x.travelers} travelers</p><p>{x.start_date || 'Date TBD'} → {x.end_date || 'TBD'} · {x.destinations?.join(', ')}</p><p>Budget: {x.budget || 'Not supplied'} · Vehicle: {x.vehicle || 'Not selected'}</p><p>{x.interests}</p><label>Booking status <select value={x.status} onChange={e => change(x.id, e.target.value)}><option value="new">New</option><option value="contacted">Contacted</option><option value="quoted">Quoted</option><option value="deposit_pending">Deposit pending</option><option value="confirmed">Confirmed</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select></label> <a href={'mailto:' + encodeURIComponent(x.email)}>Email customer</a></article>)}</>}</Shell>; }
+"use client";
+import {useEffect,useMemo,useState} from "react";
+import {supabase} from "../../../lib/supabase";
+import AdminSubLayout from "../AdminSubLayout";
+import styles from "../subpages.module.css";
+const statuses=["new","contacted","quoted","deposit_pending","confirmed","completed","cancelled"];
+export default function Inquiries(){
+ const [session,setSession]=useState(null),[authorized,setAuthorized]=useState(false),[checking,setChecking]=useState(true),[items,setItems]=useState([]),[message,setMessage]=useState(""),[search,setSearch]=useState(""),[filter,setFilter]=useState("all"),[busy,setBusy]=useState(null);
+ useEffect(()=>{if(!supabase){setChecking(false);return;}let live=true;supabase.auth.getSession().then(({data})=>{if(live)setSession(data.session)});const {data:{subscription}}=supabase.auth.onAuthStateChange((event,s)=>{if(live&&(event==="SIGNED_OUT"||event==="SIGNED_IN"))setSession(old=>old?.user?.id===s?.user?.id?old:s)});return()=>{live=false;subscription.unsubscribe()};},[]);
+ useEffect(()=>{let live=true;if(!session?.user?.id){setAuthorized(false);setChecking(false);return;}setChecking(true);supabase.from("admin_users").select("user_id").eq("user_id",session.user.id).maybeSingle().then(({data,error})=>{if(!live)return;setAuthorized(!!data&&!error);setChecking(false);if(data&&!error)load()});return()=>{live=false}},[session?.user?.id]);
+ async function load(){const {data,error}=await supabase.from("inquiries").select("*").order("created_at",{ascending:false});if(error)setMessage(error.message);else setItems(data||[])}
+ async function change(id,status){setBusy(id);setMessage("");const {error}=await supabase.from("inquiries").update({status}).eq("id",id);if(error)setMessage(error.message);else{setItems(old=>old.map(x=>x.id===id?{...x,status}:x))}setBusy(null)}
+ const shown=useMemo(()=>items.filter(x=>(filter==="all"||x.status===filter)&&[x.name,x.email,x.phone,x.vehicle,JSON.stringify(x.destinations||[]),x.interests].join(" ").toLowerCase().includes(search.toLowerCase())),[items,search,filter]);
+ return <AdminSubLayout active="Customer Inquiries" title="Customer inquiries" subtitle="Review trip requests, contact travelers, and track bookings.">
+ {!supabase?<div className={styles.error}>Configure Supabase first.</div>:checking?<div className={styles.empty}>Checking administrator access…</div>:!session?<div className={styles.empty}>Please sign in at <a href="/admin">Admin Dashboard</a>.</div>:!authorized?<div className={styles.error}>Administrator authorization required.</div>:<>
+ <div className={styles.stats}><div className={styles.stat}><span>Total requests</span><strong>{items.length}</strong></div><div className={styles.stat}><span>New inquiries</span><strong>{items.filter(x=>x.status==="new").length}</strong></div><div className={styles.stat}><span>Confirmed</span><strong>{items.filter(x=>x.status==="confirmed").length}</strong></div></div>
+ <div className={styles.toolbar}><input className={styles.input} value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search customers, destinations, emails…" aria-label="Search inquiries"/><select className={styles.select} value={filter} onChange={e=>setFilter(e.target.value)} aria-label="Filter booking status"><option value="all">All statuses</option>{statuses.map(x=><option key={x} value={x}>{x.replaceAll("_"," ")}</option>)}</select><button className={`${styles.button} ${styles.secondary}`} onClick={load}>↻ Refresh</button></div>
+ {message&&<div className={styles.error} role="alert">{message}</div>}
+ {shown.length===0?<div className={styles.empty}>No matching inquiries found.</div>:<div className={styles.cards}>{shown.map(x=><article className={styles.card} key={x.id}><div style={{display:"flex",justifyContent:"space-between",gap:12,flexWrap:"wrap"}}><h3>{x.name||"Unnamed traveler"}</h3><span className={styles.pill}>{(x.status||"new").replaceAll("_"," ")}</span></div><div className={styles.details}><p>✉ {x.email||"No email"} · ☎ {x.phone||"No phone"}</p><p>👥 {x.travelers??"—"} travelers · 📅 {x.start_date||"Date TBD"} → {x.end_date||"TBD"}</p><p><strong>Destinations:</strong> {Array.isArray(x.destinations)?x.destinations.join(", "):x.destinations||"Not specified"}</p><p><strong>Vehicle:</strong> {x.vehicle||"Not selected"} · <strong>Budget:</strong> {x.budget||"Not supplied"}</p>{x.interests&&<p><strong>Interests:</strong> {typeof x.interests==="string"?x.interests:JSON.stringify(x.interests)}</p>}</div><div className={styles.actions}><select className={styles.select} aria-label={`Status for ${x.name}`} disabled={busy===x.id} value={x.status||"new"} onChange={e=>change(x.id,e.target.value)}>{statuses.map(s=><option key={s} value={s}>{s.replaceAll("_"," ")}</option>)}</select>{x.email&&<a className={styles.button} href={`mailto:${x.email}`}>Email customer</a>}</div></article>)}</div>}</>}
+ </AdminSubLayout>
+}

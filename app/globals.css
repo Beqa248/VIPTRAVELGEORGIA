@@ -429,3 +429,9 @@ footer {
     grid-template-columns: 1fr !important;
   }
 }
+
+/* Hide public navigation and footer only on dedicated admin subpages */
+body:has(.adminSubRoot) header,
+body:has(.adminSubRoot) footer,
+body:has(.adminSubRoot) .wafloat { display:none!important; }
+body:has(.adminSubRoot) .vtg-shell { min-height:0!important; }

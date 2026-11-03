@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { supabase } from "../../../lib/supabase";
+import AdminSubLayout from "../AdminSubLayout";
+import styles from "../subpages.module.css";
 
 const tours = [
   "adjara",
@@ -86,26 +88,27 @@ export default function TourPhotosAdmin() {
     finally { setBusy(false); }
   }
 
-  return <main style={{ minHeight: "100vh", background: "#F3F0E9", color: "#234B40", padding: "35px 5%", fontFamily: "Arial,sans-serif" }}>
-    <div style={{ maxWidth: 850, margin: "auto" }}>
-      <p><a href="/admin">← Back to admin</a></p><h1>Tour Cover Photos & Galleries</h1>
-      {!supabase ? <p>Supabase is not configured.</p> : checking ? <p>Checking admin access…</p> : !session ? <p>Please <a href="/admin">sign in</a> first.</p> : !allowed ? <p>Administrator access required.</p> : <>
-        <label>Select existing tour<select style={field} value={slug} onChange={e => setSlug(e.target.value)}>{tours.map(t => <option key={t} value={t}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>)}</select></label>
-        <p>Original tour photos remain in place. Upload a new cover to replace the tour banner and Tours-page card image. Gallery photos are added below the existing gallery images.</p>
-        <form onSubmit={save} style={{ background: "white", padding: 24, borderRadius: 12 }} key={slug + (record?.updated_at || "new")}>
-          <h2>Cover photo</h2>
-          {record?.cover_url && <div><img src={record.cover_url} alt="Current cover" style={{ width: 280, maxWidth: "100%", borderRadius: 8 }} /><label style={{ display: "block" }}><input type="checkbox" name="remove_cover" /> Restore original cover photo</label></div>}
-          <input style={field} type="file" name="cover" accept="image/jpeg,image/png,image/webp" />
-          <h2>Additional gallery photos</h2>
-          <input style={field} type="file" name="gallery" multiple accept="image/jpeg,image/png,image/webp" />
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginBottom: 20 }}>
-            {(record?.gallery_images || []).map(url => <label key={url} style={{ width: 130 }}><img src={url} alt="Tour gallery" style={{ width: 130, height: 95, objectFit: "cover" }} /><span style={{ display: "block" }}><input type="checkbox" checked={removed.includes(url)} onChange={e => setRemoved(old => e.target.checked ? [...old, url] : old.filter(x => x !== url))} /> Remove</span></label>)}
-          </div>
-          <label><input type="checkbox" name="published" defaultChecked={record?.published ?? true} /> Published</label>
-          <div style={{ marginTop: 20 }}><button type="submit" style={button} disabled={busy}>{busy ? "Uploading…" : "Save tour photos"}</button><a href={`/${slug}`} target="_blank" rel="noreferrer">View tour</a></div>
-        </form>
-        {error && <p role="alert" style={{ color: "#a52418" }}>{error}</p>}{message && <p role="status">{message}</p>}
-      </>}
-    </div>
-  </main>;
+  return <AdminSubLayout active="Tour Photos" title="Tour covers & galleries" subtitle="Manage cover images and galleries for your existing tours.">
+    {!supabase ? <div className={styles.error}>Supabase is not configured.</div> : checking ? <div className={styles.empty}>Checking administrator access…</div> : !session ? <div className={styles.empty}>Please <a href="/admin">sign in</a> first.</div> : !allowed ? <div className={styles.error}>Administrator access required.</div> : <>
+      <div className={styles.toolbar}><label className={styles.field} style={{flex:1}}>Choose a tour
+        <select className={styles.select} value={slug} onChange={e => setSlug(e.target.value)}>{tours.map(t => <option key={t} value={t}>{t === "airport-transfers" ? "Airport Transfers" : t.charAt(0).toUpperCase() + t.slice(1)}</option>)}</select>
+      </label></div>
+      <p className={styles.muted}>Original photos remain in place. Uploaded cover photos replace the tour banner and card image. Additional gallery photos appear after existing gallery images.</p>
+      <form onSubmit={save} key={slug + (record?.updated_at || "new")}>
+        <div className={styles.cards}>
+          <section className={styles.card}><h2>Cover photo</h2>
+            {record?.cover_url ? <><img className={styles.preview} src={record.cover_url} alt="Current tour cover"/><label className={styles.field} style={{marginTop:12,flexDirection:"row",alignItems:"center"}}><input type="checkbox" name="remove_cover"/> Restore original cover photo</label></> : <div className={styles.empty}>No custom cover uploaded. Original cover is being used.</div>}
+            <label className={styles.upload} style={{marginTop:14}}><strong>↑ Upload new cover</strong><span className={styles.muted}>JPG, PNG or WebP · up to 6 MB</span><input type="file" name="cover" accept="image/jpeg,image/png,image/webp"/></label>
+          </section>
+          <section className={styles.card}><h2>Additional gallery photos</h2>
+            <label className={styles.upload}><strong>↑ Add gallery photos</strong><span className={styles.muted}>Choose multiple images · up to 6 MB each</span><input type="file" name="gallery" multiple accept="image/jpeg,image/png,image/webp"/></label>
+            <p className={styles.muted}>{(record?.gallery_images||[]).length} uploaded gallery photos</p>
+            <div className={styles.gallery}>{(record?.gallery_images||[]).map(url=><label key={url} className={styles.tile}><img src={url} alt="Tour gallery"/><span><input type="checkbox" checked={removed.includes(url)} onChange={e=>setRemoved(old=>e.target.checked?[...old,url]:old.filter(x=>x!==url))}/> Remove photo</span></label>)}</div>
+          </section>
+        </div>
+        <div className={styles.card} style={{marginTop:16}}><div className={styles.actions}><label className={styles.field} style={{flexDirection:"row",alignItems:"center"}}><input type="checkbox" name="published" defaultChecked={record?.published ?? true}/> Published</label><button type="submit" className={styles.button} disabled={busy}>{busy?"Uploading…":"Save tour photos"}</button>{slug!=="airport-transfers"&&<a className={`${styles.button} ${styles.secondary}`} href={`/${slug}`} target="_blank" rel="noreferrer">View tour ↗</a>}</div></div>
+      </form>
+      {error&&<div role="alert" className={styles.error}>{error}</div>}{message&&<div role="status" className={styles.notice}>{message}</div>}
+    </>}
+  </AdminSubLayout>;
 }
