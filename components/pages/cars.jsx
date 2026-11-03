@@ -14,7 +14,10 @@ export default function Page() {
   "Classic Mercedes Charlotte"
 ];
 
-const cars = rows;
+const cars = [...rows].sort(
+  (a, b) =>
+    (a.sort_order ?? 999999) - (b.sort_order ?? 999999)
+);
 
   const [active, setActive] = useState(0);
 
