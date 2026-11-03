@@ -396,3 +396,36 @@ footer {
 #wa { background: #25D366; }
 #tg { background: #229ED9; }
 #fb { background: #1877F2; }
+
+
+/* Equal-size tour gallery photos */
+[data-p]:not([data-p="cars"]) .gal,
+[data-p]:not([data-p="cars"]) .gal.soft {
+  columns: auto !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+  align-items: start !important;
+}
+
+[data-p]:not([data-p="cars"]) .gal img {
+  display: block !important;
+  width: 100% !important;
+  height: 220px !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  margin: 0 !important;
+  max-width: none !important;
+}
+
+@media (max-width: 800px) {
+  [data-p]:not([data-p="cars"]) .gal {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 500px) {
+  [data-p]:not([data-p="cars"]) .gal {
+    grid-template-columns: 1fr !important;
+  }
+}
