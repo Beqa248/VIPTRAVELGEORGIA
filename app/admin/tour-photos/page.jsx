@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../../lib/supabase";
 import AdminSubLayout from "../AdminSubLayout";
 import styles from "../subpages.module.css";
+import studio from "./studio.module.css";
 
 const tours = [
   "adjara",
@@ -31,6 +32,8 @@ export default function TourPhotosAdmin() {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [coverPreview, setCoverPreview] = useState(null);
+  const [galleryPreview, setGalleryPreview] = useState([]);
 
   useEffect(() => {
     if (!supabase) { setChecking(false); return; }
@@ -49,7 +52,7 @@ export default function TourPhotosAdmin() {
   }, []);
 
   async function load(which) {
-    setError(""); setMessage(""); setRemoved([]);
+    setError(""); setMessage(""); setRemoved([]); setCoverPreview(null); setGalleryPreview([]);
     const { data, error } = await supabase.from("tour_page_media").select("*").eq("slug", which).maybeSingle();
     if (error) setError(error.message);
     setRecord(data || null);
@@ -81,32 +84,35 @@ export default function TourPhotosAdmin() {
       const { error } = await supabase.from("tour_page_media").upsert(payload, { onConflict: "slug" });
       if (error) throw error;
       setMessage("Saved. Refresh the public tour page to see the changes.");
-      form.reset();
+      form.reset(); setCoverPreview(null); setGalleryPreview([]);
       await load(slug);
       setMessage("Saved. Refresh the public tour page to see the changes.");
     } catch (err) { setError(err.message); }
     finally { setBusy(false); }
   }
 
-  return <AdminSubLayout active="Tour Photos" title="Tour covers & galleries" subtitle="Manage cover images and galleries for your existing tours.">
+  return <AdminSubLayout active="Tour Photos" title="Tour Media Studio" subtitle="A dedicated workspace for tour covers and galleries.">
     {!supabase ? <div className={styles.error}>Supabase is not configured.</div> : checking ? <div className={styles.empty}>Checking administrator access…</div> : !session ? <div className={styles.empty}>Please <a href="/admin">sign in</a> first.</div> : !allowed ? <div className={styles.error}>Administrator access required.</div> : <>
-      <div className={styles.toolbar}><label className={styles.field} style={{flex:1}}>Choose a tour
-        <select className={styles.select} value={slug} onChange={e => setSlug(e.target.value)}>{tours.map(t => <option key={t} value={t}>{t === "airport-transfers" ? "Airport Transfers" : t.charAt(0).toUpperCase() + t.slice(1)}</option>)}</select>
-      </label></div>
-      <p className={styles.muted}>Original photos remain in place. Uploaded cover photos replace the tour banner and card image. Additional gallery photos appear after existing gallery images.</p>
-      <form onSubmit={save} key={slug + (record?.updated_at || "new")}>
-        <div className={styles.cards}>
-          <section className={styles.card}><h2>Cover photo</h2>
-            {record?.cover_url ? <><img className={styles.preview} src={record.cover_url} alt="Current tour cover"/><label className={styles.field} style={{marginTop:12,flexDirection:"row",alignItems:"center"}}><input type="checkbox" name="remove_cover"/> Restore original cover photo</label></> : <div className={styles.empty}>No custom cover uploaded. Original cover is being used.</div>}
-            <label className={styles.upload} style={{marginTop:14}}><strong>↑ Upload new cover</strong><span className={styles.muted}>JPG, PNG or WebP · up to 6 MB</span><input type="file" name="cover" accept="image/jpeg,image/png,image/webp"/></label>
+      <div className={studio.selector}><div><span className={studio.eyebrow}>SELECT DESTINATION</span><h2>Choose a tour</h2><p>Manage each tour's photos without changing its itinerary.</p></div><select aria-label="Choose a tour" value={slug} onChange={e=>setSlug(e.target.value)}>{tours.map(t=><option key={t} value={t}>{t==="airport-transfers"?"Airport Transfers":t.charAt(0).toUpperCase()+t.slice(1)}</option>)}</select></div>
+      <form onSubmit={save} key={slug+(record?.updated_at||"new")}>
+        <div className={studio.workspace}>
+          <section className={studio.panel}>
+            <div className={studio.panelHead}><div><span className={studio.eyebrow}>MAIN IMAGE</span><h2>Cover photo</h2><p>Shown on the tour banner and Tours page card.</p></div><span className={studio.count}>{record?.cover_url?"Custom cover":"Original cover"}</span></div>
+            <div className={studio.coverFrame}>{coverPreview||record?.cover_url?<img src={coverPreview||record.cover_url} alt="Tour cover preview"/>:<div className={studio.placeholder}><span className={studio.largeIcon}>▧</span><strong>Original cover in use</strong><small>Upload a new image to replace it.</small></div>}</div>
+            <label className={studio.upload}><span>＋ Choose cover image</span><small>JPG, PNG or WebP · Maximum 6 MB</small><input type="file" name="cover" accept="image/jpeg,image/png,image/webp" onChange={e=>{if(coverPreview)URL.revokeObjectURL(coverPreview);setCoverPreview(e.target.files?.[0]?URL.createObjectURL(e.target.files[0]):null)}}/></label>
+            {record?.cover_url&&<label className={studio.check}><input type="checkbox" name="remove_cover"/> Restore original cover when saving</label>}
           </section>
-          <section className={styles.card}><h2>Additional gallery photos</h2>
-            <label className={styles.upload}><strong>↑ Add gallery photos</strong><span className={styles.muted}>Choose multiple images · up to 6 MB each</span><input type="file" name="gallery" multiple accept="image/jpeg,image/png,image/webp"/></label>
-            <p className={styles.muted}>{(record?.gallery_images||[]).length} uploaded gallery photos</p>
-            <div className={styles.gallery}>{(record?.gallery_images||[]).map(url=><label key={url} className={styles.tile}><img src={url} alt="Tour gallery"/><span><input type="checkbox" checked={removed.includes(url)} onChange={e=>setRemoved(old=>e.target.checked?[...old,url]:old.filter(x=>x!==url))}/> Remove photo</span></label>)}</div>
+          <section className={studio.panel}>
+            <div className={studio.panelHead}><div><span className={studio.eyebrow}>PHOTO COLLECTION</span><h2>Gallery photos</h2><p>Add multiple photos and manage uploaded images.</p></div><span className={studio.count}>{(record?.gallery_images||[]).length} saved</span></div>
+            <label className={studio.upload}><span>＋ Add gallery photos</span><small>Select multiple images · Maximum 6 MB each</small><input type="file" name="gallery" multiple accept="image/jpeg,image/png,image/webp" onChange={e=>{galleryPreview.forEach(u=>URL.revokeObjectURL(u));setGalleryPreview(Array.from(e.target.files||[]).map(f=>URL.createObjectURL(f)))}}/></label>
+            <div className={studio.gallery}>
+              {(record?.gallery_images||[]).map(url=><label key={url} className={`${studio.photo} ${removed.includes(url)?studio.marked:""}`}><img src={url} alt="Uploaded gallery photograph"/><span><input type="checkbox" checked={removed.includes(url)} onChange={e=>setRemoved(old=>e.target.checked?[...old,url]:old.filter(x=>x!==url))}/>{removed.includes(url)?"Remove on save":"Mark for removal"}</span></label>)}
+              {galleryPreview.map((url,i)=><div className={studio.photo} key={url}><img src={url} alt={`New photo ${i+1}`}/><span>New · ready to upload</span></div>)}
+            </div>
+            {!(record?.gallery_images||[]).length&&!galleryPreview.length&&<div className={studio.noPhotos}>No additional photos uploaded yet. Original gallery photos remain on the tour page.</div>}
           </section>
         </div>
-        <div className={styles.card} style={{marginTop:16}}><div className={styles.actions}><label className={styles.field} style={{flexDirection:"row",alignItems:"center"}}><input type="checkbox" name="published" defaultChecked={record?.published ?? true}/> Published</label><button type="submit" className={styles.button} disabled={busy}>{busy?"Uploading…":"Save tour photos"}</button>{slug!=="airport-transfers"&&<a className={`${styles.button} ${styles.secondary}`} href={`/${slug}`} target="_blank" rel="noreferrer">View tour ↗</a>}</div></div>
+        <div className={studio.savebar}><label className={studio.check}><input type="checkbox" name="published" defaultChecked={record?.published??true}/> Published</label><div className={studio.saveactions}>{slug!=="airport-transfers"&&<a href={`/${slug}`} target="_blank" rel="noreferrer" className={studio.view}>View tour ↗</a>}<button className={studio.save} type="submit" disabled={busy}>{busy?"Uploading & saving…":"Save changes"}</button></div></div>
       </form>
       {error&&<div role="alert" className={styles.error}>{error}</div>}{message&&<div role="status" className={styles.notice}>{message}</div>}
     </>}
