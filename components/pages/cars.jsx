@@ -4,7 +4,6 @@
 import { useState, useEffect } from "react";
 import { useLanguage } from "../site-context";
 import usePublished from "../usePublished";
-import { defaultVehicles } from "../../lib/defaultVehicles";
 
 export default function Page() {
   const { t } = useLanguage();
@@ -15,14 +14,7 @@ export default function Page() {
   "Classic Mercedes Charlotte"
 ];
 
-const cars = [
-  ...defaultVehicles.map(
-    v => rows.find(r => r.name === v.name) || v
-  ),
-  ...rows.filter(
-    r => !defaultVehicles.some(v => v.name === r.name)
-  )
-].filter(car => !hiddenCars.includes(car.name));
+const cars = rows;
 
   const [active, setActive] = useState(0);
 
