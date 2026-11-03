@@ -220,3 +220,179 @@ footer .footer-socials a:hover {
 /* CMS additions */
 #hCars .ctile{background-size:cover!important;background-position:center!important;overflow:hidden}#hCars .ctile span{color:white;text-shadow:0 2px 5px #0009}.guest-review-form{max-width:620px;margin:35px 0;padding:22px;border:1px solid #e6d6bd;border-radius:12px;background:#fffaf1}.guest-review-form label{display:block;margin:12px 0;font-weight:600}.guest-review-form input,.guest-review-form select,.guest-review-form textarea{display:block;width:100%;box-sizing:border-box;padding:10px;margin-top:6px;border:1px solid #d8c9b6;border-radius:8px}.guest-review-form .btn{margin-top:10px}
 
+
+/* VIPTravelGeorgia — Premium Color Palette */
+/* Colors only: no layout or structural changes */
+
+:root {
+  --bg: #F3F0E9;
+  --fg: #263831;
+  --mut: #65736A;
+  --card: #FAF9F6;
+  --acc: #B7864B;
+  --acc2: #234B40;
+  --bd: #DED8CB;
+}
+
+/* Header and navigation */
+header {
+  background: #F8F6F1;
+  border-image: none;
+  border-bottom-color: #D9D3C7;
+}
+
+.logo {
+  color: #234B40;
+}
+
+header nav a.on,
+.lang button.on {
+  background: #234B40;
+  border-color: #234B40;
+}
+
+.vtg-active {
+  background: #234B40 !important;
+}
+
+/* Buttons and links */
+.btn {
+  background: linear-gradient(135deg, #B7864B, #C69A62);
+  box-shadow: 0 3px 10px rgba(91, 65, 35, 0.18);
+}
+
+.btn.alt {
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: none;
+}
+
+.btn.alt2 {
+  background: transparent;
+  color: #234B40;
+  border-color: #234B40;
+  box-shadow: none;
+}
+
+.lnk a,
+.trbtn,
+.durtag {
+  color: #234B40 !important;
+}
+
+.trbtn {
+  border-color: #234B40;
+}
+
+.vtg-extras a,
+.tabs button.on {
+  background: #234B40;
+  border-color: #234B40;
+}
+
+/* Headings and section backgrounds */
+h2,
+.cinfo b,
+.facts li b {
+  color: #234B40;
+}
+
+h2::after {
+  background: linear-gradient(90deg, #B7864B, #D1B184);
+}
+
+.why,
+.howsec {
+  background: #E7EEE8;
+  border-color: #D4E0D7;
+}
+
+section#contact {
+  background: #EEE9DF;
+}
+
+/* Tour page backgrounds */
+.page[data-p="tours"],
+.page[data-p="adjara"],
+.page[data-p="martvili"],
+.page[data-p="gomis"],
+.page[data-p="reviews"] {
+  background: linear-gradient(180deg, #EBE7DE, #F3F0E9 300px);
+}
+
+/* Cards and visual accents */
+.card {
+  border-top-color: #B7864B;
+}
+
+.grid .card:nth-child(2),
+.grid .card:nth-child(6),
+.grid .card:nth-child(10) {
+  border-top-color: #507366;
+}
+
+.grid .card:nth-child(3),
+.grid .card:nth-child(7),
+.grid .card:nth-child(11) {
+  border-top-color: #9C8467;
+}
+
+.grid .card:nth-child(4),
+.grid .card:nth-child(8),
+.grid .card:nth-child(12) {
+  border-top-color: #718B82;
+}
+
+.grid .card:nth-child(5),
+.grid .card:nth-child(9),
+.grid .card:nth-child(13) {
+  border-top-color: #A79A7C;
+}
+
+.vid {
+  border-top-color: #9C8467;
+}
+
+.vid a.play {
+  background: linear-gradient(135deg, #234B40, #507366);
+}
+
+.step b,
+#ph {
+  background: #B7864B;
+}
+
+#em {
+  background: #507366;
+}
+
+.seas p {
+  border-left-color: #507366;
+}
+
+.tile,
+.rtile {
+  background-color: #234B40;
+}
+
+/* Footer */
+footer {
+  background: linear-gradient(90deg, #183D35, #285347);
+  color: #F3F0E9;
+}
+
+/* Guest review form */
+.guest-review-form {
+  background: #FAF9F6;
+  border-color: #DED8CB;
+}
+
+.guest-review-form input,
+.guest-review-form select,
+.guest-review-form textarea {
+  border-color: #DED8CB;
+}
+
+/* Keep familiar social platform colors */
+#wa { background: #25D366; }
+#tg { background: #229ED9; }
+#fb { background: #1877F2; }
