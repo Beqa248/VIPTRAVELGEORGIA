@@ -1,11 +1,12 @@
 // @ts-nocheck
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { Shell, card, field, button } from '../../lib/ui';
 const places = ['Tbilisi', 'Kazbegi', 'Borjomi', 'Batumi', 'Kutaisi', 'Svaneti', 'Vardzia', 'Rabati', 'Kakheti', 'Martvili', 'Gomismta'];
 export default function CustomTour() {
     const [picked, setPicked] = useState([]), [form, setForm] = useState({ name: '', email: '', phone: '', start_date: '', end_date: '', travelers: 2, budget: '', vehicle: '', interests: '', language: 'en', consent: false }), [msg, setMsg] = useState(''), [busy, setBusy] = useState(false);
+    useEffect(() => { const params = new URLSearchParams(window.location.search); const travelers = Number(params.get('travelers')); const days = Number(params.get('days')); const interests = params.get('interests') || ''; if (params.has('travelers') || params.has('days') || interests) setForm(old => ({ ...old, travelers: Number.isFinite(travelers) && travelers > 0 ? Math.min(20, travelers) : old.travelers, interests: [interests, days > 0 ? `Requested duration: ${days} day${days === 1 ? '' : 's'}` : ''].filter(Boolean).join('\n') })); }, []);
     const update = (k, v) => setForm(s => ({ ...s, [k]: v }));
     async function submit(e) { e.preventDefault(); setBusy(true); setMsg(''); if (!supabase) {
         setMsg('Booking requests are not connected yet. Contact us on WhatsApp.');
