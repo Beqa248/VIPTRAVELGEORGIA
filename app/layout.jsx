@@ -6,6 +6,7 @@ import "./final-home-layout.css";
 import "./inner-pages-layout.css";
 import "./aligned-home-blocks.css";
 import "./equal-review-cards.css";
+import "./final-approved-polish.css";
 import { LanguageProvider } from "../components/site-context";
 import SiteHeader from "../components/SiteHeader";
 import SiteFooter from "../components/SiteFooter";

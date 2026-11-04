@@ -1,0 +1,88 @@
+/* Final scoped homepage polish. No global width or typography changes. */
+:root{--vtg-page:#f7f8f5;--vtg-green:#e6eee8;--vtg-blue:#eaf0f2}
+/* The site canvas stays one neutral color; colored sections sit INSIDE the shared grid. */
+.vtg-shell [data-p="home"]{background:var(--vtg-page)!important}
+.vtg-shell [data-p="home"] .vtg-plan-band{background:transparent!important;padding:22px 0!important}
+.vtg-shell [data-p="home"] .vtg-plan-inner{
+ width:90%!important;max-width:none!important;margin:0 auto!important;
+ padding:26px!important;box-sizing:border-box!important;
+ background:var(--vtg-green)!important;border:1px solid #d2ded6!important;border-radius:14px!important;
+}
+.vtg-shell [data-p="home"] .vtg-plan-row{
+ background:transparent!important;border:0!important;border-radius:0!important;
+ padding:0!important;margin:0!important;width:100%!important;
+ align-items:stretch!important;
+}
+.vtg-shell [data-p="home"] .vtg-plan-row>section{align-self:stretch!important;height:100%!important}
+.vtg-shell [data-p="home"] .vtg-plan-row .howsec .wrap{height:100%!important}
+.vtg-shell [data-p="home"] .vtg-plan-row .howsec .steps{flex:1!important;display:flex!important;flex-direction:column!important}
+.vtg-shell [data-p="home"] .vtg-plan-row .howsec .step{flex:1 1 0!important}
+.vtg-shell [data-p="home"] .vtg-plan-benefits{
+ margin-top:18px!important;padding-top:16px!important;border-top:1px solid #cbd9d0!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;gap:10px!important;
+ width:100%!important;text-align:center!important;
+}
+/* Only the original TripPlanner footnote is hidden; keep the single centered benefits footer. */
+.vtg-shell [data-p="home"] .vtg-plan-row .planner-footnote,
+.vtg-shell [data-p="home"] .vtg-plan-row .trip-footnote{display:none!important}
+/* Center only the gold planner action, without altering its behavior. */
+.vtg-shell [data-p="home"] .vtg-plan-row button[type="submit"],
+.vtg-shell [data-p="home"] .vtg-plan-row .suggest-btn{margin-left:auto!important;margin-right:auto!important;display:block!important}
+/* Shared outer containers: 90% wide, matching top and bottom edges. */
+.vtg-shell [data-p="home"]>.vtg-about-row,
+.vtg-shell [data-p="home"]>.vtg-cars-pricing-row{
+ width:90%!important;margin:22px auto!important;padding:16px!important;
+ box-sizing:border-box!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ gap:16px!important;align-items:stretch!important;border-radius:13px!important;
+ border:1px solid #d2ded6!important;
+}
+.vtg-shell [data-p="home"]>.vtg-about-row{background:var(--vtg-blue)!important}
+.vtg-shell [data-p="home"]>.vtg-cars-pricing-row{background:var(--vtg-green)!important}
+.vtg-shell [data-p="home"]>.vtg-about-row>section,
+.vtg-shell [data-p="home"]>.vtg-cars-pricing-row>section{height:100%!important;min-width:0!important}
+.vtg-shell [data-p="home"]>.vtg-about-row>section>.wrap,
+.vtg-shell [data-p="home"]>.vtg-cars-pricing-row>section>.wrap{height:100%!important;box-sizing:border-box!important}
+/* Reviews and seasons are separate colored cards, NOT full viewport bands. */
+.vtg-shell [data-p="home"]>section#hRev,
+.vtg-shell [data-p="home"]>section#hSeason{
+ width:90%!important;max-width:none!important;margin:22px auto!important;
+ padding:24px!important;box-sizing:border-box!important;border-radius:13px!important;
+ border:1px solid #d2ded6!important;
+}
+.vtg-shell [data-p="home"]>section#hRev{background:var(--vtg-blue)!important}
+.vtg-shell [data-p="home"]>section#hSeason{background:var(--vtg-green)!important}
+.vtg-shell [data-p="home"]>section#hRev>.wrap,
+.vtg-shell [data-p="home"]>section#hSeason>.wrap{
+ width:100%!important;max-width:none!important;margin:0!important;padding:0!important;
+}
+.vtg-shell [data-p="home"] #hSeason .seas>*{background:#fff!important;border-radius:8px!important}
+/* Same bright gradients on HOME and CONTACT, directly on the gray panel. */
+.vtg-shell [data-p="home"] #contact .links,
+.vtg-shell [data-p="contact"] #contact .links{
+ display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;
+ gap:9px!important;width:100%!important;max-width:none!important;
+ padding:0!important;margin:16px 0!important;background:transparent!important;
+ border:0!important;box-shadow:none!important;border-radius:0!important;
+}
+.vtg-shell [data-p="home"] #contact .links>a,
+.vtg-shell [data-p="contact"] #contact .links>a{
+ display:flex!important;justify-content:center!important;align-items:center!important;
+ width:100%!important;min-width:0!important;box-sizing:border-box!important;
+ min-height:46px!important;padding:10px 3px!important;border:0!important;
+ border-radius:10px!important;color:#fff!important;font-weight:700!important;text-align:center!important;
+ text-decoration:none!important;box-shadow:0 4px 10px rgba(20,50,55,.10)!important;
+}
+.vtg-shell #contact .links #wa{background:linear-gradient(125deg,#67ef62 0%,#1dd765 45%,#009e73 100%)!important}
+.vtg-shell #contact .links #tg{background:linear-gradient(125deg,#68e5ff 0%,#20b8f0 45%,#1876df 100%)!important}
+.vtg-shell #contact .links #fb{background:linear-gradient(125deg,#51b5ff 0%,#1877f2 48%,#5145df 100%)!important}
+.vtg-shell #contact .links #ig{background:linear-gradient(125deg,#ffcb45 0%,#ff7638 27%,#f02886 60%,#8134d8 100%)!important}
+.vtg-shell #contact .links>a:hover{filter:brightness(1.05)!important;transform:translateY(-1px)}
+@media(max-width:760px){
+ .vtg-shell [data-p="home"]>.vtg-about-row,
+ .vtg-shell [data-p="home"]>.vtg-cars-pricing-row{grid-template-columns:minmax(0,1fr)!important}
+ .vtg-shell [data-p="home"] .vtg-plan-inner{padding:16px!important}
+}
+@media(max-width:650px){
+ .vtg-shell [data-p="home"] #contact .links,
+ .vtg-shell [data-p="contact"] #contact .links{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}

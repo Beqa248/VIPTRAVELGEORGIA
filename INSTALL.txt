@@ -1,3 +1,4 @@
-Apply on top of the previous Combined Planner + Reviews + Social patch. Extract into project root, overwriting matching paths.
-Changes: hide duplicate benefits only on homepage (keep on other TripPlanner uses); keep the single centered benefits row at bottom; match Contact page Instagram gradient; enforce planner/How It Works column alignment.
-No production build run.
+Combined changes-only patch. Based on VIPTRAVELGEORGIA-main(7).zip plus the previously approved planner/contact/reviews updates.
+Copy the included app/, components/, and lib/ files into your Next.js project root, preserving paths and overwriting matching files.
+Do not remove other files. Commit/backup first. No build or browser test was run.
+Includes the earlier planner/reviews fixes plus new colored section containers, centered planner action and vibrant social gradients on home and contact without white social-row backing.
