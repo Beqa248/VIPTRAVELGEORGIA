@@ -153,3 +153,38 @@
     width:100% !important;
   }
 }
+
+/* Contact section: one outer colored panel at the SAME width as the other
+   home sections; two existing colored cards remain inside it. */
+.vtg-shell [data-p="home"] > .vtg-contact-alignment {
+  width:100%!important; max-width:none!important; margin:22px auto!important;
+  box-sizing:border-box!important;
+}
+.vtg-shell [data-p="home"] > .vtg-contact-alignment > .vtg-contact-row {
+  width:100%!important;max-width:none!important;margin:0!important;
+  padding:16px!important;box-sizing:border-box!important;
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:16px!important;align-items:stretch!important;
+  background:#e6eee8!important;border:1px solid #d2ded6!important;
+  border-radius:13px!important;
+}
+.vtg-shell [data-p="home"] > .vtg-contact-alignment > .vtg-contact-row > section {
+  min-width:0!important;align-self:stretch!important;border-radius:10px!important;
+}
+.vtg-shell [data-p="home"] .vtg-guide-actions {
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+}
+.vtg-shell [data-p="home"] .vtg-guide-actions .btn {width:auto!important;margin:0!important;}
+.vtg-shell [data-p="home"] .vtg-guide-actions .vtg-recent-tours-btn {
+  background:#b88a4a!important;color:white!important;
+}
+@media(max-width:850px){
+  .vtg-shell [data-p="home"] > .vtg-contact-alignment > .vtg-contact-row {
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+}
+@media(max-width:560px){
+  .vtg-shell [data-p="home"] > .vtg-contact-alignment > .vtg-contact-row {
+    padding:12px!important;gap:12px!important;
+  }
+}
