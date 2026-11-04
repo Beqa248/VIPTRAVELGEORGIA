@@ -1,0 +1,26 @@
+/* Reviews: equal-height cards within each grid row, not masonry.
+   The tallest review in a row determines that row's height; text stays complete. */
+.vtg-shell [data-p="reviews"] .grid {
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  align-items:stretch!important;
+  grid-auto-flow:row!important;
+  gap:clamp(16px,2vw,26px)!important;
+}
+.vtg-shell [data-p="reviews"] .grid > .review-card {
+  height:100%!important;
+  min-height:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  box-sizing:border-box!important;
+}
+.vtg-shell [data-p="reviews"] .grid > .review-card > .t {
+  flex:1;
+  min-width:0;
+}
+@media(max-width:950px){
+ .vtg-shell [data-p="reviews"] .grid {grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+}
+@media(max-width:600px){
+ .vtg-shell [data-p="reviews"] .grid {grid-template-columns:minmax(0,1fr)!important;}
+}

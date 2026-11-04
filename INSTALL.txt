@@ -1,1 +1,10 @@
-CHANGES ONLY. Based on VIPTRAVELGEORGIA-main(7).zip plus approved aligned-blocks CSS. Extract at project root, overwriting matching files. Includes enlarged homepage contact message field, aligned colored blocks, and updated vehicle description. Backup first. No production build performed.
+COMBINED CHANGES-ONLY PATCH
+
+Includes:
+1. Unified Plan My Trip sage panel and centered benefits below both columns.
+2. Equal-height review cards within each desktop grid row (full text retained).
+3. Homepage Get in Touch social links: four equal-width colored buttons; 2x2 on mobile.
+
+Extract at the root of your existing Next.js project, overwriting the listed files.
+This patch is cumulative: do not apply the older planner/reviews patch afterward.
+Backup your project first. No build/browser test performed.

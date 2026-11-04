@@ -70,3 +70,54 @@ html,body,.vtg-shell{background:var(--vtg-page)!important}
 /* Approved contact section: bigger message area, balanced full-height panel. */
 .vtg-shell [data-p="home"] .vtg-contact-row #contact textarea{min-height:185px!important;resize:vertical!important}
 .vtg-shell [data-p="home"] .vtg-contact-row #contact>.wrap{display:flex!important;flex-direction:column!important}
+
+/* Unified plan section: header, two aligned columns, and centered benefits in ONE panel. */
+.vtg-shell [data-p="home"] .vtg-plan-inner{
+  background:var(--vtg-green)!important;
+  border:1px solid #d6e2d9!important;
+  border-radius:14px!important;
+  padding:clamp(16px,2vw,30px)!important;
+}
+.vtg-shell [data-p="home"] .vtg-plan-row{
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  padding:0!important;
+}
+.vtg-shell [data-p="home"] .vtg-plan-header{
+  text-align:center!important;
+  width:100%!important;
+  margin:0 auto 24px!important;
+}
+.vtg-shell [data-p="home"] .vtg-plan-benefits{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  flex-wrap:wrap!important;
+  gap:10px!important;
+  width:100%!important;
+  margin:18px auto 0!important;
+  padding-top:14px!important;
+  border-top:1px solid #cbd9d0!important;
+  color:#27694f!important;
+  font-size:13px!important;
+  text-align:center!important;
+}
+.vtg-shell [data-p="home"] .vtg-plan-benefits .vtg-benefit-dot{color:#9aada2!important}
+@media(max-width:560px){
+  .vtg-shell [data-p="home"] .vtg-plan-inner{padding:14px!important}
+  .vtg-shell [data-p="home"] .vtg-plan-benefits{gap:6px 9px!important;font-size:12px!important}
+}
+
+/* Homepage contact: four equal-width, brand-colored social links. */
+.vtg-shell [data-p="home"] .vtg-contact-row #contact .links{
+ display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px!important;width:100%!important;align-items:stretch!important;
+}
+.vtg-shell [data-p="home"] .vtg-contact-row #contact .links a{
+ display:flex!important;align-items:center!important;justify-content:center!important;min-width:0!important;width:100%!important;box-sizing:border-box!important;min-height:46px!important;padding:10px 5px!important;border:0!important;border-radius:10px!important;color:#fff!important;font-weight:700!important;text-align:center!important;text-decoration:none!important;
+}
+.vtg-shell [data-p="home"] .vtg-contact-row #contact .links #wa{background:#20c76b!important}
+.vtg-shell [data-p="home"] .vtg-contact-row #contact .links #tg{background:#229ed9!important}
+.vtg-shell [data-p="home"] .vtg-contact-row #contact .links #fb{background:#1877f2!important}
+.vtg-shell [data-p="home"] .vtg-contact-row #contact .links #ig{background:#c13584!important}
+@media(max-width:650px){.vtg-shell [data-p="home"] .vtg-contact-row #contact .links{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}}
