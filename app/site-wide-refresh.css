@@ -70,23 +70,3 @@ header .wrap, header nav .wrap, footer .wrap,
   .vtg-shell .grid { grid-template-columns: 1fr; }
   .vtg-shell .card .pic { min-height: 190px; }
 }
-
-/* Homepage two-column composition, scoped to homepage only. */
-[data-p="home"] .vtg-home-pair{width:min(calc(100% - 40px),1480px);margin:24px auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;align-items:stretch}
-[data-p="home"] .vtg-home-pair>section{min-width:0;margin:0;padding:clamp(20px,2.5vw,36px)!important;background:#fff!important;border:1px solid #dfe6de!important;border-radius:16px;box-shadow:0 5px 22px rgba(24,63,53,.045)}
-[data-p="home"] .vtg-home-pair>section>.wrap{max-width:none!important;width:100%!important;padding:0!important;margin:0!important}
-[data-p="home"] .vtg-home-pair h2{margin-top:0}
-[data-p="home"] .vtg-home-pair .steps{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-[data-p="home"] .vtg-home-pair .step{min-width:0}
-[data-p="home"] .vtg-home-pair .guide{gap:14px}
-[data-p="home"] .vtg-home-pair .gbadge{flex-basis:66px;width:66px;height:66px;font-size:32px}
-[data-p="home"] .vtg-home-pair .ctiles{width:100%;max-width:100%}
-[data-p="home"] .vtg-home-pair .ctile{min-width:130px}
-[data-p="home"] .vtg-home-pair .seas{grid-template-columns:1fr}
-[data-p="home"] .vtg-home-pair details{background:#f7f8f5}
-[data-p="home"] #hTours>.wrap,[data-p="home"] #contact>.wrap{width:min(calc(100% - 40px),1480px);max-width:1480px;margin-inline:auto}
-[data-p="home"] #hTours .tiles{grid-template-columns:repeat(3,minmax(0,1fr))}
-[data-p="home"] #contact{background:#f7f8f5!important}
-@media(max-width:1100px){[data-p="home"] .vtg-home-pair .steps{grid-template-columns:1fr}}
-@media(max-width:800px){[data-p="home"] .vtg-home-pair{grid-template-columns:1fr;width:calc(100% - 32px);gap:14px}[data-p="home"] .vtg-home-pair .steps{grid-template-columns:repeat(3,minmax(0,1fr))}[data-p="home"] #hTours .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:520px){[data-p="home"] .vtg-home-pair .steps{grid-template-columns:1fr}[data-p="home"] #hTours .tiles{grid-template-columns:1fr}}
