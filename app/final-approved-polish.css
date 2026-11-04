@@ -86,3 +86,36 @@
  .vtg-shell [data-p="home"] #contact .links,
  .vtg-shell [data-p="contact"] #contact .links{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
+
+/* FIX: FAQ + Contact must share the same centered 90%-width card as the
+   already approved homepage blocks. No changes to inner controls or links. */
+.vtg-shell [data-p="home"] > .vtg-contact-row {
+  width:90%!important;
+  max-width:none!important;
+  margin:22px auto!important;
+  padding:16px!important;
+  box-sizing:border-box!important;
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:16px!important;
+  align-items:stretch!important;
+  background:#eaf0f2!important;
+  border:1px solid #d2ded6!important;
+  border-radius:13px!important;
+}
+.vtg-shell [data-p="home"] > .vtg-contact-row > section {
+  min-width:0!important;
+  align-self:stretch!important;
+}
+@media(max-width:850px){
+  .vtg-shell [data-p="home"] > .vtg-contact-row {
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+}
+@media(max-width:560px){
+  .vtg-shell [data-p="home"] > .vtg-contact-row {
+    width:calc(100% - 32px)!important;
+    padding:12px!important;
+    gap:12px!important;
+  }
+}
