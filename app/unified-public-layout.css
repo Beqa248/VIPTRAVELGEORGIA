@@ -1,0 +1,57 @@
+/* Final public-layout corrections. Loaded last to supersede older conflicting rules.
+   No changes to components, content, data sources, admin, or form behavior. */
+:root{--vtg-unified-bg:#f7f8f5}
+html,body{background:var(--vtg-unified-bg)!important;overflow-x:clip}
+.vtg-shell{background:var(--vtg-unified-bg)!important}
+/* One continuous website background, including inner pages and homepage bands. */
+.vtg-shell [data-p="home"],
+.vtg-shell [data-p="home"] > section,
+.vtg-shell [data-p="home"] > div.vtg-plan-band,
+.vtg-shell [data-p="home"] > div.vtg-about-row,
+.vtg-shell [data-p="home"] > div.vtg-cars-pricing-row,
+.vtg-shell [data-p="home"] > div.vtg-contact-row,
+.vtg-shell [data-p="home"] #hTours,
+.vtg-shell [data-p="home"] #hRev,
+.vtg-shell [data-p="home"] #hSeason,
+.vtg-shell > [data-p]:not([data-p="home"]):not([data-p="admin"]),
+.vtg-shell > [data-p]:not([data-p="home"]):not([data-p="admin"]) > section:not(.hero){background:var(--vtg-unified-bg)!important}
+/* Consistent 90% desktop content width; keep row backgrounds full bleed. */
+.vtg-shell [data-p="home"] .vtg-plan-inner{box-sizing:border-box;width:90%!important;max-width:none!important;margin-inline:auto!important;padding-inline:clamp(20px,2.3vw,48px)!important}
+.vtg-shell [data-p="home"] .vtg-plan-row{display:grid!important;grid-template-columns:minmax(0,3fr) minmax(0,2fr)!important;align-items:stretch!important;gap:clamp(20px,2.5vw,44px)!important}
+.vtg-shell [data-p="home"] .vtg-plan-row > section,
+.vtg-shell [data-p="home"] .vtg-plan-row > .howsec{margin:0!important;padding:0!important;align-self:stretch!important;min-width:0!important;transform:none!important}
+.vtg-shell [data-p="home"] .vtg-plan-row > section > .wrap{margin:0!important;padding:0!important;width:100%!important;max-width:none!important;box-sizing:border-box;height:100%!important}
+.vtg-shell [data-p="home"] .vtg-plan-row #hPlan .wrap{display:flex!important;flex-direction:column!important}
+.vtg-shell [data-p="home"] .vtg-plan-row #hPlan [class*="TripPlanner_panel"]{width:100%!important;max-width:none!important;flex:1}
+.vtg-shell [data-p="home"] .vtg-plan-row .howsec .wrap{display:flex!important;flex-direction:column!important;justify-content:flex-start!important}
+.vtg-shell [data-p="home"] .vtg-plan-row .howsec h2{margin:0 0 12px!important;flex:none!important}
+.vtg-shell [data-p="home"] .vtg-plan-row .howsec .steps{display:flex!important;flex-direction:column!important;flex:1!important;gap:12px!important}
+.vtg-shell [data-p="home"] .vtg-plan-row .howsec .step{flex:1 1 0!important;min-height:0!important;display:flex;flex-direction:column;justify-content:center}
+/* Distinct blocks inside the unified background are retained. */
+.vtg-shell [data-p="home"] .vtg-about-row,.vtg-shell [data-p="home"] .vtg-cars-pricing-row,.vtg-shell [data-p="home"] .vtg-contact-row{box-sizing:border-box;padding-left:5%!important;padding-right:5%!important}
+/* Compact eight-item FAQ, headings remain top-aligned with contact heading. */
+.vtg-shell [data-p="home"] .vtg-contact-row{align-items:start!important}
+.vtg-shell [data-p="home"] .vtg-contact-row #hFaq,
+.vtg-shell [data-p="home"] .vtg-contact-row #contact{align-self:start!important}
+.vtg-shell [data-p="home"] .vtg-contact-row #hFaq details{margin:0 0 7px!important;min-height:0!important;flex:none!important}
+.vtg-shell [data-p="home"] .vtg-contact-row #hFaq details summary{box-sizing:border-box;padding:10px 14px!important;min-height:42px!important;line-height:1.4!important;font-size:14px!important;display:list-item!important}
+.vtg-shell [data-p="home"] .vtg-contact-row #hFaq details p{padding:10px 14px!important;margin:0!important}
+.vtg-shell [data-p="home"] .vtg-contact-row #contact form{gap:12px!important}
+.vtg-shell [data-p="home"] .vtg-contact-row #contact textarea{min-height:100px!important}
+/* Cards on inner pages: readable, limited column count, no edge-to-edge overflow. */
+.vtg-shell > [data-p]:not([data-p="home"]):not([data-p="admin"]) .wrap{box-sizing:border-box;width:90%!important;max-width:1440px!important;margin-inline:auto!important}
+.vtg-shell [data-p="reviews"] .grid,.vtg-shell [data-p="videos"] .grid,.vtg-shell [data-p="recent-tours"] .grid,.vtg-shell [data-p="tours"] .grid,.vtg-shell [data-p="travel"] .grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.vtg-shell [data-p="videos"] video{aspect-ratio:16/9;object-fit:contain}
+@media(max-width:900px){
+ .vtg-shell [data-p="home"] .vtg-plan-row{grid-template-columns:minmax(0,1fr)!important}
+ .vtg-shell [data-p="home"] .vtg-plan-row .howsec .steps{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ .vtg-shell [data-p="home"] .vtg-about-row,.vtg-shell [data-p="home"] .vtg-cars-pricing-row,.vtg-shell [data-p="home"] .vtg-contact-row{grid-template-columns:1fr!important}
+ .vtg-shell [data-p="reviews"] .grid,.vtg-shell [data-p="videos"] .grid,.vtg-shell [data-p="recent-tours"] .grid,.vtg-shell [data-p="tours"] .grid,.vtg-shell [data-p="travel"] .grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:600px){
+ .vtg-shell [data-p="home"] .vtg-plan-inner{width:100%!important;padding-inline:16px!important}
+ .vtg-shell [data-p="home"] .vtg-plan-row .howsec .steps{grid-template-columns:1fr!important}
+ .vtg-shell [data-p="home"] .vtg-about-row,.vtg-shell [data-p="home"] .vtg-cars-pricing-row,.vtg-shell [data-p="home"] .vtg-contact-row{padding-inline:16px!important}
+ .vtg-shell > [data-p]:not([data-p="home"]):not([data-p="admin"]) .wrap{width:calc(100% - 32px)!important}
+ .vtg-shell [data-p="reviews"] .grid,.vtg-shell [data-p="videos"] .grid,.vtg-shell [data-p="recent-tours"] .grid,.vtg-shell [data-p="tours"] .grid,.vtg-shell [data-p="travel"] .grid{grid-template-columns:1fr!important}
+}
