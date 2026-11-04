@@ -1,0 +1,72 @@
+/* VIPTravelGeorgia public-facing responsive visual refresh.
+   Keep this import AFTER globals.css in app/layout.jsx.
+   No database changes, no page/component changes. */
+:root {
+  --bg: #f7f8f5;
+  --fg: #243b35;
+  --mut: #53675f;
+  --card: #ffffff;
+  --acc: #183f35;
+  --acc2: #245548;
+  --bd: #dfe6de;
+  --vtg-gold: #c49a61;
+}
+html { overflow-x: clip; }
+body { background: var(--bg); color: var(--fg); }
+header { background: #fff; border-bottom: 1px solid #dfe6de; border-image: none; }
+.logo { color: #183f35; }
+header nav a { color: #183f35; border-color: #dfe6de; background: #fff; }
+header nav a.on, .lang button.on, .vtg-active {
+  background: #183f35 !important; color: #fff !important; border-color: #183f35 !important;
+}
+.btn:not(.wa) { background: #183f35; color: white; box-shadow: none; }
+.btn.alt { background: transparent; border: 1px solid currentColor; }
+a { accent-color: #183f35; }
+h1, h2, h3 { color: inherit; }
+section h2::after { border-color: var(--vtg-gold); }
+.card { background: #fff; border-color: #dfe6de; box-shadow: 0 7px 22px rgba(22,56,44,.055); }
+.card .lnk a, .lnk a { color: #245548; }
+input, select, textarea { border-color: #cfdad1; background: #fff; }
+input:focus-visible, select:focus-visible, textarea:focus-visible,
+button:focus-visible, a:focus-visible { outline: 2px solid #c49a61; outline-offset: 2px; }
+
+/* Expand the site's existing 960px central wrapper, without changing its structure. */
+header .wrap, header nav .wrap, footer .wrap,
+.vtg-shell .wrap, .vtg-shell > .wrap {
+  width: min(100%, 1520px) !important;
+  max-width: 1520px !important;
+  margin-inline: auto;
+  padding-inline: clamp(18px, 3.4vw, 56px);
+}
+.vtg-shell section { max-width: none; }
+.vtg-shell .grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(14px, 1.5vw, 24px);
+}
+.vtg-shell .grid > * { min-width: 0; }
+.vtg-shell .card .pic { min-height: 180px; }
+.vtg-shell .card h3 { line-height: 1.35; }
+.vtg-shell .hero .wrap { width: min(100%, 1520px) !important; max-width: 1520px !important; }
+.vtg-shell .vtg-extras { max-width: 1440px; }
+.vtg-shell .gal { gap: 18px; }
+.vtg-shell .banner { border-color: #dfe6de; }
+.vtg-shell .guest-review-form { background: #fff; border-color: #dfe6de; }
+
+/* Do not alter the layout of the admin dashboard or its form grids. */
+.vtg-shell .vtg-admin .grid,
+.vtg-shell [class*="admin"] .grid { grid-template-columns: revert-layer; }
+
+@media (max-width: 1100px) {
+  .vtg-shell .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  .vtg-shell .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  header .wrap, header nav .wrap, footer .wrap, .vtg-shell .wrap, .vtg-shell > .wrap {
+    padding-inline: 18px;
+  }
+  .vtg-shell .card .pic { min-height: 150px; }
+}
+@media (max-width: 480px) {
+  .vtg-shell .grid { grid-template-columns: 1fr; }
+  .vtg-shell .card .pic { min-height: 190px; }
+}
