@@ -119,3 +119,17 @@
     gap:12px!important;
   }
 }
+
+/* Travel page only: four region tiles per desktop row. Supabase-driven cards remain unchanged. */
+.vtg-shell [data-p="travel"] #trRegions .rgrid {
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:14px!important;
+}
+.vtg-shell [data-p="travel"] #trRegions .rgrid > .rtile {min-width:0!important;}
+@media (max-width:1050px) {
+  .vtg-shell [data-p="travel"] #trRegions .rgrid {grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+}
+@media (max-width:600px) {
+  .vtg-shell [data-p="travel"] #trRegions .rgrid {grid-template-columns:minmax(0,1fr)!important;}
+}
