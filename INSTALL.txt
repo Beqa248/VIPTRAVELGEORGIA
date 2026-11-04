@@ -1,21 +1,7 @@
-VIPTravelGeorgia — COMBINED UPDATE
-Includes BOTH previously supplied updates:
-1. Wide responsive public layout + forest green/white/gold palette
-2. Homepage Cars carousel synced to published Supabase vehicles
-
-Files to upload to GitHub:
-- app/site-wide-refresh.css (ADD)
-- components/VehicleCards.jsx (REPLACE)
-
-Required one-line change to your EXISTING app/layout.jsx:
-Add import "./site-wide-refresh.css"; immediately after import "./globals.css";
-
-OPTIONAL: app/layout.jsx is included as an example, but DO NOT replace your
-existing layout.jsx if it has newer changes. The one-line import is safer.
-
-No SQL needed. Do not upload either earlier patch separately.
-No other components, admin pages, or databases are changed.
-
-IMPORTANT: The archive is assembled from the two previous incremental
-patches. It is NOT a full current repository snapshot and has NOT been
-production-build-tested against the current deployed main branch.
+Based on uploaded VIPTRAVELGEORGIA-main(6).zip.
+Replace components/pages/home.jsx and app/site-wide-refresh.css.
+Your existing layout.jsx already imports this stylesheet.
+No SQL. No admin changes. Preserve all other files.
+Homepage pairs: How it works/Guide, Why/Cars, Prices/Reviews, Seasons/FAQ.
+Hero, Tours, Planner and Contact stay separate. Responsive stack on mobile.
+Not production-build-tested; verify Vercel deployment and mobile.
