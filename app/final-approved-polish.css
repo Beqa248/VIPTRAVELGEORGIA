@@ -157,7 +157,7 @@
 /* Contact section: one outer colored panel at the SAME width as the other
    home sections; two existing colored cards remain inside it. */
 .vtg-shell [data-p="home"] > .vtg-contact-alignment {
-  width:100%!important; max-width:none!important; margin:22px auto!important;
+  width:90%!important; max-width:none!important; margin:22px auto!important;
   box-sizing:border-box!important;
 }
 .vtg-shell [data-p="home"] > .vtg-contact-alignment > .vtg-contact-row {
