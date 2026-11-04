@@ -1,7 +1,1 @@
-Based on uploaded VIPTRAVELGEORGIA-main(6).zip.
-Replace components/pages/home.jsx and app/site-wide-refresh.css.
-Your existing layout.jsx already imports this stylesheet.
-No SQL. No admin changes. Preserve all other files.
-Homepage pairs: How it works/Guide, Why/Cars, Prices/Reviews, Seasons/FAQ.
-Hero, Tours, Planner and Contact stay separate. Responsive stack on mobile.
-Not production-build-tested; verify Vercel deployment and mobile.
+Replace app/layout-correction.css. Existing app/layout.jsx must already import ./layout-correction.css after ./approved-layout.css. If not, add that import. No SQL. This fix targets the homepage layout and colors; live visual verification still required.

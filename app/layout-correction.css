@@ -1,102 +1,62 @@
-/* VIPTravelGeorgia — 85% layout correction, November 2026.
-   Overrides earlier experimental width and background rules. */
-:root{--bg:#f7f9f6;--fg:#183f35;--mut:#53675f;--card:#fff;--acc:#183f35;--acc2:#245548;--bd:#dce5dd;--vtg-gold:#d5b982}
-html,body{max-width:100%;overflow-x:clip}
-body,.vtg-shell{background:#f7f9f6;color:#183f35}
-/* Use the full width of the viewport for color bands, but 85% for content. */
-.vtg-shell .wrap,header .wrap,header nav .wrap,footer .wrap,
-.vtg-shell #hTours>.wrap,.vtg-shell #hRev>.wrap,.vtg-shell #hSeason>.wrap{
-  width:90%!important;max-width:none!important;margin-left:auto!important;margin-right:auto!important;
-  padding-left:0!important;padding-right:0!important;box-sizing:border-box;
+/* Homepage width and section backgrounds: replaces earlier layout-correction.css. */
+:root{--vtg-sage:#e6eee8;--vtg-cream:#f7f9f6;--vtg-forest:#183f35;--vtg-gold:#d5b982}
+html,body{width:100%;max-width:100%;overflow-x:clip}
+.vtg-shell,.vtg-shell [data-p="home"]{width:100%!important;max-width:none!important;min-width:0!important;margin:0!important;padding:0!important}
+.vtg-shell [data-p="home"]{background:var(--vtg-cream)!important}
+/* Make the actual bands full width, rather than coloring a narrow inner wrapper. */
+.vtg-shell [data-p="home"]>.hero,
+.vtg-shell [data-p="home"]>#hTours,
+.vtg-shell [data-p="home"]>.vtg-plan-row,
+.vtg-shell [data-p="home"]>.vtg-about-row,
+.vtg-shell [data-p="home"]>.vtg-cars-pricing-row,
+.vtg-shell [data-p="home"]>#hRev,
+.vtg-shell [data-p="home"]>#hSeason,
+.vtg-shell [data-p="home"]>.vtg-contact-row{width:100%!important;max-width:none!important;box-sizing:border-box!important;margin-inline:0!important}
+.vtg-shell [data-p="home"]>#hTours,.vtg-shell [data-p="home"]>.vtg-about-row,.vtg-shell [data-p="home"]>#hRev,.vtg-shell [data-p="home"]>.vtg-contact-row{background:var(--vtg-cream)!important}
+.vtg-shell [data-p="home"]>.vtg-plan-row,.vtg-shell [data-p="home"]>.vtg-cars-pricing-row,.vtg-shell [data-p="home"]>#hSeason{background:var(--vtg-sage)!important}
+/* Every band's CONTENT uses 90% viewport width, with no 960/1520px cap. */
+.vtg-shell [data-p="home"]>.hero>.wrap,
+.vtg-shell [data-p="home"]>#hTours>.wrap,
+.vtg-shell [data-p="home"]>#hRev>.wrap,
+.vtg-shell [data-p="home"]>#hSeason>.wrap{width:90%!important;max-width:none!important;margin-inline:auto!important;padding-inline:0!important;box-sizing:border-box!important}
+.vtg-shell [data-p="home"]>.vtg-plan-row,
+.vtg-shell [data-p="home"]>.vtg-about-row,
+.vtg-shell [data-p="home"]>.vtg-cars-pricing-row,
+.vtg-shell [data-p="home"]>.vtg-contact-row{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;column-gap:clamp(24px,3vw,65px)!important;align-items:start!important;padding:clamp(35px,3.5vw,65px) 5%!important}
+.vtg-shell [data-p="home"]>.vtg-plan-row{grid-template-columns:minmax(0,1.65fr) minmax(0,1fr)!important}
+.vtg-shell [data-p="home"]>.vtg-cars-pricing-row{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)!important}
+.vtg-shell [data-p="home"]>.vtg-plan-row>section,
+.vtg-shell [data-p="home"]>.vtg-about-row>section,
+.vtg-shell [data-p="home"]>.vtg-cars-pricing-row>section,
+.vtg-shell [data-p="home"]>.vtg-contact-row>section{min-width:0!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important}
+.vtg-shell [data-p="home"]>.vtg-plan-row>section>.wrap,
+.vtg-shell [data-p="home"]>.vtg-about-row>section>.wrap,
+.vtg-shell [data-p="home"]>.vtg-cars-pricing-row>section>.wrap,
+.vtg-shell [data-p="home"]>.vtg-contact-row>section>.wrap{width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+.vtg-shell [data-p="home"]>.vtg-plan-row .howsec{padding-top:0!important}
+.vtg-shell [data-p="home"]>.vtg-plan-row .howsec h2{margin:0 0 20px!important}
+.vtg-shell [data-p="home"]>.vtg-plan-row .steps{grid-template-columns:1fr!important;gap:12px!important}
+.vtg-shell [data-p="home"]>.vtg-plan-row .step{background:white!important}
+.vtg-shell [data-p="home"]>.vtg-plan-row #hPlan .wrap{width:100%!important;max-width:none!important;padding:0!important}
+.vtg-shell [data-p="home"]>.vtg-plan-row #hPlan [class*="TripPlanner_panel"]{width:100%!important;max-width:none!important}
+.vtg-shell [data-p="home"]>#hTours .tiles{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:clamp(14px,1.6vw,26px)!important;width:100%!important}
+.vtg-shell [data-p="home"]>#hTours .tile{width:100%!important;height:auto!important;min-width:0!important;aspect-ratio:4/3!important;background-size:cover!important;background-position:center!important}
+.vtg-shell [data-p="home"]>#hSeason .seas{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))!important;gap:14px!important}
+.vtg-shell [data-p="home"]>#hSeason .seas p{background:#fff!important;border:1px solid #dce5dd!important}
+.vtg-shell [data-p="home"]>.vtg-contact-row #contact form{width:100%!important;max-width:none!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.vtg-shell [data-p="home"]>.vtg-contact-row #contact form label:has(textarea),.vtg-shell [data-p="home"]>.vtg-contact-row #contact form button{grid-column:1/-1!important}
+.vtg-shell [data-p="home"]>.vtg-contact-row #contact input,.vtg-shell [data-p="home"]>.vtg-contact-row #contact select,.vtg-shell [data-p="home"]>.vtg-contact-row #contact textarea{width:100%!important;max-width:none!important;box-sizing:border-box!important}
+.vtg-shell [data-p="home"]>.vtg-contact-row #contact textarea{min-height:140px!important}
+.vtg-shell [data-p="home"]>.vtg-contact-row #contact .links #wa{background:#25d366!important;color:white!important}
+.vtg-shell [data-p="home"]>.vtg-contact-row #contact .links #tg{background:#229ed9!important;color:white!important}
+.vtg-shell [data-p="home"]>.vtg-contact-row #contact .links #fb{background:#1877f2!important;color:white!important}
+.vtg-shell [data-p="home"]>.vtg-contact-row #contact .links #ig{background:#c13584!important;color:white!important}
+@media(max-width:850px){
+ .vtg-shell [data-p="home"]>.vtg-plan-row,.vtg-shell [data-p="home"]>.vtg-about-row,.vtg-shell [data-p="home"]>.vtg-cars-pricing-row,.vtg-shell [data-p="home"]>.vtg-contact-row{grid-template-columns:1fr!important;row-gap:28px!important}
+ .vtg-shell [data-p="home"]>#hTours .tiles{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
-.vtg-shell #hTours{background:#f7f9f6!important}
-.vtg-shell #hTours .tiles{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:clamp(12px,1.3vw,22px)!important;width:100%!important}
-.vtg-shell #hTours .tile{display:flex!important;width:100%!important;min-width:0!important;height:auto!important;aspect-ratio:4/3!important;background-position:center!important;background-size:cover!important}
-/* Two-column rows: 85% width, with consistent colors across both halves. */
-.vtg-shell .vtg-plan-row,.vtg-shell .vtg-about-row,.vtg-shell .vtg-cars-pricing-row,.vtg-shell .vtg-contact-row{
-  width:100%!important;max-width:none!important;margin:0!important;
-  padding:clamp(32px,3vw,56px) 5%!important;box-sizing:border-box;
-  display:grid!important;gap:clamp(24px,3vw,56px)!important;align-items:start!important;
-}
-.vtg-shell .vtg-plan-row{grid-template-columns:minmax(0,1.7fr) minmax(0,1fr)!important;background:#e6eee8!important}
-.vtg-shell .vtg-about-row{grid-template-columns:repeat(2,minmax(0,1fr))!important;background:#f7f9f6!important}
-.vtg-shell .vtg-cars-pricing-row{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)!important;background:#e6eee8!important}
-.vtg-shell .vtg-contact-row{grid-template-columns:repeat(2,minmax(0,1fr))!important;background:#e6eee8!important}
-.vtg-shell .vtg-plan-row>section,.vtg-shell .vtg-about-row>section,
-.vtg-shell .vtg-cars-pricing-row>section,.vtg-shell .vtg-contact-row>section{
-  width:100%!important;min-width:0!important;margin:0!important;padding:0!important;
-  background:transparent!important;border:0!important;box-shadow:none!important;
-}
-.vtg-shell .vtg-plan-row>section>.wrap,.vtg-shell .vtg-about-row>section>.wrap,
-.vtg-shell .vtg-cars-pricing-row>section>.wrap,.vtg-shell .vtg-contact-row>section>.wrap{
-  width:100%!important;max-width:none!important;padding:0!important;margin:0!important;
-}
-/* Both headings start on the same horizontal line. */
-.vtg-shell .vtg-plan-row .howsec{padding-top:0!important;align-self:start!important}
-.vtg-shell .vtg-plan-row .howsec h2{margin-top:25px!important;margin-bottom:20px!important}
-.vtg-shell .vtg-plan-row .howsec .steps{display:grid!important;grid-template-columns:1fr!important;gap:12px!important}
-.vtg-shell .vtg-plan-row .howsec .step{background:#fff!important;border:1px solid #dce5dd!important}
-.vtg-shell .vtg-plan-row #hPlan .wrap{width:100%!important;max-width:none!important;padding:0!important;margin:0!important}
-.vtg-shell .vtg-plan-row #hPlan .vtg-plan-head{width:100%!important}
-.vtg-shell .vtg-plan-row #hPlan [class*="TripPlanner_panel"]{max-width:none!important;width:100%!important}
-.vtg-shell .vtg-plan-row #hPlan [class*="TripPlanner_fields"]{max-width:none!important}
-.vtg-shell .vtg-plan-row #hPlan [class*="TripPlanner_interests"]{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-.vtg-shell .vtg-plan-row .vtg-plan-actions{justify-content:flex-start!important}
-/* Keep visual separation between full-width sections, not inside paired rows. */
-.vtg-shell #hRev{background:#f7f9f6!important}
-.vtg-shell #hSeason{background:#e6eee8!important}
-.vtg-shell .vtg-about-row .gbadge{width:92px!important;height:92px!important;font-size:46px!important}
-.vtg-shell .vtg-contact-row #contact form{width:100%!important;max-width:none!important}
-.vtg-shell .vtg-contact-row #contact form input,.vtg-shell .vtg-contact-row #contact form select,.vtg-shell .vtg-contact-row #contact form textarea{width:100%!important;box-sizing:border-box}
-.vtg-shell .vtg-cars-pricing-row #hPrice p{max-width:none!important}
-.vtg-shell .vtg-cars-pricing-row .ctiles{max-width:100%!important}
-/* Apply 85% to other public page wrappers without changing admin widths. */
-.vtg-shell:not(:has(.vtg-admin,.adminSubRoot))>.page>.wrap,
-.vtg-shell:not(:has(.vtg-admin,.adminSubRoot))>.wrap{width:90%!important;max-width:none!important}
-@media(max-width:1050px){
- .vtg-shell .vtg-plan-row{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)!important}
- .vtg-shell .vtg-plan-row #hPlan [class*="TripPlanner_interests"]{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-}
-@media(max-width:820px){
- .vtg-shell .vtg-plan-row,.vtg-shell .vtg-about-row,.vtg-shell .vtg-cars-pricing-row,.vtg-shell .vtg-contact-row{grid-template-columns:1fr!important}
- .vtg-shell .vtg-plan-row .howsec h2{margin-top:0!important}
- .vtg-shell #hTours .tiles{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-}
-@media(max-width:520px){
- .vtg-shell .wrap,header .wrap,header nav .wrap,footer .wrap,
- .vtg-shell #hTours>.wrap,.vtg-shell #hRev>.wrap,.vtg-shell #hSeason>.wrap{width:calc(100% - 32px)!important}
- .vtg-shell .vtg-plan-row,.vtg-shell .vtg-about-row,.vtg-shell .vtg-cars-pricing-row,.vtg-shell .vtg-contact-row{padding:24px 16px!important}
- .vtg-shell #hTours .tiles{grid-template-columns:1fr!important}
- .vtg-shell .vtg-plan-row #hPlan [class*="TripPlanner_interests"]{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-}
-
-/* Cohesive full-bleed bands, with 90% content and 5% side breathing room.
-   The parent row supplies the full-width color; child sections stay transparent. */
-.vtg-shell{background:#f7f9f6!important}
-.vtg-shell #hSeason{background:#e6eee8!important;border:0!important}
-.vtg-shell #hSeason>.wrap{width:90%!important;max-width:none!important;margin-inline:auto!important;padding-inline:0!important}
-.vtg-shell .vtg-contact-row{
-  width:100%!important;max-width:none!important;
-  margin:0!important;padding:clamp(40px,4vw,68px) 5%!important;
-  background:#f7f9f6!important;
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  column-gap:clamp(28px,4vw,72px)!important;
-}
-.vtg-shell .vtg-contact-row>section{background:transparent!important;border:0!important;min-width:0!important}
-.vtg-shell .vtg-contact-row>section>.wrap{width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
-.vtg-shell .vtg-contact-row #contact form{width:100%!important;max-width:none!important}
-.vtg-shell .vtg-contact-row #contact form input,
-.vtg-shell .vtg-contact-row #contact form select,
-.vtg-shell .vtg-contact-row #contact form textarea{width:100%!important;max-width:none!important}
-.vtg-shell #hRev{background:#f7f9f6!important}
-.vtg-shell .vtg-cars-pricing-row{background:#e6eee8!important}
-.vtg-shell .vtg-about-row{background:#f7f9f6!important}
-.vtg-shell .vtg-plan-row{background:#e6eee8!important}
-.vtg-shell #hSeason .seas p{background:#fff!important;border-color:#dce5dd!important}
-@media(max-width:820px){
- .vtg-shell .vtg-contact-row{grid-template-columns:1fr!important;gap:20px!important}
-}
-@media(max-width:520px){
- .vtg-shell #hSeason>.wrap{width:calc(100% - 32px)!important}
- .vtg-shell .vtg-contact-row{padding:28px 16px!important}
+@media(max-width:550px){
+ .vtg-shell [data-p="home"]>#hTours .tiles{grid-template-columns:1fr!important}
+ .vtg-shell [data-p="home"]>.vtg-contact-row #contact form{grid-template-columns:1fr!important}
+ .vtg-shell [data-p="home"]>.vtg-plan-row,.vtg-shell [data-p="home"]>.vtg-about-row,.vtg-shell [data-p="home"]>.vtg-cars-pricing-row,.vtg-shell [data-p="home"]>.vtg-contact-row{padding:26px 5%!important}
 }
