@@ -24,7 +24,7 @@ const tours = [
   { slug: "highlights", key: "t12", image: "/images/photo-086.jpg", tags: ["m", "w", "h", "s", "l"], min: 3, max: 14 },
 ];
 
-export default function TripPlanner({ hideIntro = false }) {
+export default function TripPlanner({ hideIntro = false, hideFootnote = false }) {
   const { t } = useLanguage();
   const [days, setDays] = useState(3);
   const [people, setPeople] = useState(2);
@@ -47,6 +47,6 @@ export default function TripPlanner({ hideIntro = false }) {
       <div className={styles.interests}>{options.map((o,i)=><button key={o.key} type="button" className={`${styles.interest} ${interests.includes(o.key)?styles.selected:""}`} aria-pressed={interests.includes(o.key)} onClick={()=>toggle(o.key)}><span className={styles.interestTop}><span className={styles.emoji}>{o.icon}</span><span className={styles.check}>{interests.includes(o.key)?"✓":"○"}</span></span><span>{t(`pi${i+1}`) || o.label}</span></button>)}</div>
       <button className={styles.discover} type="button" onClick={()=>setSearched(true)}>{t("planBtn")} <span>→</span></button>
       {searched && <div className={styles.results} aria-live="polite"><h3>{matches.length?"Recommended trips for you":"Let's create your perfect route"}</h3><p className={styles.hint}>{matches.length?"Explore these matching tours, or request a personalized itinerary.":"No exact match for these preferences. We can design a custom trip for you."}</p>{matches.length>0&&<div className={styles.resultGrid}>{matches.map(tour=><a key={tour.slug} href={`/${tour.slug}`} className={styles.result}><img src={tour.image} alt="" loading="lazy"/><span><strong>{t(tour.key)}</strong><small>View tour details →</small></span></a>)}</div>}<div className={styles.custom}><div><strong>Want something more personal?</strong><p>Get a route tailored to your dates, group, and interests.</p></div><div className={styles.customActions}><a href={`/custom-tour?days=${days}&travelers=${people}&interests=${encodeURIComponent(options.filter(o=>interests.includes(o.key)).map(o=>o.label).join(", "))}`} className={styles.customLink}>Build custom itinerary →</a><a href={whatsapp} target="_blank" rel="noopener noreferrer" className={styles.whatsapp}>Ask on WhatsApp</a></div></div></div>}
-    </div><p className={styles.footnote}>✓ Private tours &nbsp; · &nbsp; ✓ Flexible itineraries &nbsp; · &nbsp; ✓ Local driver-guide</p>
+    </div>{!hideFootnote && <p className={styles.footnote}>✓ Private tours &nbsp; · &nbsp; ✓ Flexible itineraries &nbsp; · &nbsp; ✓ Local driver-guide</p>}
   </div></section>;
 }

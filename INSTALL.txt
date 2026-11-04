@@ -1,10 +1,3 @@
-COMBINED CHANGES-ONLY PATCH
-
-Includes:
-1. Unified Plan My Trip sage panel and centered benefits below both columns.
-2. Equal-height review cards within each desktop grid row (full text retained).
-3. Homepage Get in Touch social links: four equal-width colored buttons; 2x2 on mobile.
-
-Extract at the root of your existing Next.js project, overwriting the listed files.
-This patch is cumulative: do not apply the older planner/reviews patch afterward.
-Backup your project first. No build/browser test performed.
+Apply on top of the previous Combined Planner + Reviews + Social patch. Extract into project root, overwriting matching paths.
+Changes: hide duplicate benefits only on homepage (keep on other TripPlanner uses); keep the single centered benefits row at bottom; match Contact page Instagram gradient; enforce planner/How It Works column alignment.
+No production build run.
