@@ -12,7 +12,7 @@ html,body,.vtg-shell{background:var(--vtg-page)!important}
 .vtg-shell [data-p="home"] .vtg-plan-inner{width:90%!important;max-width:none!important;margin-inline:auto!important;padding:0!important;box-sizing:border-box!important}
 .vtg-shell [data-p="home"]>.vtg-about-row,
 .vtg-shell [data-p="home"]>.vtg-cars-pricing-row,
-.vtg-shell [data-p="home"]>.vtg-contact-row{width:100%!important;box-sizing:border-box!important;padding:36px 5%!important;gap:clamp(18px,2vw,34px)!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:stretch!important}
+.vtg-shell [data-p="home"]>.vtg-contact-row{width:90%!important;max-width:none!important;margin:22px auto!important;box-sizing:border-box!important;padding:16px!important;gap:16px!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:stretch!important}
 /* Planner: full 90% width like the rows below; columns start and end together. */
 .vtg-shell [data-p="home"]>.vtg-plan-band{padding:36px 0!important}
 .vtg-shell [data-p="home"] .vtg-plan-header{margin-bottom:24px!important}

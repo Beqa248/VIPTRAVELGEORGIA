@@ -4,7 +4,7 @@ html,body{overflow-x:clip}
 .vtg-shell .wrap,header .wrap,header nav .wrap,footer .wrap{width:90%!important;max-width:none!important;margin-inline:auto!important;padding-inline:0!important}
 header{background:var(--vtg-sage)!important}
 .vtg-shell .hero .wrap{width:90%!important;max-width:none!important}
-.vtg-shell [data-p="home"]>section,.vtg-shell [data-p="home"]>div.vtg-plan-band,.vtg-shell [data-p="home"]>div.vtg-about-row,.vtg-shell [data-p="home"]>div.vtg-cars-pricing-row,.vtg-shell [data-p="home"]>div.vtg-contact-row{width:100%!important;max-width:none!important;margin-inline:0!important}
+.vtg-shell [data-p="home"]>section,.vtg-shell [data-p="home"]>div.vtg-plan-band,.vtg-shell [data-p="home"]>div.vtg-contact-row{width:100%!important;max-width:none!important;margin-inline:0!important}
 .vtg-shell [data-p="home"] #hTours{background:var(--vtg-ivory)!important}
 .vtg-shell [data-p="home"] #hTours .tiles{grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
 .vtg-shell [data-p="home"] #hTours .tile{aspect-ratio:4/3;height:auto}
