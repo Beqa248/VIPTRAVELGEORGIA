@@ -137,7 +137,7 @@
 /* FAQ/contact: constrain the entire existing two-column block in one wrapper.
    This intentionally does not alter its internal grid or form. */
 .vtg-shell [data-p="home"] > .vtg-contact-alignment {
-  width:90% !important;
+  width:100% !important;
   max-width:none !important;
   margin:22px auto !important;
   box-sizing:border-box !important;
@@ -150,6 +150,6 @@
 }
 @media(max-width:560px) {
   .vtg-shell [data-p="home"] > .vtg-contact-alignment {
-    width:calc(100% - 32px) !important;
+    width:100% !important;
   }
 }
