@@ -1,0 +1,1 @@
+Apply to VIPTRAVELGEORGIA-main(9).zip project root. Replace these two files only. The FAQ + Get in Touch row is wrapped in a 90%-width centered container; inner content is unchanged.
