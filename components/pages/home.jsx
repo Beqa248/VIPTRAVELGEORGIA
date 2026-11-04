@@ -43,7 +43,7 @@ export default function Page() {
     <label><span data-k="fTour">{t("fTour")}</span><select id="t"><option>Adjarian mountains</option><option>Martvili &amp; Prometheus</option><option>Gomis Mta</option><option>Svaneti</option><option>Kobuleti coast</option><option>Dashbashi Canyon &amp; Diamond Bridge</option><option>Vardzia &amp; Rabati</option><option>Tusheti</option><option>Beshumi &amp; Green Lake</option><option>Kazbegi &amp; Juta</option><option>Georgia Highlights</option><option>Airport transfer</option><option>Other / custom</option></select></label>
     <label><span data-k="fCar">{t("fCar")}</span><VehicleSelect id="v"/></label>
     <label><span data-k="fDates">{t("fDates")}</span><input id="d" placeholder="e.g. 12–16 June, 3 people"/></label>
-    <label><span data-k="fMsg">{t("fMsg")}</span><textarea id="m" rows="3"></textarea></label>
+    <label><span data-k="fMsg">{t("fMsg")}</span><textarea id="m" rows="7"></textarea></label>
     <button className="btn" type="submit" data-k="send">{t("send")}</button>
     </form>
 
