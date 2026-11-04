@@ -1,0 +1,99 @@
+
+/* VIPTravelGeorgia approved refresh — public pages only. */
+:root{--bg:#f7f9f6;--fg:#183f35;--mut:#52675d;--card:#fff;--acc:#183f35;--acc2:#245548;--bd:#dce5dd;--vtg-gold:#d5b982}
+body{background:#f7f9f6;color:#183f35}
+.vtg-shell{background:#f7f9f6}
+.vtg-shell .wrap,header .wrap,header nav .wrap,footer .wrap{
+  width:92%;max-width:1600px;margin-inline:auto;padding-inline:0;
+}
+.vtg-shell .hero .wrap{width:92%!important;max-width:1600px!important}
+.vtg-shell section{padding-block:clamp(30px,3.5vw,55px)}
+.vtg-shell h2{color:#183f35}
+.vtg-shell h2:after{background:#d5b982}
+.vtg-shell .btn:not(.alt):not(.vtg-outline){background:#183f35;box-shadow:none}
+.vtg-shell .card,.vtg-shell .vid{background:#fff;border-color:#dce5dd}
+.vtg-shell .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:20px}
+.vtg-shell .grid>.card{min-width:0}
+.vtg-shell .grid .card{border-top-color:#d5b982}
+.vtg-shell .grid .card .pic{aspect-ratio:4/3;height:auto;min-height:0}
+.vtg-shell .vid video{aspect-ratio:16/9;object-fit:contain;background:#0a1511}
+.vtg-shell .vid a.play{aspect-ratio:16/9;height:auto;background:#183f35}
+.vtg-shell .gal img{max-width:100%;height:auto}
+.vtg-shell .tiles{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.vtg-shell .tile{height:auto;aspect-ratio:4/3;min-width:0}
+.vtg-shell .tile span{font-size:clamp(13px,1.1vw,17px)}
+.vtg-shell .why,.vtg-shell .howsec,.vtg-shell #hSeason{background:#e6eee8;border-color:#dce5dd}
+.vtg-shell #hRev,.vtg-shell #hTours{background:#f7f9f6}
+.vtg-shell .vtg-plan-row,.vtg-shell .vtg-about-row,.vtg-shell .vtg-cars-pricing-row,.vtg-shell .vtg-contact-row{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  width:92%;max-width:1600px;margin:0 auto;gap:clamp(24px,3vw,52px);align-items:start;
+}
+.vtg-shell .vtg-plan-row{grid-template-columns:minmax(0,1.8fr) minmax(310px,1fr);align-items:start}
+.vtg-shell .vtg-plan-row>section,.vtg-shell .vtg-about-row>section,
+.vtg-shell .vtg-cars-pricing-row>section,.vtg-shell .vtg-contact-row>section{
+  min-width:0;background:transparent!important;border:0!important;padding:40px 0!important;
+}
+.vtg-shell .vtg-plan-row>section>.wrap,.vtg-shell .vtg-about-row>section>.wrap,
+.vtg-shell .vtg-cars-pricing-row>section>.wrap,.vtg-shell .vtg-contact-row>section>.wrap{
+  width:100%!important;max-width:none!important;padding:0!important;margin:0!important;
+}
+.vtg-shell .vtg-plan-row{background:#e6eee8}
+.vtg-shell .vtg-plan-row .howsec .steps{grid-template-columns:1fr}
+.vtg-shell .vtg-plan-row .howsec .step{padding:18px;background:#fff;border-color:#dce5dd}
+.vtg-shell .vtg-plan-row .howsec h2{margin-bottom:22px}
+.vtg-shell .vtg-plan-row .howsec{padding-top:clamp(92px,9vw,130px)!important}
+.vtg-shell .vtg-plan-head{display:flex;flex-direction:column;gap:10px}
+.vtg-shell .vtg-plan-head .vtg-extras{justify-content:flex-start;margin:0 0 18px;max-width:none;gap:8px}
+.vtg-shell .vtg-plan-head .vtg-extras a{background:#183f35;font-size:13px;padding:10px 12px}
+.vtg-shell .vtg-plan-row [class*="TripPlanner_panel"]{max-width:none}
+.vtg-shell .vtg-plan-row [class*="TripPlanner_fields"]{max-width:none}
+.vtg-shell .vtg-plan-row [class*="TripPlanner_interests"]{grid-template-columns:repeat(2,minmax(0,1fr))}
+.vtg-shell .vtg-about-row{background:#e6eee8}
+.vtg-shell .vtg-about-row .guide{display:flex;align-items:flex-start;gap:22px}
+.vtg-shell .vtg-about-row .gbadge{flex-shrink:0;width:90px;height:90px;font-size:44px}
+.vtg-shell .vtg-about-row .guide p{max-width:none!important}
+.vtg-shell .vtg-about-row .why ul{padding-left:20px}
+.vtg-shell .vtg-cars-pricing-row{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)}
+.vtg-shell .vtg-cars-pricing-row .ctiles{max-width:100%;width:100%;display:flex;overflow-x:auto;gap:12px;padding-bottom:12px}
+.vtg-shell .vtg-cars-pricing-row .ctile{flex:0 0 clamp(130px,12vw,175px);height:125px}
+.vtg-shell #hPrice p{max-width:640px;font-size:16px;line-height:1.7}
+.vtg-shell .vtg-price-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.vtg-shell .vtg-outline{background:transparent!important;color:#183f35;border:1px solid #183f35;box-shadow:none}
+.vtg-shell .vtg-contact-row{background:#e6eee8}
+.vtg-shell .vtg-contact-row #hFaq details{background:#fff;border-color:#dce5dd}
+.vtg-shell .vtg-contact-row #contact form{width:100%;max-width:none;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.vtg-shell .vtg-contact-row #contact form label{min-width:0}
+.vtg-shell .vtg-contact-row #contact form label:has(textarea),
+.vtg-shell .vtg-contact-row #contact form button{grid-column:1/-1}
+.vtg-shell .vtg-contact-row #contact textarea{min-height:145px}
+.vtg-shell .vtg-contact-row #contact .links a{color:#fff}
+.vtg-shell .vtg-contact-row #contact .links #wa{background:#25d366}
+.vtg-shell .vtg-contact-row #contact .links #tg{background:#229ed9}
+.vtg-shell .vtg-contact-row #contact .links #fb{background:#1877f2}
+.vtg-shell .vtg-contact-row #contact .links #ig{background:#c13584}
+.vtg-shell .vtg-contact-row #contact .cinfo a{color:#183f35}
+.vtg-shell .vtg-contact-row #contact .cinfo{overflow-wrap:anywhere}
+.vtg-shell .vtg-contact-row #contact .btn{width:100%}
+.vtg-shell #hSeason{background:#e6eee8}
+.vtg-shell #hSeason .seas{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.vtg-shell #hSeason .seas p{margin:0;background:#fff;border:1px solid #dce5dd;border-radius:9px;padding:14px}
+.vtg-shell .vtg-plan-row .section{background:transparent}
+@media(max-width:1100px){
+ .vtg-shell .vtg-plan-row{grid-template-columns:minmax(0,1.4fr) minmax(250px,1fr)}
+ .vtg-shell .vtg-about-row,.vtg-shell .vtg-cars-pricing-row,.vtg-shell .vtg-contact-row{gap:24px}
+}
+@media(max-width:850px){
+ .vtg-shell .vtg-plan-row,.vtg-shell .vtg-about-row,.vtg-shell .vtg-cars-pricing-row,.vtg-shell .vtg-contact-row{grid-template-columns:1fr}
+ .vtg-shell .vtg-plan-row .howsec{padding-top:0!important}
+ .vtg-shell .vtg-plan-row .howsec .steps{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .vtg-shell .vtg-plan-row>section,.vtg-shell .vtg-about-row>section,.vtg-shell .vtg-cars-pricing-row>section,.vtg-shell .vtg-contact-row>section{padding-block:20px!important}
+ .vtg-shell .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:560px){
+ .vtg-shell .wrap,header .wrap,header nav .wrap,footer .wrap{width:calc(100% - 32px)}
+ .vtg-shell .vtg-plan-row,.vtg-shell .vtg-about-row,.vtg-shell .vtg-cars-pricing-row,.vtg-shell .vtg-contact-row{width:calc(100% - 32px)}
+ .vtg-shell .tiles{grid-template-columns:1fr}
+ .vtg-shell .vtg-plan-row .howsec .steps{grid-template-columns:1fr}
+ .vtg-shell .vtg-contact-row #contact form{grid-template-columns:1fr}
+ .vtg-shell .vtg-plan-row [class*="TripPlanner_interests"]{grid-template-columns:repeat(2,minmax(0,1fr))}
+}

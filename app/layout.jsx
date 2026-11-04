@@ -1,6 +1,7 @@
 import GalleryLightbox from "../components/GalleryLightbox";
 import "./globals.css";
 import "./site-wide-refresh.css";
+import "./approved-layout.css";
 import { LanguageProvider } from "../components/site-context";
 import SiteHeader from "../components/SiteHeader";
 import SiteFooter from "../components/SiteFooter";
