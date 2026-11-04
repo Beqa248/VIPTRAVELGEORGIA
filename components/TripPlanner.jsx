@@ -24,7 +24,7 @@ const tours = [
   { slug: "highlights", key: "t12", image: "/images/photo-086.jpg", tags: ["m", "w", "h", "s", "l"], min: 3, max: 14 },
 ];
 
-export default function TripPlanner() {
+export default function TripPlanner({ hideIntro = false }) {
   const { t } = useLanguage();
   const [days, setDays] = useState(3);
   const [people, setPeople] = useState(2);
@@ -37,7 +37,7 @@ export default function TripPlanner() {
   const customText = `Hello! I would like a custom Georgia itinerary for ${days} day${days === 1 ? "" : "s"}, ${people} traveler${people === 1 ? "" : "s"}. Interests: ${options.filter(o => interests.includes(o.key)).map(o => o.label).join(", ") || "open to suggestions"}. Please recommend a route and price.`;
   const whatsapp = `https://wa.me/995558176108?text=${encodeURIComponent(customText)}`;
   return <section id="hPlan" className={styles.section}><div className="wrap">
-    <div className="vtg-plan-head"><div className={styles.intro}><span className={styles.eyebrow}>YOUR JOURNEY STARTS HERE</span><h2>{t("planH")}</h2><p>Tell us what you love. Discover private tours that fit your journey in Georgia.</p></div><div className="vtg-extras vtg-plan-actions"><a href="/planner">✨ AI Travel Planner</a><a href="/custom-tour">Build a custom tour</a><a href="/assistant">Travel Assistant</a></div></div>
+    {!hideIntro && <div className="vtg-plan-head"><div className={styles.intro}><span className={styles.eyebrow}>YOUR JOURNEY STARTS HERE</span><h2>{t("planH")}</h2><p>Tell us what you love. Discover private tours that fit your journey in Georgia.</p></div><div className="vtg-extras vtg-plan-actions"><a href="/planner">✨ AI Travel Planner</a><a href="/custom-tour">Build a custom tour</a><a href="/assistant">Travel Assistant</a></div></div>}
     <div className={styles.panel}>
       <div className={styles.fields}>
         <label className={styles.field}><span>▦ &nbsp;{t("planDays")}</span><select value={days} onChange={e => { setDays(Number(e.target.value)); setSearched(false); }}>{Array.from({length:14},(_,i)=><option key={i+1} value={i+1}>{i+1} {i===0?"day":"days"}</option>)}</select></label>

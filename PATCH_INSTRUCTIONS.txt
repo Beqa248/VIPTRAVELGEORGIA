@@ -1,0 +1,15 @@
+CHANGES ONLY - VIP Travel Georgia
+
+Based on VIPTRAVELGEORGIA-main(6).zip.
+Extract these files into the root of your existing Next.js project, preserving folder paths. Replace existing files when prompted. Do not delete other files.
+
+Modified or added:
+app/approved-layout.css
+app/final-home-layout.css
+app/inner-pages-layout.css
+app/layout.jsx
+components/TripPlanner.jsx
+components/VehicleSelect.jsx
+components/pages/home.jsx
+
+Back up your current project first. This patch has not been production-build tested.

@@ -1,0 +1,41 @@
+/* Public inner pages: balanced 90%-width content, without touching the admin. */
+.vtg-shell > [data-p]:not([data-p="home"]):not([data-p="admin"]) {
+  width:100%; min-width:0; background:#f7f8f5;
+}
+.vtg-shell > [data-p]:not([data-p="home"]):not([data-p="admin"]) > section:not(.hero),
+.vtg-shell > [data-p]:not([data-p="home"]):not([data-p="admin"]) > .why {
+  width:100%; max-width:none; background:#f7f8f5;
+}
+.vtg-shell > [data-p]:not([data-p="home"]):not([data-p="admin"]) .wrap {
+  box-sizing:border-box; width:90%!important; max-width:1440px!important;
+  margin-left:auto!important; margin-right:auto!important; padding-left:0!important; padding-right:0!important;
+}
+/* Inner-page galleries should not grow to five or six huge cards per row. */
+.vtg-shell [data-p="reviews"] .grid,
+.vtg-shell [data-p="videos"] .grid,
+.vtg-shell [data-p="recent-tours"] .grid,
+.vtg-shell [data-p="tours"] .grid,
+.vtg-shell [data-p="travel"] .grid {
+  display:grid!important; grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:clamp(16px,2vw,26px)!important; align-items:start;
+}
+.vtg-shell [data-p="reviews"] .review-card {height:auto!important; min-height:0!important; overflow-wrap:anywhere;}
+.vtg-shell [data-p="reviews"] .review-card p {font-size:clamp(15px,1.05vw,17px);line-height:1.6;}
+.vtg-shell [data-p="reviews"] .review-card small {line-height:1.5;overflow-wrap:anywhere;}
+.vtg-shell [data-p="videos"] .grid video {aspect-ratio:16/9;object-fit:contain;max-height:none!important;background:#102c26;}
+.vtg-shell [data-p="recent-tours"] .card,
+.vtg-shell [data-p="videos"] .card {min-width:0;overflow:hidden;}
+.vtg-shell [data-p="recent-tours"] .card img {max-width:100%;height:auto;object-fit:cover;}
+/* Keep content from empty collections near the heading, rather than visually stretching it. */
+.vtg-shell [data-p="videos"] > section,
+.vtg-shell [data-p="recent-tours"] > section {min-height:0!important;padding-block:clamp(36px,4vw,64px)!important;}
+.vtg-shell [data-p="videos"] .wrap > p,
+.vtg-shell [data-p="recent-tours"] .wrap > p {max-width:850px;}
+header {background:#e6eee8!important;}
+@media(max-width:950px){
+ .vtg-shell [data-p="reviews"] .grid,.vtg-shell [data-p="videos"] .grid,.vtg-shell [data-p="recent-tours"] .grid,.vtg-shell [data-p="tours"] .grid,.vtg-shell [data-p="travel"] .grid {grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+}
+@media(max-width:600px){
+ .vtg-shell > [data-p]:not([data-p="home"]):not([data-p="admin"]) .wrap {width:calc(100% - 32px)!important;max-width:none!important;}
+ .vtg-shell [data-p="reviews"] .grid,.vtg-shell [data-p="videos"] .grid,.vtg-shell [data-p="recent-tours"] .grid,.vtg-shell [data-p="tours"] .grid,.vtg-shell [data-p="travel"] .grid {grid-template-columns:1fr!important;}
+}
