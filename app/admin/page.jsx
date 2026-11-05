@@ -242,8 +242,12 @@ export default function Admin() {
   function switchTab(next) {
     if (busy) return;
     setTab(next); setEditing(null); setFormOpen(false); setRemoved([]); setSelectedFiles({}); setError(""); setNotice(""); setSearch(""); setFilter("all");
-    if (typeof window !== "undefined") window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    if (typeof window !== "undefined") { window.scrollTo({ top: 0, left: 0, behavior: "instant" }); }
   }
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, [tab]);
 
   const filteredRows = useMemo(() => rows.filter(row => {
     const content = [row.name, row.title, row.description, row.text, row.country].filter(Boolean).join(" ").toLowerCase();

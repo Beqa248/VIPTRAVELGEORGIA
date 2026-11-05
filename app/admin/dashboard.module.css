@@ -7,18 +7,66 @@
 .editor .uploadGrid{max-width:900px}.editor .existingPhotos{max-width:1000px}
 
 
-/* Consistent, non-overlapping header on every dashboard tab */
-.topbar { position:relative; top:auto; z-index:auto; min-height:76px; display:flex; align-items:center; justify-content:space-between; background:#173c35; color:#fff; border-radius:0; padding:16px clamp(20px,4vw,48px); }
-.adminHeaderTitle { display:block; color:#fff; font-size:20px; font-weight:700; }
-.topbar .signOut { display:inline-flex; align-items:center; color:#fff; border:1px solid #6d9083; }
-.nav { position:relative; top:auto; z-index:auto; margin:0; padding:12px clamp(20px,4vw,48px) 22px; background:#173c35; border-radius:0 0 20px 20px; }
-.content { position:relative; padding-top:34px; }
-@media(max-width:620px){ .topbar{padding:16px;} .nav{padding:12px 16px 18px;} }
 
-/* FINAL HEADER LAYOUT: header and navigation remain visible without covering content. */
-.topbar { position:sticky !important; top:0 !important; z-index:101 !important; min-height:72px !important; display:flex !important; align-items:center !important; justify-content:space-between !important; padding:14px clamp(20px,4vw,48px) !important; background:#173c35 !important; color:#fff !important; border-radius:0 !important; }
-.adminHeaderTitle { display:block !important; color:#fff !important; font-size:20px !important; line-height:1.3 !important; font-weight:700 !important; }
-.topbar .signOut { display:inline-flex !important; color:#fff !important; visibility:visible !important; }
-.nav { position:sticky !important; top:72px !important; z-index:100 !important; margin:0 !important; padding:12px clamp(20px,4vw,48px) 20px !important; background:#173c35 !important; border-radius:0 0 20px 20px !important; }
-.content { position:relative !important; padding-top:36px !important; }
-@media(max-width:620px) { .topbar { min-height:72px !important; padding:12px 16px !important; } .nav { padding:12px 16px 18px !important; } }
+/* Header is a separate block in normal document flow. */
+.shell .topbar { position:static !important; display:flex !important; visibility:visible !important; min-height:86px; align-items:center; justify-content:space-between; background:#173c35; color:#fff; padding:22px clamp(20px,4vw,48px); border-radius:18px 18px 0 0; }
+.shell .adminHeaderTitle { display:block !important; color:#fff !important; font-size:22px; font-weight:700; }
+.shell .signOut { display:inline-flex !important; visibility:visible !important; color:#fff !important; }
+.shell .nav { position:static !important; margin:0 !important; padding:12px clamp(20px,4vw,48px) 22px !important; background:#173c35; border-radius:0 0 20px 20px; }
+.shell .content { position:static !important; padding-top:38px !important; }
+@media(max-width:620px){.shell .topbar{padding:18px 16px;min-height:76px}.shell .nav{padding:12px 16px 20px !important}}
+
+/* FINAL ADMIN CHROME: two independent blocks, both in document flow.
+   Topbar is always visible; tabs remain exactly as before. */
+.shell .dashboard > .topbar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  min-height: 78px !important;
+  margin: 0 !important;
+  padding: 18px clamp(20px, 4vw, 48px) !important;
+  background: #173c35 !important;
+  border-radius: 0 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
+.shell .dashboard > .topbar .adminHeaderTitle {
+  display: block !important;
+  color: white !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+}
+.shell .dashboard > .topbar .signOut {
+  display: inline-flex !important;
+  align-items: center !important;
+  color: #fff !important;
+  visibility: visible !important;
+}
+.shell .dashboard > .nav {
+  position: sticky !important;
+  top: 78px !important;
+  z-index: 99 !important;
+  margin: 0 !important;
+  padding: 14px clamp(20px, 4vw, 48px) 22px !important;
+  background: #173c35 !important;
+  border-radius: 0 0 20px 20px !important;
+  transform: none !important;
+}
+.shell .dashboard > .content,
+.shell .dashboard > .adminSubRoot,
+.shell .dashboard > div:has(> .adminSubRoot) {
+  position: relative !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  transform: none !important;
+}
+.shell .dashboard > .content { padding: 36px clamp(16px,4vw,48px) 70px !important; }
+.shell .dashboard > div:has(> .adminSubRoot) .adminSubRoot main { padding-top: 36px !important; }
+@media (max-width: 620px) {
+  .shell .dashboard > .topbar { min-height: 72px !important; padding: 15px 16px !important; }
+  .shell .dashboard > .nav { top: 72px !important; padding: 12px 16px 18px !important; }
+}
