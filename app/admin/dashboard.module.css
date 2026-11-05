@@ -8,3 +8,7 @@
 
 /* Compact, consistent admin navigation */
 .topbar{padding:9px clamp(20px,4vw,48px);border-radius:0}.nav{padding-top:12px}
+
+/* Keep dashboard navigation visible in every section */
+.nav { position: sticky; top: 69px; z-index: 39; }
+@media (max-width: 650px) { .nav { top: 68px; } }

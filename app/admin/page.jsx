@@ -242,6 +242,8 @@ export default function Admin() {
   function switchTab(next) {
     if (busy) return;
     setTab(next); setEditing(null); setFormOpen(false); setRemoved([]); setSelectedFiles({}); setError(""); setNotice(""); setSearch(""); setFilter("all");
+    // All seven tabs should return to the same visible dashboard header.
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   }
 
   const filteredRows = useMemo(() => rows.filter(row => {
@@ -255,7 +257,7 @@ export default function Admin() {
   return (
     <main className={styles.shell}>
       <div className={styles.dashboard}>
-        <header className={styles.topbar}>
+        <header className={styles.topbar} style={{ position: "sticky", top: 0, zIndex: 40, background: "#173c35", color: "#fff" }}>
           <span style={{fontWeight:700}}>Admin dashboard</span>
           {session && <button type="button" className={styles.signOut} onClick={() => client?.auth.signOut()}>Sign out ↗</button>}
         </header>
