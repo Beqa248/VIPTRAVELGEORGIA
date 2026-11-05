@@ -243,7 +243,6 @@ export default function Admin() {
     if (busy) return;
     setTab(next); setEditing(null); setFormOpen(false); setRemoved([]); setSelectedFiles({}); setError(""); setNotice(""); setSearch(""); setFilter("all");
     // All seven tabs should return to the same visible dashboard header.
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   }
 
   const filteredRows = useMemo(() => rows.filter(row => {
@@ -257,9 +256,13 @@ export default function Admin() {
   return (
     <main className={styles.shell}>
       <div className={styles.dashboard}>
-        <header className={styles.topbar} style={{ position: "sticky", top: 0, zIndex: 40, background: "#173c35", color: "#fff" }}>
-          <span style={{fontWeight:700}}>Admin dashboard</span>
-          {session && <button type="button" className={styles.signOut} onClick={() => client?.auth.signOut()}>Sign out ↗</button>}
+        <header className={styles.topbar}>
+          <strong className={styles.adminHeaderTitle}>Admin Dashboard</strong>
+          {session && (
+            <button type="button" className={styles.signOut} onClick={() => client?.auth.signOut()}>
+              Sign out ↗
+            </button>
+          )}
         </header>
         {!client ? <div className={styles.centerCard}>Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in Vercel, then redeploy.</div>
         : !session ? <form onSubmit={login} className={styles.loginCard}>
@@ -275,7 +278,10 @@ export default function Admin() {
           <nav className={styles.nav} aria-label="Admin sections">
             {tabs.map(item => <button type="button" key={item.id} className={`${styles.navItem} ${tab === item.id ? styles.navActive : ""}`} onClick={() => switchTab(item.id)}><span>{item.icon}</span>{item.label}</button>)}
           </nav>
-          {tab === "regions" ? <RegionsAdmin embedded /> : tab === "inquiries" ? <InquiriesAdmin embedded /> : tab === "tour_photos" ? <TourPhotosAdmin embedded /> : <div className={styles.content}>
+          <div style={{ display: tab === "regions" ? "block" : "none" }}><RegionsAdmin embedded /></div>
+          <div style={{ display: tab === "inquiries" ? "block" : "none" }}><InquiriesAdmin embedded /></div>
+          <div style={{ display: tab === "tour_photos" ? "block" : "none" }}><TourPhotosAdmin embedded /></div>
+          {!["regions", "inquiries", "tour_photos"].includes(tab) && <div className={styles.content}>
             <div className={styles.headingRow}>
               <div><div className={styles.eyebrow}>WEBSITE MANAGEMENT</div><h1>{sectionTitle}</h1><p>Manage content, photographs and visibility from one place.</p></div>
               {<button type="button" className={styles.primary} onClick={() => formOpen ? (setFormOpen(false), setEditing(null), setSelectedFiles({})) : openForm()}>{formOpen ? "× Close editor" : `＋ Add ${tab === "vehicles" ? "vehicle" : tab === "videos" ? "video" : tab === "reviews" ? "review" : "tour"}`}</button>}

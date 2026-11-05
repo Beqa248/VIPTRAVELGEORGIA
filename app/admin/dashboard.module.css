@@ -12,3 +12,45 @@
 /* Keep dashboard navigation visible in every section */
 .nav { position: sticky; top: 69px; z-index: 39; }
 @media (max-width: 650px) { .nav { top: 68px; } }
+
+/* Admin header: visible title and sign-out on every tab */
+.topbar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  min-height: 72px !important;
+  background: #173c35 !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+.adminHeaderTitle {
+  display: block !important;
+  color: #ffffff !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  opacity: 1 !important;
+}
+.topbar .signOut {
+  display: inline-flex !important;
+  align-items: center !important;
+  color: #ffffff !important;
+  background: #245a49 !important;
+  border: 1px solid #8cae9e !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+.nav { top: 72px !important; }
+
+/* FINAL FIX: dashboard header and tabs remain in normal document flow.
+   No sticky overlays or negative offsets on content. */
+.topbar { position: relative !important; top: auto !important; z-index: auto !important; border-radius: 0 !important; min-height: 72px !important; }
+.nav { position: relative !important; top: auto !important; z-index: auto !important; margin-top: 0 !important; }
+
+/* Match original navigation and ensure no overlap with tab content */
+.nav { position:relative!important; top:auto!important; z-index:1; margin:0!important; border-radius:0 0 20px 20px!important; }
+.topbar { position:relative!important; top:auto!important; min-height:72px; }
+.content { position:relative; padding-top:38px; }
