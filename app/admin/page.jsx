@@ -3,12 +3,18 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase as client } from "../../lib/supabase";
 import styles from "./dashboard.module.css";
+import RegionsAdmin from "./regions/page";
+import InquiriesAdmin from "./inquiries/page";
+import TourPhotosAdmin from "./tour-photos/page";
 
 const tabs = [
   { id: "vehicles", label: "Cars", icon: "🚙" },
   { id: "videos", label: "Videos", icon: "▶" },
   { id: "recent_tours", label: "Recent Tours", icon: "🏔" },
   { id: "reviews", label: "Guest Reviews", icon: "★" },
+  { id: "regions", label: "Regions", icon: "🗺" },
+  { id: "inquiries", label: "Customer Inquiries", icon: "✉" },
+  { id: "tour_photos", label: "Tour Photos", icon: "▧" },
 ];
 const allowedImages = ["image/jpeg", "image/png", "image/webp"];
 const allowedVideos = ["video/mp4", "video/webm", "video/quicktime"];
@@ -96,7 +102,7 @@ export default function Admin() {
   }
 
   useEffect(() => {
-    if (!authorized || !session?.user?.id || !client) return;
+    if (!authorized || !session?.user?.id || !client || !["vehicles", "videos", "recent_tours", "reviews"].includes(tab)) return;
     setError("");
     setRows([]);
     refresh(tab);
@@ -266,11 +272,8 @@ export default function Admin() {
         : <>
           <nav className={styles.nav} aria-label="Admin sections">
             {tabs.map(item => <button type="button" key={item.id} className={`${styles.navItem} ${tab === item.id ? styles.navActive : ""}`} onClick={() => switchTab(item.id)}><span>{item.icon}</span>{item.label}</button>)}
-            <a className={styles.navItem} href="/admin/regions"><span>🗺</span>Regions</a>
-            <a className={styles.navItem} href="/admin/inquiries"><span>✉</span>Customer Inquiries</a>
-            <a className={styles.navItem} href="/admin/tour-photos"><span>▧</span>Tour Photos</a>
           </nav>
-          <div className={styles.content}>
+          {tab === "regions" ? <RegionsAdmin embedded /> : tab === "inquiries" ? <InquiriesAdmin embedded /> : tab === "tour_photos" ? <TourPhotosAdmin embedded /> : <div className={styles.content}>
             <div className={styles.headingRow}>
               <div><div className={styles.eyebrow}>WEBSITE MANAGEMENT</div><h1>{sectionTitle}</h1><p>Manage content, photographs and visibility from one place.</p></div>
               {<button type="button" className={styles.primary} onClick={() => formOpen ? (setFormOpen(false), setEditing(null), setSelectedFiles({})) : openForm()}>{formOpen ? "× Close editor" : `＋ Add ${tab === "vehicles" ? "vehicle" : tab === "videos" ? "video" : tab === "reviews" ? "review" : "tour"}`}</button>}
@@ -340,7 +343,7 @@ export default function Admin() {
                 </article>;
               })}</div>
             </section>
-          </div>
+          </div>}
         </>}
       </div>
       {deleteTarget && <div className={styles.modalOverlay} role="presentation" onMouseDown={e => { if (e.target === e.currentTarget) setDeleteTarget(null); }}><div className={styles.modal} role="dialog" aria-modal="true" aria-labelledby="delete-heading"><div className={styles.modalIcon}>!</div><h2 id="delete-heading">Delete this entry?</h2><p><strong>{deleteTarget.name || deleteTarget.title || "Guest review"}</strong> will be permanently removed from the database. This cannot be undone.</p><div className={styles.modalActions}><button type="button" className={styles.secondary} onClick={() => setDeleteTarget(null)} disabled={busy}>Cancel</button><button type="button" className={styles.dangerSolid} onClick={remove} disabled={busy}>{busy ? "Deleting…" : "Yes, delete"}</button></div></div></div>}

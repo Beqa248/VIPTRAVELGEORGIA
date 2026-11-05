@@ -9,7 +9,7 @@ import NewToursManager from "./NewToursManager";
 const tours = ["adjara", "martvili", "gomis", "svaneti", "kobuleti", "dashbashi", "vardzia", "tusheti", "beshumi", "kazbegi", "highlights", "airport-transfers"];
 const tourName = slug => slug === "airport-transfers" ? "Airport Transfers" : slug === "gomis" ? "Gomis Mta" : slug === "highlights" ? "Georgia Highlights" : slug.charAt(0).toUpperCase() + slug.slice(1);
 
-export default function TourPhotosAdmin() {
+export default function TourPhotosAdmin({ embedded = false }) {
   const [mode, setMode] = useState("existing");
   const [session, setSession] = useState(null);
   const [allowed, setAllowed] = useState(false);
@@ -123,7 +123,7 @@ export default function TourPhotosAdmin() {
   const totalPhotos = records.reduce((sum, item) => sum + (item.gallery_images || []).length, 0);
   const shownCover = coverPreview || (!resetCover && record?.cover_url);
 
-  return <AdminSubLayout active="Tour Photos" title="Tour Media Studio" subtitle="Manage cover photographs and galleries from one place.">
+  return <AdminSubLayout embedded={embedded} active="Tour Photos" title="Tour Media Studio" subtitle="Manage cover photographs and galleries from one place.">
     {!supabase ? <div className={styles.error}>Supabase is not configured.</div> : checking ? <div className={styles.empty}>Checking administrator access…</div> : !session ? <div className={styles.empty}>Please <a href="/admin">sign in</a> first.</div> : !allowed ? <div className={styles.error}>Administrator access required.</div> : <>
       <div className={studio.modeBar}>
         <button type="button" className={mode === "existing" ? studio.modeActive : studio.modeButton} onClick={() => setMode("existing")}>Existing tours · Photos</button>
