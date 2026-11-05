@@ -6,8 +6,63 @@
 .editor .formGrid{max-width:900px}.editor .formField textarea{min-height:125px}
 .editor .uploadGrid{max-width:900px}.editor .existingPhotos{max-width:1000px}
 
+/* Compact, consistent admin navigation */
+.topbar{padding:9px clamp(20px,4vw,48px);border-radius:0}.nav{padding-top:12px}
 
-/* Consistent dashboard header across all tabs */
-.topbar{position:relative;min-height:70px;border-radius:0;padding:16px clamp(20px,4vw,48px)}
-.adminHeaderTitle{color:#fff;font-size:19px;font-weight:700}
-.nav{position:relative;top:auto;margin-top:0;padding-top:12px;z-index:1}
+/* Keep dashboard navigation visible in every section */
+.nav { position: sticky; top: 69px; z-index: 39; }
+@media (max-width: 650px) { .nav { top: 68px; } }
+
+/* Admin header: visible title and sign-out on every tab */
+.topbar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  min-height: 72px !important;
+  background: #173c35 !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+.adminHeaderTitle {
+  display: block !important;
+  color: #ffffff !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  opacity: 1 !important;
+}
+.topbar .signOut {
+  display: inline-flex !important;
+  align-items: center !important;
+  color: #ffffff !important;
+  background: #245a49 !important;
+  border: 1px solid #8cae9e !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+.nav { top: 72px !important; }
+
+/* FINAL FIX: dashboard header and tabs remain in normal document flow.
+   No sticky overlays or negative offsets on content. */
+.topbar { position: relative !important; top: auto !important; z-index: auto !important; border-radius: 0 !important; min-height: 72px !important; }
+.nav { position: relative !important; top: auto !important; z-index: auto !important; margin-top: 0 !important; }
+
+/* Fix: dashboard title stays visible when switching any of the seven tabs. */
+.topbar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 101 !important;
+  display: flex !important;
+  min-height: 66px;
+  background: #173c35 !important;
+  color: #fff !important;
+  padding: 14px clamp(20px,4vw,48px) !important;
+  border-radius: 0 !important;
+}
+.adminHeaderTitle {display: block !important; color: #fff !important; font-size: 20px; font-weight: 700;}
+.signOut {display: inline-flex !important; align-items: center; color: #fff !important;}
+.nav {position: sticky !important; top: 66px !important; z-index: 100 !important; margin-top: 0 !important; padding-top: 10px !important;}
+/* Original nav button design is unchanged. */
