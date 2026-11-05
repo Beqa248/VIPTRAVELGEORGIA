@@ -242,7 +242,7 @@ export default function Admin() {
   function switchTab(next) {
     if (busy) return;
     setTab(next); setEditing(null); setFormOpen(false); setRemoved([]); setSelectedFiles({}); setError(""); setNotice(""); setSearch(""); setFilter("all");
-    window.scrollTo({ top: 0, behavior: "instant" });
+    // All seven tabs should return to the same visible dashboard header.
   }
 
   const filteredRows = useMemo(() => rows.filter(row => {
