@@ -6,5 +6,8 @@
 .editor .formGrid{max-width:900px}.editor .formField textarea{min-height:125px}
 .editor .uploadGrid{max-width:900px}.editor .existingPhotos{max-width:1000px}
 
-/* Compact, consistent admin navigation */
-.topbar{padding:9px clamp(20px,4vw,48px);border-radius:0}.nav{padding-top:12px}
+
+/* Consistent dashboard header across all tabs */
+.topbar{position:relative;min-height:70px;border-radius:0;padding:16px clamp(20px,4vw,48px)}
+.adminHeaderTitle{color:#fff;font-size:19px;font-weight:700}
+.nav{position:relative;top:auto;margin-top:0;padding-top:12px;z-index:1}

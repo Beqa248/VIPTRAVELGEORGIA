@@ -4,6 +4,3 @@
 
 /* Embedded admin tabs: align with dashboard content and avoid page-like layout. */
 .adminSubRoot { min-height: 0; }
-
-/* Embedded sections share dashboard spacing, without nested full-page layout */
-.adminSubRoot { min-height:0!important; background:transparent!important; }
