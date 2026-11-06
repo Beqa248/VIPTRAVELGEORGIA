@@ -31,3 +31,32 @@ body > footer {flex-shrink:0;}
 .vtg-unified-contact .vtg-honeypot {position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;}
 .vtg-unified-contact .vtg-contact-notice {font-size:14px;margin:0;}
 @media(max-width:600px) {.vtg-unified-contact .vtg-contact-form {grid-template-columns:1fr!important;}.vtg-unified-contact .vtg-contact-actions {grid-template-columns:repeat(2,minmax(0,1fr))!important;}.vtg-unified-contact .vtg-contact-actions button {font-size:12px!important;padding:10px 5px!important;}}
+
+/* Contact page and homepage: consistent, centered two-column form. */
+.vtg-shell #contact.vtg-unified-contact .vtg-contact-inner {width:100%!important;max-width:800px!important;margin:0 auto!important;box-sizing:border-box!important;}
+.vtg-shell #contact.vtg-unified-contact form.vtg-contact-form {display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;width:100%!important;max-width:100%!important;margin:0!important;align-items:start!important;}
+.vtg-shell #contact.vtg-unified-contact form.vtg-contact-form > label {display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:5px!important;width:auto!important;max-width:none!important;margin:0!important;min-width:0!important;}
+.vtg-shell #contact.vtg-unified-contact form.vtg-contact-form > label input:not([type="checkbox"]),
+.vtg-shell #contact.vtg-unified-contact form.vtg-contact-form > label select,
+.vtg-shell #contact.vtg-unified-contact form.vtg-contact-form > label textarea {width:100%!important;max-width:100%!important;box-sizing:border-box!important;}
+.vtg-shell #contact.vtg-unified-contact form.vtg-contact-form > .vtg-contact-message,
+.vtg-shell #contact.vtg-unified-contact form.vtg-contact-form > .vtg-contact-consent,
+.vtg-shell #contact.vtg-unified-contact form.vtg-contact-form > .vtg-contact-actions,
+.vtg-shell #contact.vtg-unified-contact form.vtg-contact-form > .vtg-contact-notice {grid-column:1/-1!important;}
+.vtg-shell #contact.vtg-unified-contact form.vtg-contact-form > .vtg-contact-consent {display:flex!important;flex-direction:row!important;justify-content:flex-start!important;align-items:center!important;gap:8px!important;}
+.vtg-shell #contact.vtg-unified-contact .vtg-contact-consent input[type="checkbox"] {flex:0 0 auto!important;width:16px!important;height:16px!important;margin:0!important;}
+.vtg-shell #contact.vtg-unified-contact .vtg-contact-actions {display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;align-items:stretch!important;}
+.vtg-shell #contact.vtg-unified-contact form.vtg-contact-form .vtg-contact-actions > button {grid-column:auto!important;width:100%!important;max-width:none!important;margin:0!important;padding:12px 8px!important;}
+.vtg-shell #contact.vtg-unified-contact .links.vtg-contact-socials {display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:10px!important;width:100%!important;max-width:100%!important;margin:12px 0 0!important;padding:0!important;}
+.vtg-shell #contact.vtg-unified-contact .links.vtg-contact-socials > a {flex:none!important;width:100%!important;min-width:0!important;max-width:none!important;margin:0!important;box-sizing:border-box!important;}
+.vtg-shell [data-p="contact"] #contact.vtg-unified-contact {background:#e8f0f2!important;}
+.vtg-shell [data-p="contact"] #contact.vtg-unified-contact > .wrap {width:100%!important;max-width:920px!important;margin:0 auto!important;box-sizing:border-box!important;padding:24px!important;}
+.vtg-shell [data-p="contact"] #contact.vtg-unified-contact .vtg-contact-inner > h2 {text-align:left!important;}
+.vtg-shell #contact.vtg-unified-contact .cinfo {text-align:center!important;}
+@media(max-width:600px) {
+ .vtg-shell #contact.vtg-unified-contact form.vtg-contact-form {grid-template-columns:1fr!important;}
+ .vtg-shell #contact.vtg-unified-contact form.vtg-contact-form > .vtg-contact-message,
+ .vtg-shell #contact.vtg-unified-contact form.vtg-contact-form > .vtg-contact-consent,
+ .vtg-shell #contact.vtg-unified-contact form.vtg-contact-form > .vtg-contact-actions {grid-column:1!important;}
+ .vtg-shell #contact.vtg-unified-contact .links.vtg-contact-socials {grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+}

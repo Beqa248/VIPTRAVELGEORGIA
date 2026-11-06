@@ -1,0 +1,31 @@
+VIPTravelGeorgia — PATCH ONLY (not full website)
+
+Replace these 5 files at the same paths in your GitHub project.
+
+FIXES
+1. Plan My Trip now filters by EXACT duration_days before ranking by interests.
+   3 days shows only 3-day tours; 1 day only 1-day tours; etc.
+   It fetches published tours fresh from /api/published-tours.
+2. Contact page and homepage share the same ContactForm and a corrected centered,
+   two-column layout. WhatsApp and Email buttons share a row; social links sit below.
+3. Contact form loads published tour titles via /api/published-tours.
+4. Direct email route included, but email cannot work without provider setup.
+
+REQUIRED EMAIL SETUP IN VERCEL > Project > Settings > Environment Variables:
+ RESEND_API_KEY = your Resend API key (server-only)
+ CONTACT_FROM_EMAIL = VIP Travel Georgia <bookings@YOUR_VERIFIED_DOMAIN>
+The sender domain must be verified in Resend, and the recipient is
+SubTravelGeorgia@gmail.com. Redeploy after adding environment variables.
+Never put the API key in NEXT_PUBLIC_* variables or GitHub.
+Optional: SUPABASE_SERVICE_ROLE_KEY saves successful email inquiries in
+the existing inquiries table; verify the schema and permissions first.
+
+TEST
+- Visit /api/published-tours and verify your current published tours.
+- Choose 3 days; only 3-day tour cards should appear. Test 1 and 4 days.
+- Confirm the tour duration_days values in Supabase are correct.
+- Check Contact on home and /contact on desktop and mobile.
+- Test sending an email after configuring Resend.
+
+LIMITATIONS: Not live-tested with your Vercel/Supabase/Resend accounts.
+This patch does not change Admin Dashboard files.
