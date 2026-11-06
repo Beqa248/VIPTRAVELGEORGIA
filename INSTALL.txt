@@ -1,1 +1,6 @@
-Changes-only patch for the project with the recent contact alignment updates. Replace components/pages/home.jsx and app/final-approved-polish.css. Includes: centered shared contact panel with two inner cards, and a See Recent Tours button beside Read guest reviews linking to /recent-tours. No other project files are included. Build/browser not tested.
+1. Run SUPABASE_TOUR_PRICES.sql in Supabase SQL Editor.
+2. Upload the 8 code files to their matching GitHub paths (do not upload SQL/INSTALL).
+3. Admin > Tour Photos > Existing tours: choose a tour and set price below Gallery photos, then Save changes.
+4. Admin > Tour Photos > Create & Manage New Tours: new and database-created tours can also set prices.
+5. To rename the dashboard tab WITHOUT overwriting your working header, in the CURRENT GitHub app/admin/page.jsx replace the visible text `Tour Photos` with `Tours` (keep component keys/routes unchanged). In app/admin/AdminSubLayout.jsx similarly change the displayed label only, if desired. Do NOT replace the admin dashboard page with an older copy.
+6. Price updates are fetched from tour_prices; public pages reflect saved values on refresh. Existing static individual tour pages retain their original content; prices are guaranteed on homepage/Tours listing and new custom tour details.

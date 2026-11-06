@@ -15,11 +15,11 @@ export default function Page() {
     useEffect(() => {
       if (!supabase) return;
       let active=true;
-      supabase.from("custom_tours").select("slug,published,price_mode,price_amount,price_currency,price_unit")
+      supabase.from("tour_prices").select("slug,price_mode,price_amount,price_currency,price_unit")
         .in("slug",["adjara","svaneti","martvili","gomis","kazbegi","beshumi"])
         .then(({data,error}) => {
           if (!active || error) return;
-          setHomePrices(Object.fromEntries((data||[]).filter(x=>x.published).map(x=>[x.slug,tourPriceLabel(x)])));
+          setHomePrices(Object.fromEntries((data||[]).map(x=>[x.slug,tourPriceLabel(x)])));
         });
       return () => { active=false; };
     }, []);

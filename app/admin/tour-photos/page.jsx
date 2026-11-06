@@ -9,7 +9,7 @@ import NewToursManager from "./NewToursManager";
 const tours = ["adjara", "martvili", "gomis", "svaneti", "kobuleti", "dashbashi", "vardzia", "tusheti", "beshumi", "kazbegi", "highlights", "airport-transfers"];
 const tourName = slug => slug === "airport-transfers" ? "Airport Transfers" : slug === "gomis" ? "Gomis Mta" : slug === "highlights" ? "Georgia Highlights" : slug.charAt(0).toUpperCase() + slug.slice(1);
 
-export default function TourPhotosAdmin({ embedded = false }) {
+export default function TourPhotosAdmin() {
   const [mode, setMode] = useState("existing");
   const [session, setSession] = useState(null);
   const [allowed, setAllowed] = useState(false);
@@ -26,6 +26,7 @@ export default function TourPhotosAdmin({ embedded = false }) {
   const [galleryPreview, setGalleryPreview] = useState([]);
   const [resetCover, setResetCover] = useState(false);
   const [published, setPublished] = useState(true);
+  const [price, setPrice] = useState({price_mode:"hidden",price_amount:"",price_currency:"USD",price_unit:"car"});
 
   useEffect(() => {
     if (!supabase) { setChecking(false); return; }
@@ -58,6 +59,9 @@ export default function TourPhotosAdmin({ embedded = false }) {
       const found = list.find(item => item.slug === which) || null;
       setRecord(found);
       setPublished(found?.published ?? true);
+      const {data:priceRow,error:priceError}=await supabase.from("tour_prices").select("price_mode,price_amount,price_currency,price_unit").eq("slug",which).maybeSingle();
+      if(priceError) throw priceError;
+      setPrice({price_mode:priceRow?.price_mode||"hidden",price_amount:priceRow?.price_amount??"",price_currency:priceRow?.price_currency||"USD",price_unit:priceRow?.price_unit||"car"});
     } catch (err) { setError(err.message || "Unable to load tour photos."); }
     finally { setLoading(false); }
   }
@@ -102,12 +106,15 @@ export default function TourPhotosAdmin({ embedded = false }) {
     const form = e.currentTarget;
     const data = new FormData(form);
     try {
+      if(price.price_mode==="starting" && !(Number(price.price_amount)>0)) throw new Error("Enter a starting price greater than zero.");
       const uploadedCover = (await upload(data.getAll("cover")))[0];
       const cover = uploadedCover || (resetCover ? null : record?.cover_url || null);
       const uploadedGallery = await upload(data.getAll("gallery"));
       const gallery_images = [...(record?.gallery_images || []).filter(url => !removed.includes(url)), ...uploadedGallery];
       const { error: saveError } = await supabase.from("tour_page_media").upsert({ slug, cover_url: cover, gallery_images, published }, { onConflict: "slug" });
       if (saveError) throw saveError;
+      const {error:pricingError}=await supabase.from("tour_prices").upsert({slug,...price,price_amount:price.price_mode==="starting"?Number(price.price_amount):null},{onConflict:"slug"});
+      if(pricingError) throw pricingError;
       form.reset();
       if (coverPreview) URL.revokeObjectURL(coverPreview);
       galleryPreview.forEach(url => URL.revokeObjectURL(url));
@@ -123,10 +130,10 @@ export default function TourPhotosAdmin({ embedded = false }) {
   const totalPhotos = records.reduce((sum, item) => sum + (item.gallery_images || []).length, 0);
   const shownCover = coverPreview || (!resetCover && record?.cover_url);
 
-  return <AdminSubLayout embedded={embedded} active="Tour Photos" title="Tour Media Studio" subtitle="Manage cover photographs and galleries from one place.">
+  return <AdminSubLayout active="Tour Photos" title="Tours" subtitle="Manage cover photographs and galleries from one place.">
     {!supabase ? <div className={styles.error}>Supabase is not configured.</div> : checking ? <div className={styles.empty}>Checking administrator access…</div> : !session ? <div className={styles.empty}>Please <a href="/admin">sign in</a> first.</div> : !allowed ? <div className={styles.error}>Administrator access required.</div> : <>
       <div className={studio.modeBar}>
-        <button type="button" className={mode === "existing" ? studio.modeActive : studio.modeButton} onClick={() => setMode("existing")}>Existing tours · Photos</button>
+        <button type="button" className={mode === "existing" ? studio.modeActive : studio.modeButton} onClick={() => setMode("existing")}>Existing tours · Photos & Prices</button>
         <button type="button" className={mode === "new" ? studio.modeActive : studio.modeButton} onClick={() => setMode("new")}>＋ Create & Manage New Tours</button>
       </div>
       {mode === "new" ? <NewToursManager /> : <>
@@ -156,6 +163,17 @@ export default function TourPhotosAdmin({ embedded = false }) {
             {(record?.gallery_images || []).map(url => <div key={url} className={`${studio.photo} ${removed.includes(url) ? studio.marked : ""}`}><img src={url} alt="Saved tour gallery photo"/><label><input type="checkbox" checked={removed.includes(url)} onChange={e => setRemoved(old => e.target.checked ? [...old, url] : old.filter(item => item !== url))}/>{removed.includes(url) ? "Remove when saved" : "Remove photo"}</label></div>)}
             {galleryPreview.map((url, i) => <div className={studio.photo} key={url}><img src={url} alt={`New gallery preview ${i + 1}`} /><span className={studio.newTag}>New photo · ready to upload</span></div>)}
           </div> : <div className={studio.empty}>No additional photos yet. The original tour gallery will remain unchanged.</div>}
+        </div>
+        <div className={studio.section}>
+          <div className={studio.sectionTitle}><div><h3>Tour pricing</h3><p>Shown on the homepage, Tours page and tour details.</p></div></div>
+          <div style={{display:"grid",gap:14,maxWidth:720}}>
+            <label>Price display<select value={price.price_mode} onChange={e=>setPrice(x=>({...x,price_mode:e.target.value}))}><option value="starting">Starting price</option><option value="request">Price on request</option><option value="hidden">Hide price</option></select></label>
+            {price.price_mode==="starting"&&<div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(160px,1fr))",gap:12}}>
+              <label>Starting amount<input type="number" min="0.01" step="0.01" required value={price.price_amount} onChange={e=>setPrice(x=>({...x,price_amount:e.target.value}))}/></label>
+              <label>Currency<select value={price.price_currency} onChange={e=>setPrice(x=>({...x,price_currency:e.target.value}))}><option value="USD">USD ($)</option><option value="EUR">EUR (€)</option><option value="GEL">GEL (₾)</option></select></label>
+              <label>Price per<select value={price.price_unit} onChange={e=>setPrice(x=>({...x,price_unit:e.target.value}))}><option value="car">Car</option><option value="person">Person</option><option value="group">Group</option></select></label>
+            </div>}
+          </div>
         </div>
         <div className={studio.actions}><label className={studio.check}><input type="checkbox" checked={published} onChange={e => setPublished(e.target.checked)} /> Published on website</label><div className={studio.actionButtons}>{slug !== "airport-transfers" && <a className={studio.secondaryButton} href={`/${slug}`} target="_blank" rel="noreferrer">View tour ↗</a>}<button className={studio.saveButton} type="submit" disabled={busy || loading}>{busy ? "Uploading & saving…" : "Save changes"}</button></div></div>
       </form>
