@@ -10,7 +10,7 @@ const tours = ["adjara", "martvili", "gomis", "svaneti", "kobuleti", "dashbashi"
 const tourName = slug => slug === "airport-transfers" ? "Airport Transfers" : slug === "gomis" ? "Gomis Mta" : slug === "highlights" ? "Georgia Highlights" : slug.charAt(0).toUpperCase() + slug.slice(1);
 
 export default function TourPhotosAdmin({embedded=false}) {
-  const [mode, setMode] = useState("existing");
+  const [mode, setMode] = useState("new");
   const [session, setSession] = useState(null);
   const [allowed, setAllowed] = useState(false);
   const [checking, setChecking] = useState(true);
@@ -179,11 +179,10 @@ export default function TourPhotosAdmin({embedded=false}) {
   const totalPhotos = records.reduce((sum, item) => sum + (item.gallery_images || []).length, 0);
   const shownCover = coverPreview || (!resetCover && record?.cover_url);
 
-  return <AdminSubLayout embedded={embedded} active="Tour Photos" title="Tours" subtitle="Manage cover photographs and galleries from one place.">
+  return <AdminSubLayout embedded={embedded} active="Tour Photos" title="Tours" subtitle="Create, edit, publish, and archive your tours in one place.">
     {!supabase ? <div className={styles.error}>Supabase is not configured.</div> : checking ? <div className={styles.empty}>Checking administrator access…</div> : !session ? <div className={styles.empty}>Please <a href="/admin">sign in</a> first.</div> : !allowed ? <div className={styles.error}>Administrator access required.</div> : <>
       <div className={studio.modeBar}>
-        <button type="button" className={mode === "existing" ? studio.modeActive : studio.modeButton} onClick={() => setMode("existing")}>Existing tours · Photos & Prices</button>
-        <button type="button" className={mode === "new" ? studio.modeActive : studio.modeButton} onClick={() => setMode("new")}>＋ Create & Manage New Tours</button>
+        <button type="button" className={mode === "new" ? studio.modeActive : studio.modeButton} onClick={() => setMode("new")}>＋ Create & Manage Tours</button>
         <button type="button" className={mode === "archived" ? studio.modeActive : studio.modeButton} onClick={() => setMode("archived")}>Archived Tours</button>
       </div>
       {mode === "new" ? <NewToursManager /> : mode === "archived" ? <NewToursManager archivedOnly /> : <>
