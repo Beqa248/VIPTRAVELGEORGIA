@@ -452,3 +452,11 @@ body:has(.adminSubRoot) .vtg-shell { min-height:0!important; }
 .vtg-editable-tour-text .wrap{max-width:1120px;margin:0 auto;padding:0 22px}
 .vtg-editable-tour-text h2{margin:22px 0 10px;font-size:clamp(22px,2.5vw,30px)}
 .vtg-editable-tour-text p{line-height:1.75;max-width:850px;margin:0 0 16px;color:#394e46}
+
+/* Tour listing only: equal-height cards and aligned footer links */
+.vtg-tour-list-grid{align-items:stretch;}
+.vtg-tour-list-grid .vtg-tour-list-card{display:flex;flex-direction:column;min-width:0;height:100%;}
+.vtg-tour-list-grid .vtg-tour-list-card>.pic{flex-shrink:0;}
+.vtg-tour-list-grid .vtg-tour-list-card>.t{display:flex;flex:1;flex-direction:column;}
+.vtg-tour-list-grid .vtg-tour-list-card>.t>.lnk{margin-top:auto;padding-top:12px;}
+.vtg-tour-list-grid .vtg-tour-list-card>.t>p:not(.lnk):not(.vtg-tour-price){display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden;}

@@ -1,6 +1,13 @@
-1. Run SUPABASE_EXISTING_TOUR_CONTENT.sql in Supabase SQL Editor.
-2. Upload only the 5 code files in this ZIP to their matching paths in GitHub.
-3. In Admin > Tours > Existing tours, select a tour, enter overview and itinerary, and click Save changes.
-4. The original tour pages keep their original design/photos; edited text is shown in a new section below. Tour cards use the edited overview.
-5. No Admin Dashboard header or tab-navigation files are changed.
-Note: based on the last pricing fix and earlier supplied website ZIP, not the current GitHub state. Build not tested.
+VIPTravelGeorgia — Tour Card & Itinerary Layout Fix
+
+Replace the four files in your GitHub repository at the exact paths in this ZIP.
+Based on the latest archive-enabled tour code.
+
+Changes:
+- Public Tours listing: equal-height cards, bottom-aligned details links, 4-line description preview.
+- New/custom tour detail: one continuous itinerary panel, headings rendered without Markdown ** markers.
+- Archived-tour visibility logic retained in the supplied tours.jsx and detail page.
+- No admin files touched. No database SQL needed.
+
+Important: These four files are replacement files, not a full website.
+After pushing to GitHub, verify the Vercel build and check Tours + one tour detail page.

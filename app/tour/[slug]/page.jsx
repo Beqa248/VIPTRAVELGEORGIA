@@ -11,6 +11,14 @@ export default async function CustomTourPage({params}){
  if(error||!tour)notFound();
  const {data:pricing}=await db.from("tour_prices").select("price_mode,price_amount,price_currency,price_unit").eq("slug",slug).maybeSingle();
  const label=tourPriceLabel(pricing||tour);
- const days=(tour.itinerary||"").split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean);
- return <main className={styles.page}><div className={styles.wrap}><a href="/tours" className={styles.back}>← All tours</a><div className={styles.hero}>{tour.cover_url&&<img src={tour.cover_url} alt={tour.title}/>}<div className={styles.intro}><span>{tour.duration_days} day(s) · {tour.category}</span><h1>{tour.title}</h1><p>{tour.description}</p>{label&&<p className="vtg-tour-price">{label}</p>}</div></div>{days.length>0&&<section><h2>Your itinerary</h2>{days.map((d,i)=><article className={styles.day} key={i}>{d}</article>)}</section>}{!!tour.gallery_images?.length&&<section><h2>Photo gallery</h2><div className={styles.gallery}>{tour.gallery_images.map((url,i)=><img key={url} src={url} alt={`${tour.title} photo ${i+1}`} loading="lazy"/>)}</div></section>}<section className={styles.cta}><h2>Interested in this tour?</h2><p>Contact us for dates, pricing and a personalized itinerary.</p><a href={`/contact?tour=${encodeURIComponent(tour.title)}`}>Request this tour →</a></section></div></main>
+ const itinerarySections=(tour.itinerary||"").split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean);
+ const clean=(value)=>value.replace(/\*\*/g,"").replace(/^#{1,6}\s*/,"").trim();
+ const parts=itinerarySections.flatMap(section=>{
+   const lines=section.split("\n").map(x=>x.trim()).filter(Boolean);
+   if(!lines.length)return [];
+   const first=lines[0];
+   const titleLike=/^(?:\*\*)?(?:Departure|Return|Stop\s*\d+|Day\s*\d+|Tour Duration|Please Note|Important|Duration|Note)/i.test(first)||/^#{1,6}\s/.test(first);
+   return [{title:titleLike?clean(first):"",body:(titleLike?lines.slice(1):lines).map(clean).join(" ")}];
+ });
+ return <main className={styles.page}><div className={styles.wrap}><a href="/tours" className={styles.back}>← All tours</a><div className={styles.hero}>{tour.cover_url&&<img src={tour.cover_url} alt={tour.title}/>}<div className={styles.intro}><span>{tour.duration_days} day(s) · {tour.category}</span><h1>{tour.title}</h1><p>{tour.description}</p>{label&&<p className="vtg-tour-price">{label}</p>}</div></div>{parts.length>0&&<section><h2>Your itinerary</h2><div className={styles.itinerary}>{parts.map((part,i)=><div className={styles.itineraryStop} key={i}>{part.title&&<h3>{part.title}</h3>}{part.body&&<p>{part.body}</p>}</div>)}</div></section>}{!!tour.gallery_images?.length&&<section><h2>Photo gallery</h2><div className={styles.gallery}>{tour.gallery_images.map((url,i)=><img key={url} src={url} alt={`${tour.title} photo ${i+1}`} loading="lazy"/>)}</div></section>}<section className={styles.cta}><h2>Interested in this tour?</h2><p>Contact us for dates, pricing and a personalized itinerary.</p><a href={`/contact?tour=${encodeURIComponent(tour.title)}`}>Request this tour →</a></section></div></main>
 }
