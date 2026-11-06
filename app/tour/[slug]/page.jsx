@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import styles from "./tour.module.css";
 import { tourPriceLabel } from "../../../lib/tourPricing";
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 export default async function CustomTourPage({params}){
  const {slug}=await params;
  if(!process.env.NEXT_PUBLIC_SUPABASE_URL||!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)notFound();

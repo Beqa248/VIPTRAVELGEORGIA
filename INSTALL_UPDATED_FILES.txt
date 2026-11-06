@@ -1,0 +1,9 @@
+VIPTravelGeorgia patch - only changed files
+
+1. Back up current repo.
+2. Copy app/ and components/ files into matching paths in your repository, preserving all other files.
+3. Run SUPABASE_ARCHIVED_TOURS.sql only if the archive migration has not been applied.
+4. Deploy via Vercel. Confirm Supabase custom_tours has published tours before deploying: public hardcoded fallbacks are removed.
+5. Test Contact, Tours, Plan My Trip, archived tours, and tour detail pages.
+
+Based on the combined package and the uploaded VIPTRAVELGEORGIA-main(20261106-191341).zip. Full build/live test not performed.

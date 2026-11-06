@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { supabase } from "../lib/supabase";
 import { useLanguage } from "./site-context";
 import styles from "./TripPlanner.module.css";
 
@@ -10,30 +11,55 @@ const options = [
   { key: "s", icon: "☀", label: "Sea & relaxation" },
   { key: "l", icon: "🌲", label: "Lakes & villages" },
 ];
-const tours = [
-  { slug: "adjara", key: "t1", image: "/images/photo-002.jpg", tags: ["m", "w", "l"], min: 1, max: 3 },
-  { slug: "martvili", key: "t2", image: "/images/photo-009.jpg", tags: ["w", "l"], min: 1, max: 3 },
-  { slug: "gomis", key: "t3", image: "/images/photo-018.jpg", tags: ["m", "l"], min: 1, max: 2 },
-  { slug: "svaneti", key: "t4", image: "/images/photo-027.jpg", tags: ["m", "l", "h"], min: 2, max: 7 },
-  { slug: "kobuleti", key: "t6", image: "/images/photo-044.jpg", tags: ["s", "l"], min: 1, max: 3 },
-  { slug: "dashbashi", key: "t7", image: "/images/photo-051.jpg", tags: ["w", "m"], min: 1, max: 2 },
-  { slug: "vardzia", key: "t8", image: "/images/photo-057.jpg", tags: ["h", "m"], min: 1, max: 3 },
-  { slug: "tusheti", key: "t9", image: "/images/photo-064.jpg", tags: ["m", "l", "h"], min: 2, max: 7 },
-  { slug: "beshumi", key: "t10", image: "/images/photo-073.jpg", tags: ["m", "l"], min: 1, max: 3 },
-  { slug: "kazbegi", key: "t11", image: "/images/photo-080.jpg", tags: ["m", "l", "h"], min: 1, max: 3 },
-  { slug: "highlights", key: "t12", image: "/images/photo-086.jpg", tags: ["m", "w", "h", "s", "l"], min: 3, max: 14 },
-];
-
+const signals = {
+  m: /mountain|alpine|caucasus|kazbegi|svaneti|beshumi|goderdzi|gomis|hiking|trek|peak|viewpoint|juta|koruldi/i,
+  w: /waterfall|canyon|gorge|cave|river|martvili|prometheus|machakhela|mirveti|makhuntseti/i,
+  h: /history|historic|culture|cultural|fortress|castle|monastery|church|folklore|heritage|ancient|museum|bridge|ushguli|mtskheta/i,
+  s: /sea|coast|beach|botanical|relax|spa|sulfur|kobuleti|shekvetili|batumi|dendrological/i,
+  l: /lake|village|forest|nature|green|rural|cottage|heshkili|koruldi|ushguli/i,
+};
+function classify(tour) {
+  const haystack = [tour.title, tour.description, tour.category, tour.overview, tour.itinerary].filter(Boolean).join(" ");
+  return options.filter(option => signals[option.key].test(haystack)).map(option => option.key);
+}
+function tourHref(tour) { return tour.slug === "airport-transfers" ? "/contact" : `/tour/${encodeURIComponent(tour.slug)}`; }
 export default function TripPlanner({ hideIntro = false, hideFootnote = false }) {
   const { t } = useLanguage();
   const [days, setDays] = useState(3);
   const [people, setPeople] = useState(2);
   const [interests, setInterests] = useState(["m", "w"]);
   const [searched, setSearched] = useState(false);
+  const [tours, setTours] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
+  useEffect(() => {
+    let active = true;
+    if (!supabase) { setLoading(false); setLoadError(true); return; }
+    const load = async () => {
+      const { data, error } = await supabase.from("custom_tours")
+        .select("slug,title,description,overview,itinerary,category,duration_days,cover_url,published,archived,sort_order")
+        .eq("published", true).eq("archived", false).order("sort_order", { ascending: true });
+      if (!active) return;
+      setTours(error ? [] : (data || []));
+      setLoadError(!!error);
+      setLoading(false);
+    };
+    load();
+    // Refresh recommendations when the visitor returns to this tab after an admin update.
+    const refresh = () => { if (document.visibilityState === "visible") load(); };
+    document.addEventListener("visibilitychange", refresh);
+    return () => { active = false; document.removeEventListener("visibilitychange", refresh); };
+  }, []);
   const toggle = key => { setInterests(old => old.includes(key) ? old.filter(x => x !== key) : [...old, key]); setSearched(false); };
-  const matches = tours.map(tour => ({ ...tour, score: tour.tags.filter(tag => interests.includes(tag)).length }))
-    .filter(tour => tour.score > 0 && days >= tour.min && days <= tour.max)
-    .sort((a, b) => b.score - a.score || a.min - b.min).slice(0, 6);
+  const matches = useMemo(() => tours.map(tour => {
+    const tags = classify(tour);
+    const duration = Math.max(1, Number(tour.duration_days) || 1);
+    const matched = tags.filter(tag => interests.includes(tag)).length;
+    // Prefer tours matching the selected length; allow shorter trips within a longer stay.
+    const lengthFit = duration === days ? 3 : duration < days ? Math.max(0, 2 - (days - duration) * .25) : -5;
+    return { ...tour, score: matched * 4 + lengthFit, matched, duration };
+  }).filter(tour => tour.duration <= days && (interests.length === 0 || tour.matched > 0))
+    .sort((a,b) => b.score - a.score || a.duration - b.duration).slice(0,6), [tours, days, interests]);
   const customText = `Hello! I would like a custom Georgia itinerary for ${days} day${days === 1 ? "" : "s"}, ${people} traveler${people === 1 ? "" : "s"}. Interests: ${options.filter(o => interests.includes(o.key)).map(o => o.label).join(", ") || "open to suggestions"}. Please recommend a route and price.`;
   const whatsapp = `https://wa.me/995558176108?text=${encodeURIComponent(customText)}`;
   return <section id="hPlan" className={styles.section}><div className="wrap">
@@ -45,8 +71,8 @@ export default function TripPlanner({ hideIntro = false, hideFootnote = false })
       </div>
       <div className={styles.rule}/><h3>{t("planInt")}</h3><p className={styles.hint}>Select as many as you like</p>
       <div className={styles.interests}>{options.map((o,i)=><button key={o.key} type="button" className={`${styles.interest} ${interests.includes(o.key)?styles.selected:""}`} aria-pressed={interests.includes(o.key)} onClick={()=>toggle(o.key)}><span className={styles.interestTop}><span className={styles.emoji}>{o.icon}</span><span className={styles.check}>{interests.includes(o.key)?"✓":"○"}</span></span><span>{t(`pi${i+1}`) || o.label}</span></button>)}</div>
-      <button className={styles.discover} type="button" onClick={()=>setSearched(true)}>{t("planBtn")} <span>→</span></button>
-      {searched && <div className={styles.results} aria-live="polite"><h3>{matches.length?"Recommended trips for you":"Let's create your perfect route"}</h3><p className={styles.hint}>{matches.length?"Explore these matching tours, or request a personalized itinerary.":"No exact match for these preferences. We can design a custom trip for you."}</p>{matches.length>0&&<div className={styles.resultGrid}>{matches.map(tour=><a key={tour.slug} href={`/${tour.slug}`} className={styles.result}><img src={tour.image} alt="" loading="lazy"/><span><strong>{t(tour.key)}</strong><small>View tour details →</small></span></a>)}</div>}<div className={styles.custom}><div><strong>Want something more personal?</strong><p>Get a route tailored to your dates, group, and interests.</p></div><div className={styles.customActions}><a href={`/custom-tour?days=${days}&travelers=${people}&interests=${encodeURIComponent(options.filter(o=>interests.includes(o.key)).map(o=>o.label).join(", "))}`} className={styles.customLink}>Build custom itinerary →</a><a href={whatsapp} target="_blank" rel="noopener noreferrer" className={styles.whatsapp}>Ask on WhatsApp</a></div></div></div>}
+      <button className={styles.discover} type="button" onClick={()=>setSearched(true)} disabled={loading}>{loading ? "Loading tours…" : t("planBtn")} <span>→</span></button>
+      {searched && <div className={styles.results} aria-live="polite"><h3>{matches.length?"Recommended trips for you":"Let's create your perfect route"}</h3><p className={styles.hint}>{loadError?"Tour recommendations are temporarily unavailable. You can still request a custom itinerary.":matches.length?"Explore current published tours that match your interests, or request a personalized itinerary.":"No matching published tour for these preferences. We can design a custom trip for you."}</p>{matches.length>0&&<div className={styles.resultGrid}>{matches.map(tour=><a key={tour.slug} href={tourHref(tour)} className={styles.result}>{tour.cover_url?<img src={tour.cover_url} alt={tour.title} loading="lazy"/>:<div className={styles.resultPlaceholder}>Explore Georgia</div>}<span><strong>{tour.title}</strong><small>{tour.duration} {tour.duration===1?"day":"days"} · View tour details →</small></span></a>)}</div>}<div className={styles.custom}><div><strong>Want something more personal?</strong><p>Get a route tailored to your dates, group, and interests.</p></div><div className={styles.customActions}><a href={`/custom-tour?days=${days}&travelers=${people}&interests=${encodeURIComponent(options.filter(o=>interests.includes(o.key)).map(o=>o.label).join(", "))}`} className={styles.customLink}>Build custom itinerary →</a><a href={whatsapp} target="_blank" rel="noopener noreferrer" className={styles.whatsapp}>Ask on WhatsApp</a></div></div></div>}
     </div>{!hideFootnote && <p className={styles.footnote}>✓ Private tours &nbsp; · &nbsp; ✓ Flexible itineraries &nbsp; · &nbsp; ✓ Local driver-guide</p>}
   </div></section>;
 }
