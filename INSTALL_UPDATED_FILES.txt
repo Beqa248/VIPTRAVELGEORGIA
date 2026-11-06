@@ -1,9 +1,20 @@
-VIPTravelGeorgia patch - only changed files
+VIPTravelGeorgia — updated files only
 
-1. Back up current repo.
-2. Copy app/ and components/ files into matching paths in your repository, preserving all other files.
-3. Run SUPABASE_ARCHIVED_TOURS.sql only if the archive migration has not been applied.
-4. Deploy via Vercel. Confirm Supabase custom_tours has published tours before deploying: public hardcoded fallbacks are removed.
-5. Test Contact, Tours, Plan My Trip, archived tours, and tour detail pages.
+Copy each file into the same path in your GitHub repository. Do not replace the entire project.
 
-Based on the combined package and the uploaded VIPTRAVELGEORGIA-main(20261106-191341).zip. Full build/live test not performed.
+FIXES
+- Plan My Trip and the contact Tour or Service dropdown now use the SAME server-side live published-tours endpoint.
+- New published tours are included automatically when visitors load or revisit the page.
+- Unpublished and archived tours are excluded (archive column migration required for archive filtering).
+- Recommendations rank interests and trip length; tours with incomplete keywords can still appear.
+- Direct email contact API and matching contact form styling included from previous patch.
+
+SETUP
+- Keep NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in Vercel.
+- Run SUPABASE_ARCHIVED_TOURS.sql if archived column is not present.
+- For email configure RESEND_API_KEY and CONTACT_FROM_EMAIL (verified sending domain).
+- Optional SUPABASE_SERVICE_ROLE_KEY for storing customer inquiries. Never expose server keys with NEXT_PUBLIC_.
+- Deploy, verify /api/published-tours returns a tours array, then test the homepage Plan My Trip and both contact forms.
+
+If /api/published-tours returns an empty array, check published status and Supabase RLS SELECT policies.
+This patch was syntax-checked for the API routes but was NOT fully build-tested or live tested.

@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { supabase } from "../lib/supabase";
 import { useLanguage } from "./site-context";
 import styles from "./TripPlanner.module.css";
 
@@ -34,21 +33,23 @@ export default function TripPlanner({ hideIntro = false, hideFootnote = false })
   const [loadError, setLoadError] = useState(false);
   useEffect(() => {
     let active = true;
-    if (!supabase) { setLoading(false); setLoadError(true); return; }
     const load = async () => {
-      const { data, error } = await supabase.from("custom_tours")
-        .select("slug,title,description,overview,itinerary,category,duration_days,cover_url,published,archived,sort_order")
-        .eq("published", true).eq("archived", false).order("sort_order", { ascending: true });
-      if (!active) return;
-      setTours(error ? [] : (data || []));
-      setLoadError(!!error);
-      setLoading(false);
+      try {
+        const response = await fetch("/api/published-tours", { cache: "no-store" });
+        const payload = await response.json();
+        if (!response.ok) throw new Error(payload.error || "Unable to load tours");
+        if (active) { setTours(payload.tours || []); setLoadError(false); }
+      } catch (error) {
+        console.error("Plan My Trip:", error);
+        if (active) { setTours([]); setLoadError(true); }
+      } finally { if (active) setLoading(false); }
     };
     load();
-    // Refresh recommendations when the visitor returns to this tab after an admin update.
     const refresh = () => { if (document.visibilityState === "visible") load(); };
+    const focus = () => load();
     document.addEventListener("visibilitychange", refresh);
-    return () => { active = false; document.removeEventListener("visibilitychange", refresh); };
+    window.addEventListener("focus", focus);
+    return () => { active = false; document.removeEventListener("visibilitychange", refresh); window.removeEventListener("focus", focus); };
   }, []);
   const toggle = key => { setInterests(old => old.includes(key) ? old.filter(x => x !== key) : [...old, key]); setSearched(false); };
   const matches = useMemo(() => tours.map(tour => {
@@ -58,7 +59,7 @@ export default function TripPlanner({ hideIntro = false, hideFootnote = false })
     // Prefer tours matching the selected length; allow shorter trips within a longer stay.
     const lengthFit = duration === days ? 3 : duration < days ? Math.max(0, 2 - (days - duration) * .25) : -5;
     return { ...tour, score: matched * 4 + lengthFit, matched, duration };
-  }).filter(tour => tour.duration <= days && (interests.length === 0 || tour.matched > 0))
+  }).filter(tour => tour.duration <= days)
     .sort((a,b) => b.score - a.score || a.duration - b.duration).slice(0,6), [tours, days, interests]);
   const customText = `Hello! I would like a custom Georgia itinerary for ${days} day${days === 1 ? "" : "s"}, ${people} traveler${people === 1 ? "" : "s"}. Interests: ${options.filter(o => interests.includes(o.key)).map(o => o.label).join(", ") || "open to suggestions"}. Please recommend a route and price.`;
   const whatsapp = `https://wa.me/995558176108?text=${encodeURIComponent(customText)}`;
