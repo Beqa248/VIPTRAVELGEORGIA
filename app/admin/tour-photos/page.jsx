@@ -26,6 +26,7 @@ export default function TourPhotosAdmin() {
   const [galleryPreview, setGalleryPreview] = useState([]);
   const [resetCover, setResetCover] = useState(false);
   const [published, setPublished] = useState(true);
+  const [tourText, setTourText] = useState({overview:"",itinerary:""});
   const [price, setPrice] = useState({price_mode:"hidden",price_amount:"",price_currency:"USD",price_unit:"car"});
 
   useEffect(() => {
@@ -62,6 +63,9 @@ export default function TourPhotosAdmin() {
       const {data:priceRow,error:priceError}=await supabase.from("tour_prices").select("price_mode,price_amount,price_currency,price_unit").eq("slug",which).maybeSingle();
       if(priceError) throw priceError;
       setPrice({price_mode:priceRow?.price_mode||"hidden",price_amount:priceRow?.price_amount??"",price_currency:priceRow?.price_currency||"USD",price_unit:priceRow?.price_unit||"car"});
+      const {data:textRow,error:textError}=await supabase.from("tour_content").select("overview,itinerary").eq("slug",which).maybeSingle();
+      if(textError) throw textError;
+      setTourText({overview:textRow?.overview||"",itinerary:textRow?.itinerary||""});
     } catch (err) { setError(err.message || "Unable to load tour photos."); }
     finally { setLoading(false); }
   }
@@ -115,6 +119,8 @@ export default function TourPhotosAdmin() {
       if (saveError) throw saveError;
       const {error:pricingError}=await supabase.from("tour_prices").upsert({slug,...price,price_amount:price.price_mode==="starting"?Number(price.price_amount):null},{onConflict:"slug"});
       if(pricingError) throw pricingError;
+      const {error:textSaveError}=await supabase.from("tour_content").upsert({slug,overview:tourText.overview.trim(),itinerary:tourText.itinerary.trim()},{onConflict:"slug"});
+      if(textSaveError) throw textSaveError;
       form.reset();
       if (coverPreview) URL.revokeObjectURL(coverPreview);
       galleryPreview.forEach(url => URL.revokeObjectURL(url));
@@ -163,6 +169,18 @@ export default function TourPhotosAdmin() {
             {(record?.gallery_images || []).map(url => <div key={url} className={`${studio.photo} ${removed.includes(url) ? studio.marked : ""}`}><img src={url} alt="Saved tour gallery photo"/><label><input type="checkbox" checked={removed.includes(url)} onChange={e => setRemoved(old => e.target.checked ? [...old, url] : old.filter(item => item !== url))}/>{removed.includes(url) ? "Remove when saved" : "Remove photo"}</label></div>)}
             {galleryPreview.map((url, i) => <div className={studio.photo} key={url}><img src={url} alt={`New gallery preview ${i + 1}`} /><span className={studio.newTag}>New photo · ready to upload</span></div>)}
           </div> : <div className={studio.empty}>No additional photos yet. The original tour gallery will remain unchanged.</div>}
+        </div>
+        <div className={studio.section}>
+          <div className={studio.sectionTitle}><div><h3>Tour overview & itinerary</h3><p>Edit the description and detailed itinerary for this existing tour. Leave either field blank to keep the original website text.</p></div></div>
+          <div style={{display:"grid",gap:16,maxWidth:850}}>
+            <label style={{display:"grid",gap:8,fontWeight:650}}>Tour overview
+              <textarea rows={5} value={tourText.overview} onChange={e=>setTourText(v=>({...v,overview:e.target.value}))} placeholder="Describe what makes this experience special..." style={{width:"100%",boxSizing:"border-box",border:"1px solid #cadbd0",borderRadius:10,padding:12,font:"inherit",fontWeight:400}} />
+            </label>
+            <label style={{display:"grid",gap:8,fontWeight:650}}>Detailed itinerary
+              <textarea rows={9} value={tourText.itinerary} onChange={e=>setTourText(v=>({...v,itinerary:e.target.value}))} placeholder={"Stop 1: ...\n\nStop 2: ..."} style={{width:"100%",boxSizing:"border-box",border:"1px solid #cadbd0",borderRadius:10,padding:12,font:"inherit",fontWeight:400}} />
+            </label>
+            <small style={{color:"#65786d"}}>Text is saved when you click Save changes below. Existing photos and pricing remain unchanged.</small>
+          </div>
         </div>
         <div className={studio.section}>
           <div className={studio.sectionTitle}><div><h3>Tour pricing</h3><p>Shown on the homepage, Tours page and tour details.</p></div></div>

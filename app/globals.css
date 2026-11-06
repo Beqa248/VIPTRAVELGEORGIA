@@ -446,3 +446,9 @@ body:has(.adminSubRoot) .vtg-shell { min-height:0!important; }
 @media(max-width:380px){[data-p="contact"] #contact .links {grid-template-columns:1fr 1fr;}}
 .vtg-tour-price{color:#a8793e;font-weight:750;font-size:15px;margin:8px 0 10px;}
 #hTours .tile .vtg-home-tour-price{display:block;padding:4px 0 0;font:700 14px/1.35 system-ui,sans-serif;color:#e8c797;text-shadow:0 1px 3px rgba(0,0,0,.4);}
+
+/* Editable tour information, below the original tour layout */
+.vtg-editable-tour-text{padding:32px 0 52px;background:#f7f6f1;color:#173c32}
+.vtg-editable-tour-text .wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+.vtg-editable-tour-text h2{margin:22px 0 10px;font-size:clamp(22px,2.5vw,30px)}
+.vtg-editable-tour-text p{line-height:1.75;max-width:850px;margin:0 0 16px;color:#394e46}
