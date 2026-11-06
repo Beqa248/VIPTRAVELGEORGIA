@@ -5,7 +5,7 @@ import AdminSubLayout from "../AdminSubLayout";
 import styles from "../subpages.module.css";
 import {defaultRegions} from "../../../lib/defaultRegions";
 const blank={title:"",description:"",link_url:"/tours",image_url:"",published:true};
-export default function RegionsAdmin({ embedded = false }){
+export default function RegionsAdmin({embedded=false}){
  const [session,setSession]=useState(null),[authorized,setAuthorized]=useState(false),[checking,setChecking]=useState(true),[items,setItems]=useState([]),[form,setForm]=useState(null),[file,setFile]=useState(null),[busy,setBusy]=useState(false),[error,setError]=useState(""),[notice,setNotice]=useState("");
  useEffect(()=>{if(!supabase){setChecking(false);return;}let alive=true;supabase.auth.getSession().then(({data})=>{if(alive)setSession(data.session)});const {data:{subscription}}=supabase.auth.onAuthStateChange((event,s)=>{if(alive&&["SIGNED_IN","SIGNED_OUT"].includes(event))setSession(s)});return()=>{alive=false;subscription.unsubscribe()}},[]);
  useEffect(()=>{let alive=true;setChecking(true);setAuthorized(false);if(!session?.user){setChecking(false);return;}supabase.from("admin_users").select("user_id").eq("user_id",session.user.id).maybeSingle().then(({data,error})=>{if(!alive)return;setAuthorized(!!data&&!error);setChecking(false);if(data&&!error)load();if(error)setError(error.message)});return()=>{alive=false}},[session?.user?.id]);

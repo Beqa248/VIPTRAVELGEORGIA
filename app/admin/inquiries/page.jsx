@@ -4,7 +4,7 @@ import {supabase} from "../../../lib/supabase";
 import AdminSubLayout from "../AdminSubLayout";
 import styles from "../subpages.module.css";
 const statuses=["new","contacted","quoted","deposit_pending","confirmed","completed","cancelled"];
-export default function Inquiries({ embedded = false }){
+export default function Inquiries({embedded=false}){
  const [session,setSession]=useState(null),[authorized,setAuthorized]=useState(false),[checking,setChecking]=useState(true),[items,setItems]=useState([]),[message,setMessage]=useState(""),[search,setSearch]=useState(""),[filter,setFilter]=useState("all"),[busy,setBusy]=useState(null);
  useEffect(()=>{if(!supabase){setChecking(false);return;}let live=true;supabase.auth.getSession().then(({data})=>{if(live)setSession(data.session)});const {data:{subscription}}=supabase.auth.onAuthStateChange((event,s)=>{if(live&&(event==="SIGNED_OUT"||event==="SIGNED_IN"))setSession(old=>old?.user?.id===s?.user?.id?old:s)});return()=>{live=false;subscription.unsubscribe()};},[]);
  useEffect(()=>{let live=true;if(!session?.user?.id){setAuthorized(false);setChecking(false);return;}setChecking(true);supabase.from("admin_users").select("user_id").eq("user_id",session.user.id).maybeSingle().then(({data,error})=>{if(!live)return;setAuthorized(!!data&&!error);setChecking(false);if(data&&!error)load()});return()=>{live=false}},[session?.user?.id]);

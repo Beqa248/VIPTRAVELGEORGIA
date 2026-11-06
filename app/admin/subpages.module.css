@@ -2,5 +2,7 @@
 
 .nav{padding-top:14px;border-radius:0 0 18px 18px}
 
-/* Embedded admin tabs: align with dashboard content and avoid page-like layout. */
-.adminSubRoot { min-height: 0; }
+/* Embedded sections render only their own content, never a second dashboard/nav. */
+:global(.adminEmbedded) {min-height:0!important;background:transparent!important;padding:0!important;margin:0!important;}
+:global(.adminEmbedded) > div {max-width:none!important;margin:0!important;padding:0!important;}
+:global(.adminEmbedded) main {padding:34px clamp(16px,4vw,48px)!important;margin:0!important;position:static!important;transform:none!important;}

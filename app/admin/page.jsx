@@ -14,7 +14,7 @@ const tabs = [
   { id: "reviews", label: "Guest Reviews", icon: "★" },
   { id: "regions", label: "Regions", icon: "🗺" },
   { id: "inquiries", label: "Customer Inquiries", icon: "✉" },
-  { id: "tour_photos", label: "Tour Photos", icon: "▧" },
+  { id: "tour_photos", label: "Tours", icon: "▧" },
 ];
 const allowedImages = ["image/jpeg", "image/png", "image/webp"];
 const allowedVideos = ["video/mp4", "video/webm", "video/quicktime"];
