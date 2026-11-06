@@ -1,1 +1,1 @@
-Apply to VIPTRAVELGEORGIA-main(9).zip project root. Replace these two files only. The FAQ + Get in Touch row is wrapped in a 90%-width centered container; inner content is unchanged.
+Based on uploaded project ZIP from 2026-11-06. Replace only the three files in their matching paths. No admin header, navigation, or shared styles are changed. Existing Tours now includes custom tours; Regions has isolated restored styling. Build not tested.

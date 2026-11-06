@@ -2,7 +2,7 @@
 import {useEffect,useState} from "react";
 import {supabase} from "../../../lib/supabase";
 import AdminSubLayout from "../AdminSubLayout";
-import styles from "../subpages.module.css";
+import styles from "./regions.module.css";
 import {defaultRegions} from "../../../lib/defaultRegions";
 const blank={title:"",description:"",link_url:"/tours",image_url:"",published:true};
 export default function RegionsAdmin({embedded=false}){

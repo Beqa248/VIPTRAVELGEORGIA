@@ -29,6 +29,7 @@ export default function TourPhotosAdmin({embedded=false}) {
   const [tourText, setTourText] = useState({overview:"",itinerary:""});
   const [tourDetails,setTourDetails] = useState({title:"",description:"",duration_days:1,category:"mountains",sort_order:100});
   const [tourRow,setTourRow] = useState(null);
+  const [allTours,setAllTours] = useState([]);
   const [price, setPrice] = useState({price_mode:"hidden",price_amount:"",price_currency:"USD",price_unit:"car"});
 
   useEffect(() => {
@@ -59,6 +60,9 @@ export default function TourPhotosAdmin({embedded=false}) {
       if (queryError) throw queryError;
       const list = data || [];
       setRecords(list);
+      const {data:allRows,error:allError}=await supabase.from("custom_tours").select("id,slug,title,published,sort_order").order("sort_order",{ascending:true});
+      if(allError) throw allError;
+      setAllTours(allRows||[]);
       const found = list.find(item => item.slug === which) || null;
       setRecord(found);
       setPublished(found?.published ?? true);
@@ -127,12 +131,21 @@ export default function TourPhotosAdmin({embedded=false}) {
       const {error:pricingError}=await supabase.from("tour_prices").upsert({slug,...price,price_amount:price.price_mode==="starting"?Number(price.price_amount):null},{onConflict:"slug"});
       if(pricingError) throw pricingError;
       const {error:textSaveError}=await supabase.from("tour_content").upsert({slug,overview:tourText.overview.trim(),itinerary:tourText.itinerary.trim()},{onConflict:"slug"});
-      const tourPayload={title:tourDetails.title.trim()||tourName(slug),description:tourDetails.description.trim(),duration_days:Number(tourDetails.duration_days)||1,category:tourDetails.category||"mountains",sort_order:Number(tourDetails.sort_order)||0,published,is_original:true};
+      const tourPayload={title:tourDetails.title.trim()||tourName(slug),description:tourDetails.description.trim(),duration_days:Number(tourDetails.duration_days)||1,category:tourDetails.category||"mountains",sort_order:Number(tourDetails.sort_order)||0,published,is_original:tours.includes(slug)};
       const originalCovers={adjara:"/images/photo-003.jpg",martvili:"/images/photo-009.jpg",gomis:"/images/photo-018.jpg",svaneti:"/images/photo-026.jpg",kobuleti:"/images/photo-044.jpg",dashbashi:"/images/photo-051.jpg",vardzia:"/images/photo-057.jpg",tusheti:"/images/photo-064.jpg",beshumi:"/images/photo-073.jpg",kazbegi:"/images/photo-080.jpg",highlights:"/images/photo-086.jpg"};
       const savedTour=tourRow
         ? await supabase.from("custom_tours").update(tourPayload).eq("id",tourRow.id)
         : await supabase.from("custom_tours").insert({...tourPayload,slug,cover_url:cover||originalCovers[slug]||null,gallery_images:gallery_images||[],itinerary:tourText.itinerary.trim()});
       if(savedTour.error)throw savedTour.error;
+      // Custom tour media is read from custom_tours on its public detail page.
+      if(tourRow && !tours.includes(slug)){
+        const {error:mediaUpdateError}=await supabase.from("custom_tours").update({
+          cover_url:cover||tourRow.cover_url||null,
+          gallery_images:gallery_images.length?gallery_images:(tourRow.gallery_images||[]),
+          itinerary:tourText.itinerary.trim()||tourRow.itinerary||""
+        }).eq("id",tourRow.id);
+        if(mediaUpdateError)throw mediaUpdateError;
+      }
       if(textSaveError) throw textSaveError;
       form.reset();
       if (coverPreview) URL.revokeObjectURL(coverPreview);
@@ -144,6 +157,10 @@ export default function TourPhotosAdmin({embedded=false}) {
     finally { setBusy(false); }
   }
 
+  const tourChoices = [
+    ...allTours.map(t=>({slug:t.slug,name:t.title||tourName(t.slug)})),
+    ...tours.filter(t=>!allTours.some(r=>r.slug===t)).map(t=>({slug:t,name:tourName(t)}))
+  ];
   const currentGallery = (record?.gallery_images || []).filter(url => !removed.includes(url));
   const customCovers = records.filter(item => !!item.cover_url).length;
   const totalPhotos = records.reduce((sum, item) => sum + (item.gallery_images || []).length, 0);
@@ -157,16 +174,16 @@ export default function TourPhotosAdmin({embedded=false}) {
       </div>
       {mode === "new" ? <NewToursManager /> : <>
       <div className={studio.stats}>
-        <div className={studio.stat}><span>Total tours</span><strong>{tours.length}</strong><small>Available to manage</small></div>
+        <div className={studio.stat}><span>Total tours</span><strong>{tourChoices.length}</strong><small>Available to manage</small></div>
         <div className={studio.stat}><span>Custom covers</span><strong>{customCovers}</strong><small>Uploaded main images</small></div>
         <div className={studio.stat}><span>Gallery photos</span><strong>{totalPhotos}</strong><small>Saved additional photos</small></div>
       </div>
       <div className={studio.toolbar}>
         <div><span className={studio.eyebrow}>SELECT DESTINATION</span><h2>Choose a tour</h2><p>Pick a tour to manage its cover and gallery photos.</p></div>
-        <select aria-label="Choose a tour" value={slug} disabled={busy} onChange={e => changeTour(e.target.value)}>{tours.map(item => <option key={item} value={item}>{tourName(item)}</option>)}</select>
+        <select aria-label="Choose a tour" value={slug} disabled={busy} onChange={e => changeTour(e.target.value)}>{tourChoices.map(item => <option key={item.slug} value={item.slug}>{item.name}</option>)}</select>
       </div>
       <form onSubmit={save} className={studio.editor} key={slug}>
-        <div className={studio.editorHeader}><div><span className={studio.eyebrow}>PHOTO EDITOR</span><h2>{tourName(slug)}</h2><p>Changes are saved to your existing Supabase database.</p></div><span className={studio.status}>{loading ? "Loading…" : published ? "● Published" : "○ Hidden"}</span></div>
+        <div className={studio.editorHeader}><div><span className={studio.eyebrow}>PHOTO EDITOR</span><h2>{tourDetails.title||tourName(slug)}</h2><p>Changes are saved to your existing Supabase database.</p></div><span className={studio.status}>{loading ? "Loading…" : published ? "● Published" : "○ Hidden"}</span></div>
         <div className={studio.section}>
           <div className={studio.sectionTitle}><div><h3>Edit tour details</h3><p>Changes update the Tours page and homepage ordering.</p></div></div>
           <div style={{display:"grid",gap:12,maxWidth:720}}>
