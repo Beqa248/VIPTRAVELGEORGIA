@@ -1,0 +1,5 @@
+1. Run SUPABASE_TOUR_PRICING.sql in Supabase SQL Editor.
+2. Upload the six code files to matching GitHub main branch paths.
+3. Admin > Tour Photos > Create & Manage New Tours: edit tour and set pricing.
+4. Existing tours default to hidden price.
+Source: Nov 4 uploaded project ZIP, not a live GitHub checkout. No admin dashboard layout files included.
