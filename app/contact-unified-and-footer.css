@@ -60,3 +60,25 @@ body > footer {flex-shrink:0;}
  .vtg-shell #contact.vtg-unified-contact form.vtg-contact-form > .vtg-contact-actions {grid-column:1!important;}
  .vtg-shell #contact.vtg-unified-contact .links.vtg-contact-socials {grid-template-columns:repeat(2,minmax(0,1fr))!important;}
 }
+
+/* Contact page: match the warm neutral site body, not the blue panel. */
+[data-p="contact"] #contact.vtg-unified-contact,
+.vtg-shell [data-p="contact"] #contact.vtg-unified-contact {
+  background: #f7f8f5 !important;
+}
+/* Contact details remain clickable, but look like normal dark site text. */
+#contact.vtg-unified-contact .cinfo a[href^="tel:"],
+#contact.vtg-unified-contact .cinfo a[href^="mailto:"] {
+  color: #173e34 !important;
+  text-decoration: none !important;
+}
+#contact.vtg-unified-contact .cinfo a[href^="tel:"]:hover,
+#contact.vtg-unified-contact .cinfo a[href^="mailto:"]:hover {
+  color: #173e34 !important;
+  text-decoration: none !important;
+}
+
+/* Final contact appearance: neutral page background and non-underlined contact links. */
+[data-p="contact"] #contact.vtg-unified-contact { background:#f7f8f5 !important; }
+#contact.vtg-unified-contact .cinfo a[href^="tel:"],
+#contact.vtg-unified-contact .cinfo a[href^="mailto:"] { color:#173e34 !important; text-decoration:none !important; }

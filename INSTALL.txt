@@ -1,1 +1,16 @@
-Upload only these five files to the same paths in GitHub. No SQL needed. Contact form on home and Contact page uses WhatsApp or mailto:SubTravelGeorgia@gmail.com. Footer uses flex page layout to stay at bottom on short pages. Email opens the visitor email client; it does not send directly. Test after Vercel deploy.
+VIPTravelGeorgia — final updated files only (2026-11-07)
+
+Copy these files to the same paths in your GitHub repository. Do not delete unrelated files.
+
+Included:
+- FAQ wording (all four languages): How do I book? / Which car will we use?
+- Shared Contact form without contact-consent checkbox
+- Custom Tour request without consent checkbox
+- Contact email API without checkbox validation
+- Contact page background and phone/email links without underlines
+- Plan My Trip exact-duration recommendations and published-tours endpoint (from earlier patch)
+
+Direct email still requires RESEND_API_KEY and CONTACT_FROM_EMAIL configured in Vercel with a verified sender domain.
+Keep existing Supabase environment variables. Deploy and test each form and duration.
+
+This is a replacement-file patch, not a full project. Full Next.js build and live email tests have not been performed.
