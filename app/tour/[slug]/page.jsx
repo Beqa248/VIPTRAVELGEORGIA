@@ -7,7 +7,7 @@ export default async function CustomTourPage({params}){
  const {slug}=await params;
  if(!process.env.NEXT_PUBLIC_SUPABASE_URL||!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)notFound();
  const db=createClient(process.env.NEXT_PUBLIC_SUPABASE_URL,process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,{auth:{persistSession:false,autoRefreshToken:false}});
- const {data:tour,error}=await db.from("custom_tours").select("title,description,duration_days,category,itinerary,cover_url,gallery_images,price_mode,price_amount,price_currency,price_unit").eq("slug",slug).eq("published",true).maybeSingle();
+ const {data:tour,error}=await db.from("custom_tours").select("title,description,duration_days,category,itinerary,cover_url,gallery_images,price_mode,price_amount,price_currency,price_unit").eq("slug",slug).eq("published",true).eq("archived",false).maybeSingle();
  if(error||!tour)notFound();
  const {data:pricing}=await db.from("tour_prices").select("price_mode,price_amount,price_currency,price_unit").eq("slug",slug).maybeSingle();
  const label=tourPriceLabel(pricing||tour);

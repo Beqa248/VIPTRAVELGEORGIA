@@ -60,7 +60,7 @@ export default function TourPhotosAdmin({embedded=false}) {
       if (queryError) throw queryError;
       const list = data || [];
       setRecords(list);
-      const {data:allRows,error:allError}=await supabase.from("custom_tours").select("id,slug,title,published,sort_order").order("sort_order",{ascending:true});
+      const {data:allRows,error:allError}=await supabase.from("custom_tours").select("id,slug,title,published,archived,sort_order").order("sort_order",{ascending:true});
       if(allError) throw allError;
       setAllTours(allRows||[]);
       const found = list.find(item => item.slug === which) || null;
@@ -158,10 +158,23 @@ export default function TourPhotosAdmin({embedded=false}) {
   }
 
   const tourChoices = [
-    ...allTours.map(t=>({slug:t.slug,name:t.title||tourName(t.slug)})),
+    ...allTours.filter(t=>!t.archived).map(t=>({slug:t.slug,name:t.title||tourName(t.slug)})),
     ...tours.filter(t=>!allTours.some(r=>r.slug===t)).map(t=>({slug:t,name:tourName(t)}))
   ];
   const currentGallery = (record?.gallery_images || []).filter(url => !removed.includes(url));
+  async function archiveSelected(){
+    if(!window.confirm(`Archive ${tourDetails.title||tourName(slug)}? It will disappear from the public website.`))return;
+    setBusy(true);setError('');
+    try{
+      const payload={slug,title:tourDetails.title||tourName(slug),description:tourDetails.description||'',duration_days:Number(tourDetails.duration_days)||1,category:tourDetails.category||'other',sort_order:Number(tourDetails.sort_order)||100,published:false,archived:true,is_original:tours.includes(slug)};
+      const {error:saveError}=await supabase.from('custom_tours').upsert(payload,{onConflict:'slug'});
+      if(saveError)throw saveError;
+      const {error:mediaError}=await supabase.from('tour_page_media').upsert({slug,published:false},{onConflict:'slug'});
+      if(mediaError)throw mediaError;
+      setMessage('Tour archived. You can restore it from Archived Tours.');
+      await load(slug);setMode('archived');
+    }catch(e){setError(e.message||'Unable to archive tour.');}finally{setBusy(false)}
+  }
   const customCovers = records.filter(item => !!item.cover_url).length;
   const totalPhotos = records.reduce((sum, item) => sum + (item.gallery_images || []).length, 0);
   const shownCover = coverPreview || (!resetCover && record?.cover_url);
@@ -171,8 +184,9 @@ export default function TourPhotosAdmin({embedded=false}) {
       <div className={studio.modeBar}>
         <button type="button" className={mode === "existing" ? studio.modeActive : studio.modeButton} onClick={() => setMode("existing")}>Existing tours · Photos & Prices</button>
         <button type="button" className={mode === "new" ? studio.modeActive : studio.modeButton} onClick={() => setMode("new")}>＋ Create & Manage New Tours</button>
+        <button type="button" className={mode === "archived" ? studio.modeActive : studio.modeButton} onClick={() => setMode("archived")}>Archived Tours</button>
       </div>
-      {mode === "new" ? <NewToursManager /> : <>
+      {mode === "new" ? <NewToursManager /> : mode === "archived" ? <NewToursManager archivedOnly /> : <>
       <div className={studio.stats}>
         <div className={studio.stat}><span>Total tours</span><strong>{tourChoices.length}</strong><small>Available to manage</small></div>
         <div className={studio.stat}><span>Custom covers</span><strong>{customCovers}</strong><small>Uploaded main images</small></div>
@@ -235,7 +249,7 @@ export default function TourPhotosAdmin({embedded=false}) {
             </div>}
           </div>
         </div>
-        <div className={studio.actions}><label className={studio.check}><input type="checkbox" checked={published} onChange={e => setPublished(e.target.checked)} /> Published on website</label><div className={studio.actionButtons}>{slug !== "airport-transfers" && <a className={studio.secondaryButton} href={`/${slug}`} target="_blank" rel="noreferrer">View tour ↗</a>}<button className={studio.saveButton} type="submit" disabled={busy || loading}>{busy ? "Uploading & saving…" : "Save changes"}</button></div></div>
+        <div className={studio.actions}><label className={studio.check}><input type="checkbox" checked={published} onChange={e => setPublished(e.target.checked)} /> Published on website</label><div className={studio.actionButtons}>{slug !== "airport-transfers" && <a className={studio.secondaryButton} href={`/${slug}`} target="_blank" rel="noreferrer">View tour ↗</a>}<button type="button" className={studio.secondaryButton} disabled={busy||loading} onClick={archiveSelected}>Archive tour</button><button className={studio.saveButton} type="submit" disabled={busy || loading}>{busy ? "Uploading & saving…" : "Save changes"}</button></div></div>
       </form>
       </>}
       {error && <div role="alert" className={styles.error}>{error}</div>}{message && <div role="status" className={styles.notice}>{message}</div>}

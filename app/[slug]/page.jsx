@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { createClient } from "@supabase/supabase-js";
 import TourMedia from "../../components/TourMedia";
 import TourEditableContent from "../../components/TourEditableContent";
 import Home from "../../components/pages/home";
@@ -21,6 +22,12 @@ import Videos from "../../components/pages/videos";
 import Reviews from "../../components/pages/reviews";
 import Contact from "../../components/pages/contact";
 const pages = { "home": Home, "tours": Tours, "adjara": Adjara, "martvili": Martvili, "gomis": Gomis, "svaneti": Svaneti, "kobuleti": Kobuleti, "dashbashi": Dashbashi, "vardzia": Vardzia, "tusheti": Tusheti, "beshumi": Beshumi, "kazbegi": Kazbegi, "highlights": Highlights, "travel": Travel, "plan": Plan, "cars": Cars, "videos": Videos, "reviews": Reviews, "contact": Contact };
+export const dynamic = "force-dynamic";
 export function generateStaticParams() { return Object.keys(pages).filter(x => x !== "home").map(slug => ({ slug })); }
-export default async function DynamicPage({ params }) { const { slug } = await params; const Page = pages[slug]; if (!Page)
-    notFound(); return <><Page /><TourEditableContent slug={slug} /><TourMedia slug={slug} /></>; }
+export default async function DynamicPage({ params }) { const { slug } = await params; const Page = pages[slug]; if (!Page) notFound();
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    const db=createClient(process.env.NEXT_PUBLIC_SUPABASE_URL,process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,{auth:{persistSession:false,autoRefreshToken:false}});
+    const {data,error}=await db.from('custom_tours').select('archived').eq('slug',slug).maybeSingle();
+    if(!error&&data?.archived)notFound();
+  }
+  return <><Page /><TourEditableContent slug={slug} /><TourMedia slug={slug} /></>; }
