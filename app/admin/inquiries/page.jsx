@@ -2,7 +2,7 @@
 import {useEffect,useMemo,useState} from "react";
 import {supabase} from "../../../lib/supabase";
 import AdminSubLayout from "../AdminSubLayout";
-import styles from "../subpages.module.css";
+import styles from "./inquiries.module.css";
 const statuses=["new","contacted","quoted","deposit_pending","confirmed","completed","cancelled"];
 export default function Inquiries({embedded=false}){
  const [session,setSession]=useState(null),[authorized,setAuthorized]=useState(false),[checking,setChecking]=useState(true),[items,setItems]=useState([]),[message,setMessage]=useState(""),[search,setSearch]=useState(""),[filter,setFilter]=useState("all"),[busy,setBusy]=useState(null);

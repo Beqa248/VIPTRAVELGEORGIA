@@ -1,1 +1,1 @@
-Based on uploaded project ZIP from 2026-11-06. Replace only the three files in their matching paths. No admin header, navigation, or shared styles are changed. Existing Tours now includes custom tours; Regions has isolated restored styling. Build not tested.
+Replace only app/admin/inquiries/page.jsx and add app/admin/inquiries/inquiries.module.css. No dashboard header, navigation or region files modified. The Edit button on each Regions card is already present.
