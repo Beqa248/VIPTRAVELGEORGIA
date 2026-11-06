@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
 import styles from "./tour.module.css";
 import { tourPriceLabel } from "../../../lib/tourPricing";
-import { tourPriceLabel } from "../../../lib/tourPricing";
 export const dynamic = "force-dynamic";
 export default async function CustomTourPage({params}){
  const {slug}=await params;
