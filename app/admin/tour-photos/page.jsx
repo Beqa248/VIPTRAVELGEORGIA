@@ -27,6 +27,8 @@ export default function TourPhotosAdmin() {
   const [resetCover, setResetCover] = useState(false);
   const [published, setPublished] = useState(true);
   const [tourText, setTourText] = useState({overview:"",itinerary:""});
+  const [tourDetails,setTourDetails] = useState({title:"",description:"",duration_days:1,category:"mountains",sort_order:100});
+  const [tourRow,setTourRow] = useState(null);
   const [price, setPrice] = useState({price_mode:"hidden",price_amount:"",price_currency:"USD",price_unit:"car"});
 
   useEffect(() => {
@@ -66,6 +68,11 @@ export default function TourPhotosAdmin() {
       const {data:textRow,error:textError}=await supabase.from("tour_content").select("overview,itinerary").eq("slug",which).maybeSingle();
       if(textError) throw textError;
       setTourText({overview:textRow?.overview||"",itinerary:textRow?.itinerary||""});
+      const {data:existingTour,error:tourError}=await supabase.from("custom_tours").select("*").eq("slug",which).maybeSingle();
+      if(tourError)throw tourError;
+      setTourRow(existingTour);
+      const originalOrder=tours.indexOf(which)*10;
+      setTourDetails({title:existingTour?.title||tourName(which),description:existingTour?.description||"",duration_days:existingTour?.duration_days||1,category:existingTour?.category||"mountains",sort_order:existingTour?.sort_order??originalOrder});
     } catch (err) { setError(err.message || "Unable to load tour photos."); }
     finally { setLoading(false); }
   }
@@ -120,6 +127,12 @@ export default function TourPhotosAdmin() {
       const {error:pricingError}=await supabase.from("tour_prices").upsert({slug,...price,price_amount:price.price_mode==="starting"?Number(price.price_amount):null},{onConflict:"slug"});
       if(pricingError) throw pricingError;
       const {error:textSaveError}=await supabase.from("tour_content").upsert({slug,overview:tourText.overview.trim(),itinerary:tourText.itinerary.trim()},{onConflict:"slug"});
+      const tourPayload={title:tourDetails.title.trim()||tourName(slug),description:tourDetails.description.trim(),duration_days:Number(tourDetails.duration_days)||1,category:tourDetails.category||"mountains",sort_order:Number(tourDetails.sort_order)||0,published,is_original:true};
+      const originalCovers={adjara:"/images/photo-003.jpg",martvili:"/images/photo-009.jpg",gomis:"/images/photo-018.jpg",svaneti:"/images/photo-026.jpg",kobuleti:"/images/photo-044.jpg",dashbashi:"/images/photo-051.jpg",vardzia:"/images/photo-057.jpg",tusheti:"/images/photo-064.jpg",beshumi:"/images/photo-073.jpg",kazbegi:"/images/photo-080.jpg",highlights:"/images/photo-086.jpg"};
+      const savedTour=tourRow
+        ? await supabase.from("custom_tours").update(tourPayload).eq("id",tourRow.id)
+        : await supabase.from("custom_tours").insert({...tourPayload,slug,cover_url:cover||originalCovers[slug]||null,gallery_images:gallery_images||[],itinerary:tourText.itinerary.trim()});
+      if(savedTour.error)throw savedTour.error;
       if(textSaveError) throw textSaveError;
       form.reset();
       if (coverPreview) URL.revokeObjectURL(coverPreview);
@@ -154,6 +167,18 @@ export default function TourPhotosAdmin() {
       </div>
       <form onSubmit={save} className={studio.editor} key={slug}>
         <div className={studio.editorHeader}><div><span className={studio.eyebrow}>PHOTO EDITOR</span><h2>{tourName(slug)}</h2><p>Changes are saved to your existing Supabase database.</p></div><span className={studio.status}>{loading ? "Loading…" : published ? "● Published" : "○ Hidden"}</span></div>
+        <div className={studio.section}>
+          <div className={studio.sectionTitle}><div><h3>Edit tour details</h3><p>Changes update the Tours page and homepage ordering.</p></div></div>
+          <div style={{display:"grid",gap:12,maxWidth:720}}>
+            <label style={{display:"grid",gap:5}}>Tour name<input value={tourDetails.title} onChange={e=>setTourDetails(v=>({...v,title:e.target.value}))} required /></label>
+            <label style={{display:"grid",gap:5}}>Short description<textarea rows={3} value={tourDetails.description} onChange={e=>setTourDetails(v=>({...v,description:e.target.value}))}/></label>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(160px,1fr))",gap:12}}>
+              <label style={{display:"grid",gap:5}}>Duration (days)<input type="number" min="1" value={tourDetails.duration_days} onChange={e=>setTourDetails(v=>({...v,duration_days:e.target.value}))}/></label>
+              <label style={{display:"grid",gap:5}}>Category<select value={tourDetails.category} onChange={e=>setTourDetails(v=>({...v,category:e.target.value}))}><option value="mountains">Mountains</option><option value="waterfalls">Waterfalls</option><option value="canyons">Canyons</option><option value="culture">Culture</option><option value="winter">Winter</option><option value="transfers">Transfers</option></select></label>
+              <label style={{display:"grid",gap:5}}>Display order<input type="number" value={tourDetails.sort_order} onChange={e=>setTourDetails(v=>({...v,sort_order:e.target.value}))}/></label>
+            </div>
+          </div>
+        </div>
         <div className={studio.section}>
           <div className={studio.sectionTitle}><div><h3>Cover photo</h3><p>The main image on the tour banner and Tours-page card.</p></div><span className={studio.chip}>{shownCover ? "Custom cover" : "Original cover"}</span></div>
           <div className={studio.coverRow}>
