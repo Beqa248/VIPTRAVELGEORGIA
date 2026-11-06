@@ -40,7 +40,6 @@ export default function ContactForm() {
       vehicle: String(data.get("vehicle") || "").trim(),
       dates: String(data.get("dates") || "").trim(),
       message: String(data.get("message") || "").trim(),
-      consent: data.get("consent") === "on",
       website: String(data.get("website") || "")
     };
   }
@@ -74,7 +73,6 @@ export default function ContactForm() {
       <label><span data-k="fCar">{t("fCar")}</span><VehicleSelect name="vehicle" /></label>
       <label><span data-k="fDates">{t("fDates")}</span><input name="dates" maxLength={180} placeholder="e.g. 12–16 June, 3 people" /></label>
       <label className="vtg-contact-message"><span data-k="fMsg">{t("fMsg")}</span><textarea name="message" maxLength={4000} rows={6} required /></label>
-      <label className="vtg-contact-consent"><input type="checkbox" name="consent" required /> I agree to be contacted about my inquiry.</label>
       <div className="vtg-honeypot" aria-hidden="true"><label>Website<input name="website" tabIndex={-1} autoComplete="off" /></label></div>
       <div className="vtg-contact-actions"><button className="btn" type="submit">Send via WhatsApp</button><button className="btn vtg-email-button" type="button" onClick={email} disabled={sending}>{sending ? "Sending…" : "Send via Email"}</button></div>
       {notice && <p className="vtg-contact-notice" role="status">{notice}</p>}

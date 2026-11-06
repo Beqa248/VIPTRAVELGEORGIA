@@ -13,8 +13,8 @@ export async function POST(request) {
     const vehicle = clean(body.vehicle, 100);
     const dates = clean(body.dates, 180);
     const message = clean(body.message, 4000);
-    if (name.length < 2 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !tour || !message || body.consent !== true)
-      return Response.json({ error: "Please enter your name, valid email, tour, message, and consent." }, { status: 400 });
+    if (name.length < 2 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !tour || !message)
+      return Response.json({ error: "Please enter your name, valid email, tour, and message." }, { status: 400 });
     if (!process.env.RESEND_API_KEY || !process.env.CONTACT_FROM_EMAIL)
       return Response.json({ error: "Email delivery is not configured yet. Please use WhatsApp." }, { status: 503 });
     const lines = [`Name: ${name}`, `Email: ${email}`, `Tour or service: ${tour}`, `Vehicle: ${vehicle}`, `Dates and group size: ${dates}`, "", "Message:", message];
@@ -32,7 +32,7 @@ export async function POST(request) {
     if (process.env.SUPABASE_SERVICE_ROLE_KEY && process.env.NEXT_PUBLIC_SUPABASE_URL) {
       try {
         const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
-        const { error } = await db.from("inquiries").insert({ name, email, destinations: [tour], vehicle, interests: `Dates/group: ${dates}\n${message}`, source: "tour-builder", consent: true, status: "new" });
+        const { error } = await db.from("inquiries").insert({ name, email, destinations: [tour], vehicle, interests: `Dates/group: ${dates}\n${message}`, source: "tour-builder", consent: false, status: "new" });
         if (error) console.error("Inquiry storage failed:", error.message);
         else saved = true;
       } catch (error) { console.error("Inquiry storage error:", error.message); }
