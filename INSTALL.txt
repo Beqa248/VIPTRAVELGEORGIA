@@ -1,5 +1,1 @@
-Replace ONLY these two files in your GitHub project:
-app/[slug]/page.jsx
-app/tour/[slug]/page.jsx
-
-Removes duplicate generateMetadata functions and imports from previous patch. No UI changes.
+Replace middleware.js in the ROOT of your GitHub repository. Commit changes and redeploy on Vercel. No other files need replacing for this syntax error.
