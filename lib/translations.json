@@ -271,7 +271,15 @@
     "vehiclePassengers": "Passengers",
     "vehicleLuggage": "Luggage",
     "vehicleDrive": "Drive",
-    "vehicleAC": "A/C"
+    "vehicleAC": "A/C",
+    "depositInfoHeading": "Booking deposit",
+    "depositInfoLeadBefore": "To confirm your booking and reserve your dates, a ",
+    "depositInfoLeadBold": "20% deposit",
+    "depositInfoLeadAfter": " is requested.",
+    "depositInfoDetails": "The remaining balance can be paid as agreed before or during your tour. Contact us to confirm the payment method and booking details.",
+    "depositInfoNoPayment": "Please do not send any payment until your booking details are confirmed.",
+    "vehicleYes": "Yes",
+    "vehicleNo": "No"
   },
   "ru": {
     "h1": "Частные туры из Батуми",
@@ -545,7 +553,15 @@
     "vehiclePassengers": "Пассажиры",
     "vehicleLuggage": "Багаж",
     "vehicleDrive": "Привод",
-    "vehicleAC": "Кондиционер"
+    "vehicleAC": "Кондиционер",
+    "depositInfoHeading": "Предоплата за бронирование",
+    "depositInfoLeadBefore": "Для подтверждения бронирования и выбранных дат требуется ",
+    "depositInfoLeadBold": "предоплата 20%",
+    "depositInfoLeadAfter": ".",
+    "depositInfoDetails": "Порядок оплаты оставшейся суммы согласовывается до или во время тура. Свяжитесь с нами, чтобы уточнить способ оплаты и детали бронирования.",
+    "depositInfoNoPayment": "Пожалуйста, не отправляйте оплату до подтверждения деталей бронирования.",
+    "vehicleYes": "Да",
+    "vehicleNo": "Нет"
   },
   "ka": {
     "h1": "კერძო ტურები ბათუმიდან",
@@ -819,7 +835,15 @@
     "vehiclePassengers": "მგზავრები",
     "vehicleLuggage": "ბარგი",
     "vehicleDrive": "ამძრავი",
-    "vehicleAC": "კონდიციონერი"
+    "vehicleAC": "კონდიციონერი",
+    "depositInfoHeading": "ჯავშნის ავანსი",
+    "depositInfoLeadBefore": "ჯავშნისა და სასურველი თარიღების დასადასტურებლად საჭიროა ",
+    "depositInfoLeadBold": "20%-იანი ავანსი",
+    "depositInfoLeadAfter": ".",
+    "depositInfoDetails": "დარჩენილი თანხის გადახდის პირობები შეთანხმდება ტურის დაწყებამდე ან ტურის განმავლობაში. გადახდის მეთოდისა და ჯავშნის დეტალების დასაზუსტებლად დაგვიკავშირდით.",
+    "depositInfoNoPayment": "გთხოვთ, თანხა არ გადარიცხოთ ჯავშნის დეტალების დადასტურებამდე.",
+    "vehicleYes": "კი",
+    "vehicleNo": "არა"
   },
   "he": {
     "h1": "טיולים פרטיים מבטומי",
@@ -1095,6 +1119,14 @@
     "vehiclePassengers": "נוסעים",
     "vehicleLuggage": "מטען",
     "vehicleDrive": "הנעה",
-    "vehicleAC": "מיזוג אוויר"
+    "vehicleAC": "מיזוג אוויר",
+    "depositInfoHeading": "מקדמה להזמנה",
+    "depositInfoLeadBefore": "כדי לאשר את ההזמנה ולשריין את התאריכים המבוקשים, נדרשת ",
+    "depositInfoLeadBold": "מקדמה של 20%",
+    "depositInfoLeadAfter": ".",
+    "depositInfoDetails": "תנאי תשלום היתרה יתואמו לפני הטיול או במהלכו. צרו איתנו קשר לאישור אמצעי התשלום ופרטי ההזמנה.",
+    "depositInfoNoPayment": "נא לא לשלוח תשלום לפני אישור פרטי ההזמנה.",
+    "vehicleYes": "כן",
+    "vehicleNo": "לא"
   }
 }

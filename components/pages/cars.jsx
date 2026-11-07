@@ -68,11 +68,11 @@ const cars = [...rows].sort(
                   ""}
               </p>
 
-              {(Number(car.passengers)>0 || car.luggage_capacity || car.air_conditioning) && <div className="vtg-car-detail-specs">
-                {Number(car.passengers)>0 && <span>♙ {t("vehiclePassengers") === "vehiclePassengers" ? "Passengers" : t("vehiclePassengers")}: {car.passengers}</span>}
-                {car.luggage_capacity && <span>▣ {t("vehicleLuggage") === "vehicleLuggage" ? "Luggage" : t("vehicleLuggage")}: {car.luggage_capacity}</span>}
-                {car.air_conditioning && <span>❄ {t("vehicleAC") === "vehicleAC" ? "A/C" : t("vehicleAC")}</span>}
-              </div>}
+              <div className="vtg-car-detail-specs">
+                <span>♙ {t("vehiclePassengers")}: {Number(car.passengers) || "—"}</span>
+                <span>▣ {t("vehicleLuggage")}: {car.luggage_capacity || "—"}</span>
+                <span>❄ {t("vehicleAC")}: {car.air_conditioning === true ? t("vehicleYes") : t("vehicleNo")}</span>
+              </div>
 
               <div className="gal soft">
                 {(car.images || []).map((src, i) => (

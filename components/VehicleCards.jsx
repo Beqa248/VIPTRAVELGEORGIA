@@ -1,16 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import usePublished from "./usePublished";
 import { useLanguage } from "./site-context";
 import { carIcon } from "../lib/defaultVehicles";
 
 const translations = {
-  en: { passengers: "Passengers", luggage: "Luggage", ac: "A/C", details: "Vehicle details", loading: "Loading available cars…", empty: "No vehicles are currently available." },
-  ka: { passengers: "მგზავრები", luggage: "ბარგი", ac: "კონდიციონერი", details: "მანქანის დეტალები", loading: "მანქანები იტვირთება…", empty: "ამჟამად მანქანები არ არის ხელმისაწვდომი." },
-  ru: { passengers: "Пассажиры", luggage: "Багаж", ac: "Кондиционер", details: "Детали автомобиля", loading: "Загрузка автомобилей…", empty: "Автомобили пока недоступны." },
-  he: { passengers: "נוסעים", luggage: "מטען", ac: "מיזוג אוויר", details: "פרטי הרכב", loading: "טוען רכבים…", empty: "אין רכבים זמינים כרגע." },
+  en: { passengers: "Passengers", luggage: "Luggage", ac: "A/C", details: "Vehicle details", loading: "Loading available cars…", empty: "No vehicles are currently available.", yes: "Yes", no: "No" },
+  ka: { passengers: "მგზავრები", luggage: "ბარგი", ac: "კონდიციონერი", details: "მანქანის დეტალები", loading: "მანქანები იტვირთება…", empty: "ამჟამად მანქანები არ არის ხელმისაწვდომი.", yes: "კი", no: "არა" },
+  ru: { passengers: "Пассажиры", luggage: "Багаж", ac: "Кондиционер", details: "Детали автомобиля", loading: "Загрузка автомобилей…", empty: "Автомобили пока недоступны.", yes: "Да", no: "Нет" },
+  he: { passengers: "נוסעים", luggage: "מטען", ac: "מיזוג אוויר", details: "פרטי הרכב", loading: "טוען רכבים…", empty: "אין רכבים זמינים כרגע.", yes: "כן", no: "לא" },
 };
 
 function VehicleCard({ car, labels }) {
@@ -29,8 +29,8 @@ function VehicleCard({ car, labels }) {
         </button>
         {expanded && <div className="vtg-modern-car-expanded">
           <div className="vtg-modern-car-feature"><span aria-hidden="true">♙</span><strong>{Number(car.passengers) || 0}</strong><small>{labels.passengers}</small></div>
-          {car.luggage_capacity && <div className="vtg-modern-car-feature"><span aria-hidden="true">▣</span><strong>{car.luggage_capacity}</strong><small>{labels.luggage}</small></div>}
-          {hasAc && <div className="vtg-modern-car-feature"><span aria-hidden="true">❄</span><strong>{labels.ac}</strong></div>}
+          <div className="vtg-modern-car-feature"><span aria-hidden="true">▣</span><strong>{car.luggage_capacity || "—"}</strong><small>{labels.luggage}</small></div>
+          <div className="vtg-modern-car-feature"><span aria-hidden="true">❄</span><strong>{hasAc ? labels.yes : labels.no}</strong><small>{labels.ac}</small></div>
         </div>}
       </div>
     </article>
@@ -44,5 +44,39 @@ export default function VehicleCards() {
   const cars = [...rows].sort((a,b) => (a.sort_order ?? 999999) - (b.sort_order ?? 999999));
   if (!loaded) return <p>{labels.loading}</p>;
   if (!cars.length) return <p>{labels.empty}</p>;
-  return <div className="vtg-modern-cars-grid">{cars.map(car => <VehicleCard key={car.id || car.name} car={car} labels={labels} />)}</div>;
+  return <VehicleCarousel cars={cars} labels={labels} />;
+}
+
+function VehicleCarousel({ cars, labels }) {
+  const track = useRef(null);
+  const [position, setPosition] = useState(0);
+  const [canNext, setCanNext] = useState(cars.length > 2);
+  const [canPrev, setCanPrev] = useState(false);
+  const update = () => {
+    const node = track.current;
+    if (!node) return;
+    const max = Math.max(0, node.scrollWidth - node.clientWidth);
+    setCanPrev(node.scrollLeft > 4);
+    setCanNext(node.scrollLeft < max - 4);
+    setPosition(max ? Math.round((node.scrollLeft / max) * 100) : 0);
+  };
+  const move = direction => {
+    const node = track.current;
+    if (!node) return;
+    const first = node.querySelector('.vtg-modern-car-card');
+    const gap = parseFloat(getComputedStyle(node).columnGap) || 12;
+    node.scrollBy({ left: direction * ((first?.getBoundingClientRect().width || node.clientWidth) + gap), behavior: 'smooth' });
+  };
+  return <div className="vtg-car-carousel">
+    <div className="vtg-modern-cars-grid" ref={track} onScroll={update} role="region" aria-label={labels.details} tabIndex={0}>
+      {cars.map(car => <VehicleCard key={car.id || car.name} car={car} labels={labels} />)}
+    </div>
+    {cars.length > 1 && <div className="vtg-car-carousel-controls">
+      <div className="vtg-car-carousel-progress" aria-hidden="true"><span style={{left: `${position * .72}%`}} /></div>
+      <div className="vtg-car-carousel-arrows">
+        <button type="button" onClick={() => move(-1)} disabled={!canPrev} aria-label="Previous vehicle">‹</button>
+        <button type="button" onClick={() => move(1)} disabled={!canNext} aria-label="Next vehicle">›</button>
+      </div>
+    </div>}
+  </div>;
 }
