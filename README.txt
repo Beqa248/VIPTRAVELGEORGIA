@@ -1,15 +1,7 @@
-VIP Travel Georgia - minimal patch (homepage + Cars page + deposit translations)
+VIP Travel Georgia PATCH - 2026-11-08
+Replace these files in the same paths on GitHub:
+components/VehicleCards.jsx
+app/aligned-home-blocks.css
+lib/translations.json
 
-Replace these files at the SAME paths in GitHub:
-  components/VehicleCards.jsx
-  components/pages/cars.jsx
-  lib/translations.json
-
-Run SUPABASE_VEHICLE_FIELDS.sql once in Supabase SQL Editor if the columns are not present.
-
-IMPORTANT: Admin Panel must already be updated from the earlier vehicle patch, with luggage_capacity input and air_conditioning checkbox. If not, also replace app/admin/page.jsx (included here).
-
-Then go to Admin > Vehicles, edit each vehicle, set luggage capacity, and tick A/C for vehicles that have it. Existing rows have blank luggage and A/C=false by default; the UI shows a dash and No until updated.
-
-The homepage horizontal carousel and existing CSS are untouched.
-The deposit translations cover EN, KA, RU, HE.
+Three small cards on desktop, two on tablet, one on small mobile. Drag the gold LINE to scroll horizontally. Arrows and touch scrolling also work. Restores original optional 20% deposit copy in four languages. No SQL required for this patch. Keep existing admin and cars-page files from prior fixes.

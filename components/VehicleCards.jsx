@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import usePublished from "./usePublished";
 import { useLanguage } from "./site-context";
 import { carIcon } from "../lib/defaultVehicles";
@@ -49,34 +49,74 @@ export default function VehicleCards() {
 
 function VehicleCarousel({ cars, labels }) {
   const track = useRef(null);
-  const [position, setPosition] = useState(0);
-  const [canNext, setCanNext] = useState(cars.length > 2);
+  const rail = useRef(null);
+  const drag = useRef(null);
+  const [ratio, setRatio] = useState(0);
+  const [thumbFraction, setThumbFraction] = useState(1);
+  const [canNext, setCanNext] = useState(false);
   const [canPrev, setCanPrev] = useState(false);
+
   const update = () => {
     const node = track.current;
     if (!node) return;
     const max = Math.max(0, node.scrollWidth - node.clientWidth);
-    setCanPrev(node.scrollLeft > 4);
-    setCanNext(node.scrollLeft < max - 4);
-    setPosition(max ? Math.round((node.scrollLeft / max) * 100) : 0);
+    setRatio(max ? Math.max(0, Math.min(1, node.scrollLeft / max)) : 0);
+    setThumbFraction(Math.min(1, node.clientWidth / Math.max(node.scrollWidth, 1)));
+    setCanPrev(node.scrollLeft > 3);
+    setCanNext(node.scrollLeft < max - 3);
   };
+  useEffect(() => {
+    const node = track.current;
+    if (!node) return;
+    const observer = typeof ResizeObserver !== "undefined" ? new ResizeObserver(update) : null;
+    observer?.observe(node);
+    Array.from(node.children).forEach(child => observer?.observe(child));
+    window.addEventListener("resize", update);
+    update();
+    return () => { observer?.disconnect(); window.removeEventListener("resize", update); };
+  }, [cars.length]);
+
   const move = direction => {
     const node = track.current;
     if (!node) return;
-    const first = node.querySelector('.vtg-modern-car-card');
-    const gap = parseFloat(getComputedStyle(node).columnGap) || 12;
-    node.scrollBy({ left: direction * ((first?.getBoundingClientRect().width || node.clientWidth) + gap), behavior: 'smooth' });
+    const first = node.querySelector(".vtg-modern-car-card");
+    const gap = parseFloat(getComputedStyle(node).columnGap) || 10;
+    node.scrollBy({ left: direction * ((first?.getBoundingClientRect().width || node.clientWidth) + gap), behavior: "smooth" });
+  };
+  const scrollToRailPosition = clientX => {
+    const bar = rail.current, node = track.current;
+    if (!bar || !node) return;
+    const rect = bar.getBoundingClientRect();
+    const thumbWidth = rect.width * thumbFraction;
+    const available = Math.max(1, rect.width - thumbWidth);
+    const fraction = Math.max(0, Math.min(1, (clientX - rect.left - (drag.current?.offset ?? thumbWidth / 2)) / available));
+    node.scrollLeft = fraction * Math.max(0, node.scrollWidth - node.clientWidth);
+    update();
+  };
+  const startDrag = event => {
+    const rect = rail.current.getBoundingClientRect();
+    const thumbWidth = rect.width * thumbFraction;
+    const thumbLeft = rect.left + (rect.width - thumbWidth) * ratio;
+    drag.current = { offset: event.clientX >= thumbLeft && event.clientX <= thumbLeft + thumbWidth ? event.clientX - thumbLeft : thumbWidth / 2 };
+    event.currentTarget.setPointerCapture(event.pointerId);
+    scrollToRailPosition(event.clientX);
+  };
+  const endDrag = event => {
+    drag.current = null;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
   };
   return <div className="vtg-car-carousel">
     <div className="vtg-modern-cars-grid" ref={track} onScroll={update} role="region" aria-label={labels.details} tabIndex={0}>
       {cars.map(car => <VehicleCard key={car.id || car.name} car={car} labels={labels} />)}
     </div>
     {cars.length > 1 && <div className="vtg-car-carousel-controls">
-      <div className="vtg-car-carousel-progress" aria-hidden="true"><span style={{left: `${position * .72}%`}} /></div>
-      <div className="vtg-car-carousel-arrows">
-        <button type="button" onClick={() => move(-1)} disabled={!canPrev} aria-label="Previous vehicle">‹</button>
-        <button type="button" onClick={() => move(1)} disabled={!canNext} aria-label="Next vehicle">›</button>
+      <button className="vtg-car-arrow" type="button" onClick={() => move(-1)} disabled={!canPrev} aria-label="Previous vehicle">‹</button>
+      <div className="vtg-car-carousel-progress" ref={rail} role="scrollbar" aria-label="Scroll vehicles" aria-orientation="horizontal" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(ratio * 100)} tabIndex={0}
+        onPointerDown={startDrag} onPointerMove={event => { if (drag.current) scrollToRailPosition(event.clientX); }} onPointerUp={endDrag} onPointerCancel={endDrag}
+        onKeyDown={event => { if (event.key === "ArrowRight" || event.key === "ArrowLeft") { event.preventDefault(); move(event.key === "ArrowRight" ? 1 : -1); } }}>
+        <span className="vtg-car-carousel-thumb" style={{ width: `${thumbFraction * 100}%`, left: `${ratio * (1 - thumbFraction) * 100}%` }} />
       </div>
+      <button className="vtg-car-arrow" type="button" onClick={() => move(1)} disabled={!canNext} aria-label="Next vehicle">›</button>
     </div>}
   </div>;
 }
