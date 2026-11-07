@@ -178,7 +178,8 @@ html,body,.vtg-shell{background:var(--vtg-page)!important}
 /* VIP Travel Georgia: compact 3-up carousel, draggable GOLD LINE (no dot). */
 .vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-cars-grid{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;overflow-y:hidden!important;scrollbar-width:none!important;gap:10px!important;scroll-snap-type:x proximity!important;}
 .vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-card{flex:0 0 calc((100% - 20px)/3)!important;min-width:0!important;}
-.vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-photo{height:94px!important;}
+.vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-photo{height:160px!important;}
+.vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-photo img{object-fit:cover!important;object-position:center 55%!important;}
 .vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-body{padding:9px 9px 7px!important;}
 .vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-title{font-size:12px!important;line-height:1.3!important;}
 .vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-summary{font-size:10px!important;margin:4px 0 7px!important;}
@@ -196,3 +197,7 @@ html,body,.vtg-shell{background:var(--vtg-page)!important}
 .vtg-shell [data-p="home"] .vtg-car-arrow:disabled{opacity:.35!important;cursor:default!important;}
 @media(max-width:700px){.vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-card{flex-basis:calc((100% - 10px)/2)!important;}}
 @media(max-width:420px){.vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-card{flex-basis:80%!important;}}
+
+/* Keep vehicle photography readable on narrower layouts. */
+@media(max-width:700px){.vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-photo{height:145px!important;}}
+@media(max-width:420px){.vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-photo{height:175px!important;}}
