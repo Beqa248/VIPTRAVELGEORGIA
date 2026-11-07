@@ -2,9 +2,12 @@
 
 import Link from "next/link";
 import usePublished from "./usePublished";
+import { useLanguage } from "./site-context";
 import { carIcon } from "../lib/defaultVehicles";
 
 export default function VehicleCards() {
+  const { lang } = useLanguage();
+  const labels = ({en:["Passengers","Luggage","Drive"],ka:["მგზავრები","ბარგი","ამძრავი"],ru:["Пассажиры","Багаж","Привод"],he:["נוסעים","מטען","הנעה"]})[lang] || ["Passengers","Luggage","Drive"];
   // Use the exact published Supabase records that power /cars.
   // Never fall back to hardcoded defaults: deleted/hidden cars must stay hidden.
   const { rows, loaded } = usePublished("vehicles");
@@ -35,7 +38,13 @@ export default function VehicleCards() {
           }}
         >
           {!car.images?.length && <i>{carIcon(car.name)}</i>}
-          <span>{car.name}</span>
+          <span className="vtg-vehicle-card-content"><strong>{car.name}</strong>
+            <span className="vtg-vehicle-card-specs">
+              {Number(car.passengers)>0 && <span>♙ {labels[0]}: {car.passengers}</span>}
+              {car.luggage_capacity && <span>▣ {labels[1]}: {car.luggage_capacity}</span>}
+              {car.drivetrain && <span>⚙ {labels[2]}: {car.drivetrain}</span>}
+            </span>
+          </span>
         </Link>
       ))}
     </div>

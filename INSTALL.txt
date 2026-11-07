@@ -1,1 +1,7 @@
-Replace only components/pages/home.jsx in GitHub. Exact deposit text and translations remain unchanged. Commit and let Vercel deploy. CSS compacts only Prices & Booking panel. Full build not run.
+1. In Supabase SQL Editor run SUPABASE_RUN_ONCE.sql once.
+2. In GitHub replace only the five files from this ZIP, keeping their folder paths.
+3. Commit and wait for Vercel deployment.
+4. Admin > Cars > Edit a vehicle > set Passengers, Luggage capacity, Drivetrain > Save.
+5. Check homepage vehicle tiles and Cars detail page.
+This patch preserves the existing homepage Prices & Booking section, its exact deposit text, header, footer and other pages.
+NOTE: Full Next.js production build has not been run.

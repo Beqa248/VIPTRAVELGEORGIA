@@ -130,3 +130,12 @@ html,body,.vtg-shell{background:var(--vtg-page)!important}
 .vtg-shell [data-p="home"] .vtg-plan-row>section{height:100%!important}
 .vtg-shell [data-p="home"] .vtg-plan-row .howsec .wrap{height:100%!important}
 .vtg-shell [data-p="home"] .vtg-plan-row .howsec .steps{min-height:0!important}
+
+/* Vehicle specification details: only affect cars on homepage and vehicle detail pages. */
+.vtg-shell [data-p="home"] .ctiles .ctile{display:flex!important;align-items:flex-end!important;min-height:230px!important;box-sizing:border-box!important;text-decoration:none!important;}
+.vtg-shell [data-p="home"] .ctiles .ctile .vtg-vehicle-card-content{display:flex!important;flex-direction:column!important;gap:6px!important;position:relative!important;z-index:1!important;width:100%!important;line-height:1.35!important;}
+.vtg-shell [data-p="home"] .ctiles .ctile .vtg-vehicle-card-content strong{font-size:17px!important;color:white!important;}
+.vtg-shell [data-p="home"] .ctiles .ctile .vtg-vehicle-card-specs{display:flex!important;flex-direction:column!important;gap:3px!important;font-size:12px!important;font-weight:500!important;color:#fff!important;}
+.vtg-shell [data-p="home"] .ctiles .ctile .vtg-vehicle-card-specs span{display:block!important;position:static!important;background:transparent!important;padding:0!important;font-size:inherit!important;color:inherit!important;}
+.vtg-car-detail-specs{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 20px;}
+.vtg-car-detail-specs>span{border:1px solid #dbe3df;background:#f2f6f2;border-radius:9px;padding:9px 13px;font-size:14px;color:#183f35;}
