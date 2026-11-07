@@ -1,0 +1,163 @@
+/* Homepage alignment correction: one page canvas, aligned 90%-width content blocks.
+   Imported last; does not change any data, component, or admin behavior. */
+:root{--vtg-page:#f7f8f5;--vtg-green:#e6eee8;--vtg-blue:#eaf0f2;--vtg-dark:#183f35}
+html,body,.vtg-shell{background:var(--vtg-page)!important}
+.vtg-shell [data-p="home"],
+.vtg-shell [data-p="home"]>section,
+.vtg-shell [data-p="home"]>.vtg-plan-band,
+.vtg-shell [data-p="home"]>.vtg-about-row,
+.vtg-shell [data-p="home"]>.vtg-cars-pricing-row,
+.vtg-shell [data-p="home"]>.vtg-contact-row{background:var(--vtg-page)!important}
+/* One left/right vertical alignment line across all homepage sections. */
+.vtg-shell [data-p="home"] .vtg-plan-inner{width:90%!important;max-width:none!important;margin-inline:auto!important;padding:0!important;box-sizing:border-box!important}
+.vtg-shell [data-p="home"]>.vtg-about-row,
+.vtg-shell [data-p="home"]>.vtg-cars-pricing-row,
+.vtg-shell [data-p="home"]>.vtg-contact-row{width:90%!important;max-width:none!important;margin:22px auto!important;box-sizing:border-box!important;padding:16px!important;gap:16px!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:stretch!important}
+/* Planner: full 90% width like the rows below; columns start and end together. */
+.vtg-shell [data-p="home"]>.vtg-plan-band{padding:36px 0!important}
+.vtg-shell [data-p="home"] .vtg-plan-header{margin-bottom:24px!important}
+.vtg-shell [data-p="home"] .vtg-plan-row{width:100%!important;max-width:none!important;display:grid!important;grid-template-columns:minmax(0,3fr) minmax(0,2fr)!important;gap:clamp(18px,2vw,34px)!important;align-items:stretch!important;margin:0!important;padding:26px!important;background:var(--vtg-green)!important;border:1px solid #d6e2d9!important;border-radius:14px!important;box-sizing:border-box!important}
+.vtg-shell [data-p="home"] .vtg-plan-row>section{padding:0!important;margin:0!important;min-width:0!important;align-self:stretch!important;transform:none!important;background:transparent!important}
+.vtg-shell [data-p="home"] .vtg-plan-row>section>.wrap{width:100%!important;max-width:none!important;margin:0!important;padding:0!important;height:100%!important;box-sizing:border-box!important}
+.vtg-shell [data-p="home"] .vtg-plan-row .howsec .wrap{display:flex!important;flex-direction:column!important;justify-content:flex-start!important}
+.vtg-shell [data-p="home"] .vtg-plan-row .howsec h2{margin:0 0 10px!important;padding:16px!important;text-align:center!important;background:var(--vtg-dark)!important;color:white!important}
+.vtg-shell [data-p="home"] .vtg-plan-row .howsec .steps{display:flex!important;flex-direction:column!important;flex:1!important;gap:10px!important}
+.vtg-shell [data-p="home"] .vtg-plan-row .howsec .step{flex:1 1 0!important;min-height:0!important;display:flex!important;flex-direction:column!important;justify-content:center!important}
+/* Driver and why: matching panels. */
+.vtg-shell [data-p="home"] .vtg-about-row>section,
+.vtg-shell [data-p="home"] .vtg-cars-pricing-row>section,
+.vtg-shell [data-p="home"] .vtg-contact-row>section{min-width:0!important;margin:0!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important;align-self:stretch!important}
+.vtg-shell [data-p="home"] .vtg-about-row>section>.wrap,
+.vtg-shell [data-p="home"] .vtg-cars-pricing-row>section>.wrap,
+.vtg-shell [data-p="home"] .vtg-contact-row>section>.wrap{width:100%!important;max-width:none!important;height:100%!important;min-width:0!important;box-sizing:border-box!important;margin:0!important;padding:24px!important;border-radius:12px!important;border:1px solid #dbe3df!important}
+.vtg-shell [data-p="home"] .vtg-about-row #hGuide>.wrap{background:#fff!important}
+.vtg-shell [data-p="home"] .vtg-about-row .why>.wrap{background:var(--vtg-green)!important}
+/* Cars and prices: same dimensions, top aligned, internal backgrounds only. */
+.vtg-shell [data-p="home"] .vtg-cars-pricing-row #hCars>.wrap{background:var(--vtg-blue)!important;display:flex!important;flex-direction:column!important}
+.vtg-shell [data-p="home"] .vtg-cars-pricing-row #hPrice>.wrap{background:#fff!important;display:flex!important;flex-direction:column!important}
+.vtg-shell [data-p="home"] .vtg-cars-pricing-row #hPrice .vtg-price-actions{margin-top:auto!important;padding-top:16px!important}
+.vtg-shell [data-p="home"] .vtg-cars-pricing-row .ctiles{max-width:100%!important;min-width:0!important;overflow-x:auto!important}
+/* FAQ and contact: matching panels and headings; contact fills the right panel. */
+.vtg-shell [data-p="home"] .vtg-contact-row #hFaq>.wrap{background:var(--vtg-green)!important;display:flex!important;flex-direction:column!important}
+.vtg-shell [data-p="home"] .vtg-contact-row #contact>.wrap{background:var(--vtg-blue)!important;display:flex!important;flex-direction:column!important}
+.vtg-shell [data-p="home"] .vtg-contact-row h2{margin-top:0!important}
+.vtg-shell [data-p="home"] .vtg-contact-row #hFaq details{margin:0 0 7px!important;min-height:0!important;flex:none!important}
+.vtg-shell [data-p="home"] .vtg-contact-row #hFaq details summary{padding:10px 13px!important;min-height:40px!important;box-sizing:border-box!important;font-size:14px!important;line-height:1.4!important}
+.vtg-shell [data-p="home"] .vtg-contact-row #contact form{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:13px!important;width:100%!important;max-width:none!important}
+.vtg-shell [data-p="home"] .vtg-contact-row #contact form label:has(textarea),
+.vtg-shell [data-p="home"] .vtg-contact-row #contact form button{grid-column:1/-1!important}
+.vtg-shell [data-p="home"] .vtg-contact-row #contact form input,
+.vtg-shell [data-p="home"] .vtg-contact-row #contact form select,
+.vtg-shell [data-p="home"] .vtg-contact-row #contact form textarea{width:100%!important;box-sizing:border-box!important}
+.vtg-shell [data-p="home"] .vtg-contact-row #contact textarea{min-height:160px!important}
+.vtg-shell [data-p="home"] .vtg-contact-row #contact .links{margin-top:auto!important;padding-top:16px!important}
+@media(max-width:850px){
+.vtg-shell [data-p="home"] .vtg-plan-row,
+.vtg-shell [data-p="home"]>.vtg-about-row,
+.vtg-shell [data-p="home"]>.vtg-cars-pricing-row,
+.vtg-shell [data-p="home"]>.vtg-contact-row{grid-template-columns:minmax(0,1fr)!important}
+.vtg-shell [data-p="home"] .vtg-plan-row .howsec .steps{display:flex!important;flex-direction:column!important}
+}
+@media(max-width:560px){
+.vtg-shell [data-p="home"] .vtg-plan-inner{width:calc(100% - 32px)!important}
+.vtg-shell [data-p="home"]>.vtg-about-row,
+.vtg-shell [data-p="home"]>.vtg-cars-pricing-row,
+.vtg-shell [data-p="home"]>.vtg-contact-row{padding:24px 16px!important}
+.vtg-shell [data-p="home"] .vtg-plan-row{padding:14px!important}
+.vtg-shell [data-p="home"] .vtg-contact-row #contact form{grid-template-columns:1fr!important}
+}
+
+/* Approved contact section: bigger message area, balanced full-height panel. */
+.vtg-shell [data-p="home"] .vtg-contact-row #contact textarea{min-height:185px!important;resize:vertical!important}
+.vtg-shell [data-p="home"] .vtg-contact-row #contact>.wrap{display:flex!important;flex-direction:column!important}
+
+/* Unified plan section: header, two aligned columns, and centered benefits in ONE panel. */
+.vtg-shell [data-p="home"] .vtg-plan-inner{
+  background:var(--vtg-green)!important;
+  border:1px solid #d6e2d9!important;
+  border-radius:14px!important;
+  padding:clamp(16px,2vw,30px)!important;
+}
+.vtg-shell [data-p="home"] .vtg-plan-row{
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  padding:0!important;
+}
+.vtg-shell [data-p="home"] .vtg-plan-header{
+  text-align:center!important;
+  width:100%!important;
+  margin:0 auto 24px!important;
+}
+.vtg-shell [data-p="home"] .vtg-plan-benefits{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  flex-wrap:wrap!important;
+  gap:10px!important;
+  width:100%!important;
+  margin:18px auto 0!important;
+  padding-top:14px!important;
+  border-top:1px solid #cbd9d0!important;
+  color:#27694f!important;
+  font-size:13px!important;
+  text-align:center!important;
+}
+.vtg-shell [data-p="home"] .vtg-plan-benefits .vtg-benefit-dot{color:#9aada2!important}
+@media(max-width:560px){
+  .vtg-shell [data-p="home"] .vtg-plan-inner{padding:14px!important}
+  .vtg-shell [data-p="home"] .vtg-plan-benefits{gap:6px 9px!important;font-size:12px!important}
+}
+
+/* Homepage contact: four equal-width, brand-colored social links. */
+.vtg-shell [data-p="home"] .vtg-contact-row #contact .links{
+ display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px!important;width:100%!important;align-items:stretch!important;
+}
+.vtg-shell [data-p="home"] .vtg-contact-row #contact .links a{
+ display:flex!important;align-items:center!important;justify-content:center!important;min-width:0!important;width:100%!important;box-sizing:border-box!important;min-height:46px!important;padding:10px 5px!important;border:0!important;border-radius:10px!important;color:#fff!important;font-weight:700!important;text-align:center!important;text-decoration:none!important;
+}
+.vtg-shell [data-p="home"] .vtg-contact-row #contact .links #wa{background:#20c76b!important}
+.vtg-shell [data-p="home"] .vtg-contact-row #contact .links #tg{background:#229ed9!important}
+.vtg-shell [data-p="home"] .vtg-contact-row #contact .links #fb{background:#1877f2!important}
+/* Match the original Instagram gradient on the Contact page. */
+.vtg-shell [data-p="home"] .vtg-contact-row #contact .links #ig{
+ background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)!important;
+}
+@media(max-width:650px){.vtg-shell [data-p="home"] .vtg-contact-row #contact .links{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}}
+
+/* Both columns use the same row and stretch to the same bottom edge. */
+.vtg-shell [data-p="home"] .vtg-plan-row{align-items:stretch!important}
+.vtg-shell [data-p="home"] .vtg-plan-row>section{height:100%!important}
+.vtg-shell [data-p="home"] .vtg-plan-row .howsec .wrap{height:100%!important}
+.vtg-shell [data-p="home"] .vtg-plan-row .howsec .steps{min-height:0!important}
+
+/* Vehicle specification details: only affect cars on homepage and vehicle detail pages. */
+.vtg-shell [data-p="home"] .ctiles .ctile{display:flex!important;align-items:flex-end!important;min-height:230px!important;box-sizing:border-box!important;text-decoration:none!important;}
+.vtg-shell [data-p="home"] .ctiles .ctile .vtg-vehicle-card-content{display:flex!important;flex-direction:column!important;gap:6px!important;position:relative!important;z-index:1!important;width:100%!important;line-height:1.35!important;}
+.vtg-shell [data-p="home"] .ctiles .ctile .vtg-vehicle-card-content strong{font-size:17px!important;color:white!important;}
+.vtg-shell [data-p="home"] .ctiles .ctile .vtg-vehicle-card-specs{display:flex!important;flex-direction:column!important;gap:3px!important;font-size:12px!important;font-weight:500!important;color:#fff!important;}
+.vtg-shell [data-p="home"] .ctiles .ctile .vtg-vehicle-card-specs span{display:block!important;position:static!important;background:transparent!important;padding:0!important;font-size:inherit!important;color:inherit!important;}
+.vtg-car-detail-specs{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 20px;}
+.vtg-car-detail-specs>span{border:1px solid #dbe3df;background:#f2f6f2;border-radius:9px;padding:9px 13px;font-size:14px;color:#183f35;}
+
+/* Compact premium vehicle cards — homepage only. No changes to other blocks. */
+.vtg-shell [data-p="home"] .vtg-modern-cars-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%;}
+.vtg-shell [data-p="home"] .vtg-modern-car-card{min-width:0;overflow:hidden;border-radius:15px;background:#f9faf9;border:1px solid #e6eae6;box-shadow:0 5px 18px rgba(18,56,46,.055);}
+.vtg-shell [data-p="home"] .vtg-modern-car-photo{display:block;height:142px;overflow:hidden;background:#dbe5dd;text-decoration:none;}
+.vtg-shell [data-p="home"] .vtg-modern-car-photo img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .3s ease;}
+.vtg-shell [data-p="home"] .vtg-modern-car-photo:hover img{transform:scale(1.035);}
+.vtg-shell [data-p="home"] .vtg-modern-car-fallback{display:grid;place-items:center;height:100%;font-size:40px;}
+.vtg-shell [data-p="home"] .vtg-modern-car-body{padding:15px 14px 10px;}
+.vtg-shell [data-p="home"] .vtg-modern-car-title{display:block;color:#153d35;font-size:15px;font-weight:750;line-height:1.4;text-decoration:none;}
+.vtg-shell [data-p="home"] .vtg-modern-car-summary{font-size:12px;color:#63736b;margin:6px 0 13px;}
+.vtg-shell [data-p="home"] .vtg-modern-car-summary span{color:#c8a45c;}
+.vtg-shell [data-p="home"] .vtg-modern-car-toggle{width:100%;display:flex;justify-content:space-between;align-items:center;border:0;border-top:1px solid #e2e8e3;background:transparent;padding:13px 0 4px;text-align:start;color:#153d35;font:600 12px system-ui,sans-serif;cursor:pointer;}
+.vtg-shell [data-p="home"] .vtg-modern-car-chevron{font-size:21px;line-height:1;transition:transform .2s ease;}
+.vtg-shell [data-p="home"] .vtg-modern-car-chevron.open{transform:rotate(180deg);}
+.vtg-shell [data-p="home"] .vtg-modern-car-expanded{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;padding-top:12px;animation:vtgVehicleOpen .2s ease-out;}
+.vtg-shell [data-p="home"] .vtg-modern-car-feature{min-width:0;min-height:65px;border:1px solid #e2e8e3;border-radius:10px;background:white;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center;padding:7px 3px;}
+.vtg-shell [data-p="home"] .vtg-modern-car-feature>span{font-size:20px;color:#c9a455;line-height:1.1;}
+.vtg-shell [data-p="home"] .vtg-modern-car-feature strong{font-size:11px;color:#153d35;overflow-wrap:anywhere;}
+.vtg-shell [data-p="home"] .vtg-modern-car-feature small{font-size:10px;color:#617369;overflow-wrap:anywhere;}
+@keyframes vtgVehicleOpen{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:420px){.vtg-shell [data-p="home"] .vtg-modern-cars-grid{gap:8px}.vtg-shell [data-p="home"] .vtg-modern-car-photo{height:115px}.vtg-shell [data-p="home"] .vtg-modern-car-body{padding:11px 9px 9px}.vtg-shell [data-p="home"] .vtg-modern-car-title{font-size:13px}.vtg-shell [data-p="home"] .vtg-modern-car-feature{min-height:60px}.vtg-shell [data-p="home"] .vtg-modern-car-feature strong{font-size:10px}}
