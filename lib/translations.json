@@ -270,7 +270,8 @@
     "recentToursEmpty": "New tour photographs coming soon.",
     "vehiclePassengers": "Passengers",
     "vehicleLuggage": "Luggage",
-    "vehicleDrive": "Drive"
+    "vehicleDrive": "Drive",
+    "vehicleAC": "A/C"
   },
   "ru": {
     "h1": "Частные туры из Батуми",
@@ -543,7 +544,8 @@
     "recentToursEmpty": "Фотографии новых туров скоро появятся.",
     "vehiclePassengers": "Пассажиры",
     "vehicleLuggage": "Багаж",
-    "vehicleDrive": "Привод"
+    "vehicleDrive": "Привод",
+    "vehicleAC": "Кондиционер"
   },
   "ka": {
     "h1": "კერძო ტურები ბათუმიდან",
@@ -816,7 +818,8 @@
     "recentToursEmpty": "ახალი ტურების ფოტოები მალე დაემატება.",
     "vehiclePassengers": "მგზავრები",
     "vehicleLuggage": "ბარგი",
-    "vehicleDrive": "ამძრავი"
+    "vehicleDrive": "ამძრავი",
+    "vehicleAC": "კონდიციონერი"
   },
   "he": {
     "h1": "טיולים פרטיים מבטומי",
@@ -1091,6 +1094,7 @@
     "recentToursEmpty": "תמונות מסיורים חדשים יתווספו בקרוב.",
     "vehiclePassengers": "נוסעים",
     "vehicleLuggage": "מטען",
-    "vehicleDrive": "הנעה"
+    "vehicleDrive": "הנעה",
+    "vehicleAC": "מיזוג אוויר"
   }
 }

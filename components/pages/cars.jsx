@@ -68,10 +68,10 @@ const cars = [...rows].sort(
                   ""}
               </p>
 
-              {(Number(car.passengers)>0 || car.luggage_capacity || car.drivetrain) && <div className="vtg-car-detail-specs">
+              {(Number(car.passengers)>0 || car.luggage_capacity || car.air_conditioning) && <div className="vtg-car-detail-specs">
                 {Number(car.passengers)>0 && <span>♙ {t("vehiclePassengers") === "vehiclePassengers" ? "Passengers" : t("vehiclePassengers")}: {car.passengers}</span>}
                 {car.luggage_capacity && <span>▣ {t("vehicleLuggage") === "vehicleLuggage" ? "Luggage" : t("vehicleLuggage")}: {car.luggage_capacity}</span>}
-                {car.drivetrain && <span>⚙ {t("vehicleDrive") === "vehicleDrive" ? "Drive" : t("vehicleDrive")}: {car.drivetrain}</span>}
+                {car.air_conditioning && <span>❄ {t("vehicleAC") === "vehicleAC" ? "A/C" : t("vehicleAC")}</span>}
               </div>}
 
               <div className="gal soft">

@@ -139,3 +139,25 @@ html,body,.vtg-shell{background:var(--vtg-page)!important}
 .vtg-shell [data-p="home"] .ctiles .ctile .vtg-vehicle-card-specs span{display:block!important;position:static!important;background:transparent!important;padding:0!important;font-size:inherit!important;color:inherit!important;}
 .vtg-car-detail-specs{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 20px;}
 .vtg-car-detail-specs>span{border:1px solid #dbe3df;background:#f2f6f2;border-radius:9px;padding:9px 13px;font-size:14px;color:#183f35;}
+
+/* Compact premium vehicle cards — homepage only. No changes to other blocks. */
+.vtg-shell [data-p="home"] .vtg-modern-cars-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%;}
+.vtg-shell [data-p="home"] .vtg-modern-car-card{min-width:0;overflow:hidden;border-radius:15px;background:#f9faf9;border:1px solid #e6eae6;box-shadow:0 5px 18px rgba(18,56,46,.055);}
+.vtg-shell [data-p="home"] .vtg-modern-car-photo{display:block;height:142px;overflow:hidden;background:#dbe5dd;text-decoration:none;}
+.vtg-shell [data-p="home"] .vtg-modern-car-photo img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .3s ease;}
+.vtg-shell [data-p="home"] .vtg-modern-car-photo:hover img{transform:scale(1.035);}
+.vtg-shell [data-p="home"] .vtg-modern-car-fallback{display:grid;place-items:center;height:100%;font-size:40px;}
+.vtg-shell [data-p="home"] .vtg-modern-car-body{padding:15px 14px 10px;}
+.vtg-shell [data-p="home"] .vtg-modern-car-title{display:block;color:#153d35;font-size:15px;font-weight:750;line-height:1.4;text-decoration:none;}
+.vtg-shell [data-p="home"] .vtg-modern-car-summary{font-size:12px;color:#63736b;margin:6px 0 13px;}
+.vtg-shell [data-p="home"] .vtg-modern-car-summary span{color:#c8a45c;}
+.vtg-shell [data-p="home"] .vtg-modern-car-toggle{width:100%;display:flex;justify-content:space-between;align-items:center;border:0;border-top:1px solid #e2e8e3;background:transparent;padding:13px 0 4px;text-align:start;color:#153d35;font:600 12px system-ui,sans-serif;cursor:pointer;}
+.vtg-shell [data-p="home"] .vtg-modern-car-chevron{font-size:21px;line-height:1;transition:transform .2s ease;}
+.vtg-shell [data-p="home"] .vtg-modern-car-chevron.open{transform:rotate(180deg);}
+.vtg-shell [data-p="home"] .vtg-modern-car-expanded{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;padding-top:12px;animation:vtgVehicleOpen .2s ease-out;}
+.vtg-shell [data-p="home"] .vtg-modern-car-feature{min-width:0;min-height:65px;border:1px solid #e2e8e3;border-radius:10px;background:white;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center;padding:7px 3px;}
+.vtg-shell [data-p="home"] .vtg-modern-car-feature>span{font-size:20px;color:#c9a455;line-height:1.1;}
+.vtg-shell [data-p="home"] .vtg-modern-car-feature strong{font-size:11px;color:#153d35;overflow-wrap:anywhere;}
+.vtg-shell [data-p="home"] .vtg-modern-car-feature small{font-size:10px;color:#617369;overflow-wrap:anywhere;}
+@keyframes vtgVehicleOpen{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:420px){.vtg-shell [data-p="home"] .vtg-modern-cars-grid{gap:8px}.vtg-shell [data-p="home"] .vtg-modern-car-photo{height:115px}.vtg-shell [data-p="home"] .vtg-modern-car-body{padding:11px 9px 9px}.vtg-shell [data-p="home"] .vtg-modern-car-title{font-size:13px}.vtg-shell [data-p="home"] .vtg-modern-car-feature{min-height:60px}.vtg-shell [data-p="home"] .vtg-modern-car-feature strong{font-size:10px}}

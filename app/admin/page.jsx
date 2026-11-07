@@ -167,7 +167,7 @@ export default function Admin() {
           description: String(f.get("description") || ""),
           passengers: Number(f.get("passengers") || 0),
           luggage_capacity: String(f.get("luggage_capacity") || "").trim(),
-          drivetrain: String(f.get("drivetrain") || "").trim(),
+          air_conditioning: f.get("air_conditioning") === "on",
           published: f.get("published") === "on",
           images: [...(editing?.images || []).filter(url => !removed.includes(url)), ...newImages],
         };
@@ -320,7 +320,7 @@ export default function Admin() {
                   {tab === "vehicles" && <label className={styles.formField}>Passengers<input type="number" name="passengers" min="0" defaultValue={editing?.passengers ?? 0}/></label>}
                   {tab === "vehicles" && <>
                     <label className={styles.formField}>Luggage capacity (e.g. 3–4 bags)<input type="text" name="luggage_capacity" maxLength={80} defaultValue={editing?.luggage_capacity || ""} placeholder="e.g. 3–4 bags, depending on size"/></label>
-                    <label className={styles.formField}>Drivetrain<select name="drivetrain" defaultValue={editing?.drivetrain || ""}><option value="">Not specified</option><option value="AWD (4x4)">AWD (4x4)</option><option value="4WD (4x4)">4WD (4x4)</option><option value="FWD">FWD</option><option value="RWD">RWD</option><option value="Other">Other</option></select></label>
+                    <label className={styles.formField}>Air conditioning (A/C)<span style={{display:"flex",alignItems:"center",gap:10,minHeight:42}}><input type="checkbox" name="air_conditioning" defaultChecked={editing?.air_conditioning ?? false}/> Available in this vehicle</span></label>
                   </>}
                   {tab === "recent_tours" && <label className={styles.formField}>Tour date<input type="date" name="tour_date" defaultValue={editing?.tour_date || ""}/></label>}
                   <label className={`${styles.formField} ${styles.fullWidth}`}>Description<textarea name="description" rows="3" defaultValue={editing?.description || ""} placeholder="Add a short description…"/></label>
