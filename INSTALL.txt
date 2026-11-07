@@ -1,1 +1,5 @@
-Replace only components/site-context.jsx in GitHub. Commit and redeploy Vercel. This fixes escaped slashes in the JavaScript regular expression.
+Replace ONLY these two files in your GitHub project:
+app/[slug]/page.jsx
+app/tour/[slug]/page.jsx
+
+Removes duplicate generateMetadata functions and imports from previous patch. No UI changes.
