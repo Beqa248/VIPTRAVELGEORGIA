@@ -13,3 +13,14 @@
 .vtg-shell [data-p="travel"] .vtg-highlight-gallery-toggle{margin:10px 0 4px;background:#173f35;color:white;border:0;border-radius:8px;padding:9px 15px;cursor:pointer}
 .vtg-shell [data-p="travel"] .vtg-highlight-gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:8px 0 14px}
 .vtg-shell [data-p="travel"] .vtg-highlight-gallery img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px}
+
+/* Square, edge-to-edge previews for existing and future cars page images. */
+.vtg-shell [data-p="cars"] .gal.soft img {
+  display: block !important;
+  width: 100% !important;
+  aspect-ratio: 1 / 1 !important;
+  height: auto !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  background: #e6ece8 !important;
+}

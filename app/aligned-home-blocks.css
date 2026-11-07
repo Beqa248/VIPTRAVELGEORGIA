@@ -223,3 +223,18 @@ html,body,.vtg-shell{background:var(--vtg-page)!important}
 }
 .vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-photo:hover img{transform:none!important;}
 @media(max-width:700px){.vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-photo{aspect-ratio:4/3!important;}}
+
+/* VIPTravelGeorgia: consistent square vehicle previews, including future CMS vehicles. */
+.vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-photo {
+  aspect-ratio: 1 / 1 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  background: #e6ece8 !important;
+}
+.vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-photo img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+}
