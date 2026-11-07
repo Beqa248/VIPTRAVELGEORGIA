@@ -1,3 +1,14 @@
+import { headers } from "next/headers";
+import { localizedMetadata, getPublicDb } from "../../../lib/seo";
+export async function generateMetadata({params}) {
+ const {slug}=await params;
+ const h=await headers(); const lang=h.get("x-vtg-locale") || "en";
+ const db=await getPublicDb();
+ if(!db)return {};
+ const {data:tour}=await db.from("custom_tours").select("title,description,cover_url").eq("slug",slug).eq("published",true).eq("archived",false).maybeSingle();
+ if(!tour)return {};
+ return localizedMetadata("/tour/"+slug,String(tour.title||"Private Georgia Tour")+" | VIPTravelGeorgia",String(tour.description||"Private tour in Georgia").slice(0,160),tour.cover_url,lang);
+}
 import TranslatedText from "../../../components/TranslatedText";
 import { notFound } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";

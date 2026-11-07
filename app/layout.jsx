@@ -11,7 +11,14 @@ import "./final-approved-polish.css";
 import "./contact-layout-fix.css";
 import "./contact-unified-and-footer.css";
 import "./gallery-highlights-fixes.css";
+import { headers } from "next/headers";
+import { PAGE_SEO, localizedMetadata } from "../lib/seo";
 import { LanguageProvider } from "../components/site-context";
 import { seoMetadata, DEFAULT_DESCRIPTION } from "../lib/seo";
-export const metadata = seoMetadata("/", "Private Tours in Georgia | VIPTravelGeorgia", DEFAULT_DESCRIPTION);
-export default function RootLayout({ children }) { return <html lang="en"><body><SeoBusinessJsonLd/><LanguageProvider><ConditionalSiteChrome>{children}</ConditionalSiteChrome></LanguageProvider></body></html>; }
+export async function generateMetadata() {
+ const h=await headers(); const lang=h.get("x-vtg-locale") || "en";
+ const path=h.get("x-vtg-path") || "/";
+ const [title,description]=PAGE_SEO[path] || PAGE_SEO["/"];
+ return localizedMetadata(path,title,description,undefined,lang);
+}
+export default async function RootLayout({ children }) { const h=await headers(); const lang=h.get("x-vtg-locale") || "en"; return <html lang={lang} dir={lang==="he"?"rtl":"ltr"}><body><SeoBusinessJsonLd/><LanguageProvider initialLang={lang}><ConditionalSiteChrome>{children}</ConditionalSiteChrome></LanguageProvider></body></html>; }

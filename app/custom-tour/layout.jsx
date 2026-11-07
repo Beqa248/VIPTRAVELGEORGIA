@@ -1,4 +1,8 @@
-import { PAGE_SEO, seoMetadata } from "../../lib/seo";
-const [title, description] = PAGE_SEO["/custom-tour"];
-export const metadata = seoMetadata("/custom-tour", title, description);
-export default function SeoLayout({ children }) { return children; }
+import { headers } from "next/headers";
+import { PAGE_SEO, localizedMetadata } from "../../lib/seo";
+export async function generateMetadata() {
+ const h=await headers(); const lang=h.get("x-vtg-locale") || "en";
+ const [title,description]=PAGE_SEO["/custom-tour"];
+ return localizedMetadata("/custom-tour",title,description,undefined,lang);
+}
+export default function SeoLayout({children}) {return children;}

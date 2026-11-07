@@ -1,3 +1,10 @@
+import { headers } from "next/headers";
+import { PAGE_SEO, localizedMetadata } from "../../lib/seo";
+export async function generateMetadata({params}) {
+ const {slug}=await params;const h=await headers();const lang=h.get("x-vtg-locale")||"en";
+ const path="/"+slug;const [title,description]=PAGE_SEO[path]||[slug.replace(/-/g," ")+" | VIPTravelGeorgia","Explore private tours and travel experiences in Georgia."];
+ return localizedMetadata(path,title,description,undefined,lang);
+}
 import { notFound } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
 import TourMedia from "../../components/TourMedia";
