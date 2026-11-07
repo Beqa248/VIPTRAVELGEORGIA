@@ -12,7 +12,7 @@ const tabs = [
   { id: "videos", label: "Videos", icon: "▶" },
   { id: "recent_tours", label: "Recent Tours", icon: "🏔" },
   { id: "reviews", label: "Guest Reviews", icon: "★" },
-  { id: "regions", label: "Regions", icon: "🗺" },
+  { id: "regions", label: "Georgia Highlights", icon: "🗺" },
   { id: "inquiries", label: "Customer Inquiries", icon: "✉" },
   { id: "tour_photos", label: "Tours", icon: "▧" },
 ];

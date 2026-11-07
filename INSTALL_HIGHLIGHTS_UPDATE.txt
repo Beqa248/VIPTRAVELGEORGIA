@@ -1,0 +1,11 @@
+VIPTravelGeorgia — targeted update (7 November 2026)
+
+1. Copy the files in this ZIP into the same relative locations in your GitHub project. Keep all other files unchanged.
+2. BEFORE using the updated Georgia Highlights admin editor, open Supabase > SQL Editor and run SUPABASE_HIGHLIGHTS_GALLERY.sql. This adds the gallery_images column to the existing travel_regions table without deleting data.
+3. Deploy the changes to Vercel. Existing /travel URL and /admin/regions URL stay unchanged; only the public and admin labels change.
+4. Optional AUTOMATIC translation of new admin content: enable Google Cloud Translation API (Basic/v2), create a restricted server API key, and set GOOGLE_TRANSLATE_API_KEY in Vercel environment variables (Production, and Preview if needed). Redeploy. Translation service can incur charges. Without this key, dynamic content remains in its original language. Never use NEXT_PUBLIC_ prefix or commit the key.
+5. Existing static UI dictionary entries were improved for navigation, Highlights and several home-page sections. New dynamic translations apply to published tours and itineraries, cars, videos, recent tours, and region names/descriptions. Some other fixed labels may still require translation dictionary coverage.
+6. New region gallery supports multiple image uploads, previews and removing existing gallery images. The existing cover image and links remain intact. Gallery images open in a new tab. Supabase storage policies must already permit uploads to tour-media.
+7. Car gallery images are 4:3 and use object-fit: contain. Video cards are equal-height and previews use 16:9.
+
+LIMITATIONS: A full Next.js production build could not be completed in this sandbox because npm dependencies could not be installed within the available time. Verify a Vercel Preview deployment before promoting to production. Google Translate returns translated HTML entities in some cases; long-form formatting may require additional polish. This update does not rewrite or delete existing Supabase data.

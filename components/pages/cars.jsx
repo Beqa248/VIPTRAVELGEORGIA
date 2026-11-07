@@ -1,3 +1,4 @@
+import TranslatedText from "../TranslatedText";
 
 "use client";
 
@@ -48,7 +49,7 @@ const cars = [...rows].sort(
                 className={active === i ? "on" : ""}
                 onClick={() => setActive(i)}
               >
-                {c.name}
+                <TranslatedText text={c.name}/>
               </button>
             ))}
           </div>
@@ -56,7 +57,7 @@ const cars = [...rows].sort(
           {car && (
             <div className="carsec on">
               <p className="cd">
-                {car.description ||
+                {car.description ? <TranslatedText text={car.description}/> :
                   [
                     t("carD1"),
                     t("carD2"),
