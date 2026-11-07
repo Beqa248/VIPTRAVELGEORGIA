@@ -1,1 +1,7 @@
-Replace only components/SiteFooter.module.css in GitHub. No JSX changes needed. This removes both vertical divider lines, spreads the four social icons between the logo and copyright, fixes desktop overflow, and keeps mobile responsive.
+Replace 4 files in GitHub with matching paths.
+components/SiteFooter.jsx
+components/SiteFooter.module.css
+components/ContactForm.jsx
+app/contact-unified-and-footer.css
+
+Uses existing /public/viptravelgeorgia-round-logo.png. Only four existing social accounts. No database changes.

@@ -82,3 +82,10 @@ body > footer {flex-shrink:0;}
 [data-p="contact"] #contact.vtg-unified-contact { background:#f7f8f5 !important; }
 #contact.vtg-unified-contact .cinfo a[href^="tel:"],
 #contact.vtg-unified-contact .cinfo a[href^="mailto:"] { color:#173e34 !important; text-decoration:none !important; }
+
+/* Match FAQ and Contact panels in the homepage two-column row */
+.vtg-shell [data-p="home"] > .vtg-contact-alignment > .vtg-contact-row{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:stretch!important;gap:16px!important}
+.vtg-shell [data-p="home"] > .vtg-contact-alignment > .vtg-contact-row > section{min-width:0!important;height:100%!important;align-self:stretch!important;box-sizing:border-box!important}
+.vtg-shell [data-p="home"] > .vtg-contact-alignment > .vtg-contact-row > section > .wrap{width:100%!important;max-width:none!important;height:100%!important;box-sizing:border-box!important}
+.vtg-shell [data-p="home"] .vtg-contact-row #contact .links.vtg-contact-socials{margin-top:14px!important;padding-top:0!important}
+@media(max-width:800px){.vtg-shell [data-p="home"] > .vtg-contact-alignment > .vtg-contact-row{grid-template-columns:minmax(0,1fr)!important}}

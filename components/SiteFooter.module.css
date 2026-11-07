@@ -1,15 +1,11 @@
-/* Compact VIPTravelGeorgia footer: no vertical separators or oversized gaps */
-.footer{background:#092735!important;color:#e7f1ef!important;padding:14px 24px!important;font-family:system-ui,sans-serif!important;text-align:left!important;border-top:2px solid #d9b76b!important;box-sizing:border-box}
-.inner{width:100%;max-width:1400px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;column-gap:clamp(16px,3vw,48px);min-height:62px}
-.brand{display:flex;align-items:center;gap:10px;min-width:0}
-.brand img{width:58px;height:58px;object-fit:contain;flex-shrink:0}
-.brand strong{display:block;font-size:clamp(15px,1.5vw,22px);font-family:Georgia,serif;color:#fff;line-height:1.1;white-space:nowrap}
-.brand strong span{color:#d9b76b}
-.brand small{display:block;color:#d9b76b;font-size:9px;letter-spacing:1.3px;margin-top:5px;white-space:nowrap}
-.socials{display:flex;align-items:center;justify-content:space-evenly;gap:clamp(14px,2.5vw,38px);padding:0;border:0;min-width:0}
-.socials a{width:43px;height:43px;flex:0 0 43px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #d9b76b;border-radius:50%;color:#f5f5ef;text-decoration:none;transition:background .2s,transform .2s}
-.socials a:hover,.socials a:focus-visible{background:#255b4a;transform:translateY(-2px)}
-.socials svg{width:22px;height:22px}
-.inner p{margin:0!important;color:#c1d1d1!important;font-size:12px!important;line-height:1.5!important;text-align:right;white-space:normal;overflow-wrap:break-word;min-width:0}
-@media(max-width:1050px){.inner{grid-template-columns:minmax(0,1fr) auto;row-gap:10px}.inner p{grid-column:1/-1;text-align:center}.socials{gap:clamp(12px,3vw,30px)}}
-@media(max-width:600px){.footer{padding:14px 12px!important}.inner{grid-template-columns:1fr;justify-items:center;row-gap:12px}.brand{justify-content:center}.brand img{width:50px;height:50px}.brand strong{font-size:18px}.brand small{font-size:8px}.socials{gap:clamp(15px,5vw,30px)}.socials a{width:40px;height:40px;flex-basis:40px}.inner p{grid-column:1;text-align:center;font-size:11px!important}}
+/* Compact two-row footer, no separator line */
+.footer{background:#092b35;color:#e7f1ef;border-top:2px solid #d9b76b;padding:20px clamp(16px,4vw,50px);font-family:system-ui,sans-serif;box-sizing:border-box}
+.inner,.bottom{width:100%;max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px;min-width:0}
+.brand{display:flex;align-items:center;gap:14px;min-width:0}.brand img{width:76px;height:76px;object-fit:contain;flex-shrink:0}
+.brand strong{display:block;font:700 clamp(18px,2vw,29px)/1.2 Georgia,serif;color:#fff}.brand strong span{color:#d9b76b}
+.brand small{display:block;color:#d9b76b;font-size:10px;letter-spacing:1.5px;margin-top:6px}
+.contactDetails{display:flex;flex-direction:column;gap:12px;align-items:flex-start;min-width:0}.contactDetails a{display:flex;align-items:center;gap:12px;color:#f2f6f4;text-decoration:none;font-size:clamp(12px,1.2vw,16px);overflow-wrap:anywhere}.contactDetails a:hover{color:#d9b76b}
+.bottom{margin-top:18px;padding-top:12px;border-top:0}.socials{display:flex;align-items:center;gap:clamp(12px,2vw,24px)}
+.socials a{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #d9b76b;border-radius:50%;color:#fff;text-decoration:none;transition:background .2s,transform .2s}.socials a:hover,.socials a:focus-visible{background:#255b4a;transform:translateY(-2px)}.socials svg{width:23px;height:23px}
+.bottom p{margin:0;color:#b9cbcb;font-size:13px;text-align:right}
+@media(max-width:700px){.inner{flex-direction:column;align-items:center;text-align:center;gap:16px}.contactDetails{align-items:center}.brand img{width:64px;height:64px}.bottom{flex-direction:column;gap:14px}.bottom p{text-align:center}.socials a{width:42px;height:42px}}
