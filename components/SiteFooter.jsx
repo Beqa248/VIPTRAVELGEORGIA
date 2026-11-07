@@ -16,10 +16,10 @@ const socials = [
 export default function SiteFooter(){return <footer className={styles.footer}>
   <div className={styles.inner}>
     <div className={styles.brand}><img src="/viptravelgeorgia-round-logo.png" alt="VIPTravelGeorgia logo"/><div><strong>VIPTravel<span>Georgia</span></strong><small>PRIVATE TOURS & TRANSFERS</small></div></div>
-    <div className={styles.contactDetails}><a href="tel:+995558176108">☎ <span>+995 558 17 61 08</span></a><a href="mailto:SubTravelGeorgia@gmail.com">✉ <span>SubTravelGeorgia@gmail.com</span></a></div>
-  </div>
-  <div className={styles.bottom}>
     <div className={styles.socials}>{socials.map(s=><a key={s.name} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={`Open ${s.name}`} title={s.name}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{icons[s.icon]}</svg></a>)}</div>
-    <p>© {new Date().getFullYear()} VIPTravelGeorgia. All rights reserved.</p>
+    <div className={styles.contactBlock}>
+      <div className={styles.contactDetails}><a href="tel:+995558176108">☎ <span>+995 558 17 61 08</span></a><a href="mailto:SubTravelGeorgia@gmail.com">✉ <span>SubTravelGeorgia@gmail.com</span></a></div>
+      <p className={styles.copyright}>© {new Date().getFullYear()} VIPTravelGeorgia. All rights reserved.</p>
+    </div>
   </div>
 </footer>}

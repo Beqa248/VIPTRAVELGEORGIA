@@ -1,7 +1,1 @@
-Replace 4 files in GitHub with matching paths.
-components/SiteFooter.jsx
-components/SiteFooter.module.css
-components/ContactForm.jsx
-app/contact-unified-and-footer.css
-
-Uses existing /public/viptravelgeorgia-round-logo.png. Only four existing social accounts. No database changes.
+Replace components/SiteFooter.jsx and components/SiteFooter.module.css in GitHub. This patch only changes footer layout. No database changes. Test Vercel Preview before production.
