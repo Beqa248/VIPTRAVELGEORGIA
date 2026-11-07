@@ -1,6 +1,6 @@
-import TranslatedText from "../TranslatedText";
-
 "use client";
+
+import TranslatedText from "../TranslatedText";
 
 import { useState, useEffect } from "react";
 import { useLanguage } from "../site-context";
