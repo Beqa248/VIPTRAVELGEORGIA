@@ -58,12 +58,25 @@ export default function Page() {
     </p>
   </div>
 </section>
-    <section id="hPrice"><div className="wrap"><h2>{t("pricesBooking")}</h2><p>{t("pricesIntro")}</p><div className="vtg-deposit-info" style={{marginTop:"26px",marginBottom:"26px"}}>
-  <h3 style={{fontSize:"1.15rem",fontWeight:700,margin:"0 0 14px"}}>{t("depositInfoHeading")}</h3>
-  <p style={{margin:"0 0 14px"}}>{t("depositInfoLeadBefore")}<strong>{t("depositInfoLeadBold")}</strong>{t("depositInfoLeadAfter")}</p>
-  <p style={{margin:"0 0 14px"}}>{t("depositInfoDetails")}</p>
+    <section id="hPrice"><div className="wrap"><h2>{t("pricesBooking")}</h2><p>{t("pricesIntro")}</p><div className="vtg-deposit-info" style={{marginTop:"12px",marginBottom:"12px"}}>
+  <h3 style={{fontSize:"1.02rem",fontWeight:700,margin:"0 0 8px"}}>{t("depositInfoHeading")}</h3>
+  <p style={{margin:"0 0 8px"}}>{t("depositInfoLeadBefore")}<strong>{t("depositInfoLeadBold")}</strong>{t("depositInfoLeadAfter")}</p>
+  <p style={{margin:"0 0 8px"}}>{t("depositInfoDetails")}</p>
   <p style={{margin:0}}><strong>{t("depositInfoNoPayment")}</strong></p>
 </div><div className="vtg-price-actions"><a className="btn" href="https://wa.me/995558176108?text=Hello%21%20I%27d%20like%20a%20price%20quote%20for%20a%20private%20tour." target="_blank" rel="noopener noreferrer">{t("askPriceWhatsapp")}</a><a className="btn vtg-outline" href="/booking">{t("calculatePrice")}</a></div></div></section></div>
+
+<style jsx global>{`
+/* Compact only the Prices & Booking panel; preserve exact deposit copy. */
+.vtg-shell [data-p="home"] .vtg-cars-pricing-row #hPrice>.wrap {padding-top:24px!important;padding-bottom:24px!important;}
+.vtg-shell [data-p="home"] .vtg-cars-pricing-row #hPrice h2 {margin-bottom:12px!important;}
+.vtg-shell [data-p="home"] .vtg-cars-pricing-row #hPrice p {font-size:clamp(14px,1.08vw,16px)!important;line-height:1.48!important;}
+.vtg-shell [data-p="home"] .vtg-cars-pricing-row #hPrice .vtg-deposit-info {margin-top:12px!important;margin-bottom:12px!important;}
+.vtg-shell [data-p="home"] .vtg-cars-pricing-row #hPrice .vtg-deposit-info h3 {margin-bottom:8px!important;font-size:1.02rem!important;}
+.vtg-shell [data-p="home"] .vtg-cars-pricing-row #hPrice .vtg-deposit-info p {margin-bottom:8px!important;}
+.vtg-shell [data-p="home"] .vtg-cars-pricing-row #hPrice .vtg-deposit-info p:last-child {margin-bottom:0!important;}
+.vtg-shell [data-p="home"] .vtg-cars-pricing-row #hPrice .vtg-price-actions {padding-top:12px!important;margin-top:auto!important;}
+@media(max-width:850px){.vtg-shell [data-p="home"] .vtg-cars-pricing-row #hPrice>.wrap {padding-top:20px!important;padding-bottom:20px!important;}}
+`}</style>
     <section id="hRev"><div className="wrap"><h2 data-k="revH">{t("revH")}</h2><ReviewsList limit={3} /><p style={{ "marginTop": "14px" }}><a className="btn" href="/reviews" data-k="allRev">{t("allRev")}</a></p><p id="hGyg" style={{ "marginTop": "12px" }}></p></div></section>
     <section id="hSeason" className="why"><div className="wrap"><h2 data-k="seasonH">{t("seasonH")}</h2><div className="seas"><p data-k="s1">{t("s1")}</p><p data-k="s2">{t("s2")}</p><p data-k="s3">{t("s3")}</p><p data-k="s4">{t("s4")}</p><p data-k="s5">{t("s5")}</p></div><p data-k="seasonNote" style={{ "color": "var(--mut)", "fontSize": "14px", "marginTop": "12px" }}>{t("seasonNote")}</p></div></section>
     <div className="vtg-contact-alignment"><div className="vtg-contact-row"><section id="hFaq"><div className="wrap"><h2 data-k="faqH">{t("faqH")}</h2><details><summary data-k="f1q">{t("f1q")}</summary><p data-k="f1a">{t("f1a")}</p></details><details><summary data-k="f2q">{t("f2q")}</summary><p data-k="f2a">{t("f2a")}</p></details><details><summary data-k="f3q">{t("f3q")}</summary><p data-k="f3a">{t("f3a")}</p></details><details><summary data-k="f4q">{t("f4q")}</summary><p data-k="f4a">{t("f4a")}</p></details><details><summary data-k="f5q">{t("f5q")}</summary><p data-k="f5a">{t("f5a")}</p></details><details><summary data-k="f6q">{t("f6q")}</summary><p data-k="f6a">{t("f6a")}</p></details><details><summary data-k="f7q">{t("f7q")}</summary><p data-k="f7a">{t("f7a")}</p></details><details><summary data-k="f8q">{t("f8q")}</summary><p data-k="f8a">{t("f8a")}</p></details></div></section>

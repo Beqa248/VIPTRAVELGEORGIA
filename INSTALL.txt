@@ -1,1 +1,1 @@
-Replace only components/pages/home.jsx and lib/translations.json in GitHub. This changes only the Prices & Booking deposit text block on the homepage, with translated text and bold formatting. No other components changed.
+Replace only components/pages/home.jsx in GitHub. Exact deposit text and translations remain unchanged. Commit and let Vercel deploy. CSS compacts only Prices & Booking panel. Full build not run.
