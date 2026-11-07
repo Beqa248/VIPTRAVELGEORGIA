@@ -1,1 +1,1 @@
-Replace only app/aligned-home-blocks.css in GitHub. Increases carousel car photo height to 160px desktop, 145px tablet, 175px mobile. Preserves 3-up carousel, gold draggable line, arrows, translations and booking text.
+Replace only app/aligned-home-blocks.css in GitHub. This patch preserves the existing carousel and uses a 4:3 photo frame with object-fit: contain. If a source image itself is cropped, reupload the original full image in Admin.

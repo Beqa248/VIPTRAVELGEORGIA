@@ -201,3 +201,25 @@ html,body,.vtg-shell{background:var(--vtg-page)!important}
 /* Keep vehicle photography readable on narrower layouts. */
 @media(max-width:700px){.vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-photo{height:145px!important;}}
 @media(max-width:420px){.vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-photo{height:175px!important;}}
+
+/* Full vehicle photography: never crop the source image. */
+.vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-photo{height:auto!important;aspect-ratio:16/9!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#e6ece8!important;}
+.vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-photo img{width:100%!important;height:100%!important;object-fit:contain!important;object-position:center center!important;}
+@media(max-width:700px){.vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-photo{height:auto!important;}}
+@media(max-width:420px){.vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-photo{height:auto!important;}}
+
+/* FINAL PHOTO FIX: give each image real vertical room; override older 16:9 rules.
+   Keep the original file uncropped; image is contained, never stretched. */
+.vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-photo{
+  position:relative!important;display:block!important;aspect-ratio:4/3!important;
+  height:auto!important;min-height:0!important;overflow:hidden!important;
+  background:#e6ece8!important;
+}
+.vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-photo img{
+  position:absolute!important;inset:0!important;display:block!important;
+  width:100%!important;height:100%!important;max-width:none!important;
+  max-height:none!important;object-fit:contain!important;object-position:center!important;
+  transform:none!important;
+}
+.vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-photo:hover img{transform:none!important;}
+@media(max-width:700px){.vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-photo{aspect-ratio:4/3!important;}}
