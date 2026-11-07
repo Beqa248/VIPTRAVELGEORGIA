@@ -1,11 +1,1 @@
-VIPTravelGeorgia compact footer fix
-
-Replace these two files in your GitHub repository:
-- components/SiteFooter.jsx
-- components/SiteFooter.module.css
-
-Also upload public/viptravelgeorgia-round-logo.png if not already present.
-Commit to GitHub to trigger Vercel deployment.
-
-Only four icons are included: Instagram, Facebook, WhatsApp, Telegram.
-Their existing VIPTravelGeorgia URLs are preserved. Header and other components are untouched.
+Replace only components/SiteFooter.module.css in GitHub. No JSX changes needed. This removes both vertical divider lines, spreads the four social icons between the logo and copyright, fixes desktop overflow, and keeps mobile responsive.
