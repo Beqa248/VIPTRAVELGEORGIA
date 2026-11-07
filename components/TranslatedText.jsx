@@ -1,3 +1,9 @@
 "use client";
 import useTranslatedFields from "./useTranslatedFields";
-export default function TranslatedText({text,as:Tag="span",...props}){const [value]=useTranslatedFields([text||""]);return <Tag {...props}>{value}</Tag>}
+import { useLanguage } from "./site-context";
+export default function TranslatedText({text, translations, field, as:Tag="span", ...props}) {
+  const { lang } = useLanguage();
+  const saved = lang !== "en" && translations?.[lang]?.[field];
+  const [value] = useTranslatedFields([saved ? "" : (text || "")]);
+  return <Tag {...props}>{saved || value}</Tag>;
+}

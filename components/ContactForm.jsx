@@ -59,22 +59,22 @@ export default function ContactForm() {
       const response = await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(details(form)) });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Message could not be sent.");
-      setNotice("Your message was sent successfully. Thank you!");
+      setNotice(t("contactSuccess"));
       form.reset();
-    } catch (error) { setNotice(error.message || "Unable to send. Please try WhatsApp."); }
+    } catch (error) { setNotice(t("contactFailure")); }
     finally { setSending(false); }
   }
   return <section id="contact" className="vtg-unified-contact"><div className="wrap"><div className="vtg-contact-inner">
     <h2 data-k="contH">{t("contH")}</h2>
     <form className="vtg-contact-form" onSubmit={whatsapp}>
       <label><span data-k="fName">{t("fName")}</span><input name="name" maxLength={100} required /></label>
-      <label><span>Email (for reply)</span><input name="email" type="email" maxLength={180} required placeholder="you@example.com" /></label>
-      <label><span>Tour or Service</span><select name="region" defaultValue="" required><option value="" disabled>Select a tour or service</option>{tours.map(x => <option key={x.slug} value={x.title}>{x.title}</option>)}<option value="Airport transfer">Airport transfer</option><option value="Other / custom">Other / custom</option></select>{tourError && <small>Tour list unavailable; choose Other / custom or try again later.</small>}</label>
+      <label><span>{t("contactEmail")}</span><input name="email" type="email" maxLength={180} required placeholder="you@example.com" /></label>
+      <label><span>{t("contactTour")}</span><select name="region" defaultValue="" required><option value="" disabled>{t("contactSelect")}</option>{tours.map(x => <option key={x.slug} value={x.title}>{x.title}</option>)}<option value="Airport transfer">{t("contactAirport")}</option><option value="Other / custom">{t("contactOther")}</option></select>{tourError && <small>{t("contactTourError")}</small>}</label>
       <label><span data-k="fCar">{t("fCar")}</span><VehicleSelect name="vehicle" /></label>
-      <label><span data-k="fDates">{t("fDates")}</span><input name="dates" maxLength={180} placeholder="e.g. 12–16 June, 3 people" /></label>
+      <label><span data-k="fDates">{t("fDates")}</span><input name="dates" maxLength={180} placeholder={t("contactDatesExample")} /></label>
       <label className="vtg-contact-message"><span data-k="fMsg">{t("fMsg")}</span><textarea name="message" maxLength={4000} rows={6} required /></label>
       <div className="vtg-honeypot" aria-hidden="true"><label>Website<input name="website" tabIndex={-1} autoComplete="off" /></label></div>
-      <div className="vtg-contact-actions"><button className="btn" type="submit">Send via WhatsApp</button><button className="btn vtg-email-button" type="button" onClick={email} disabled={sending}>{sending ? "Sending…" : "Send via Email"}</button></div>
+      <div className="vtg-contact-actions"><button className="btn" type="submit">{t("contactWhatsapp")}</button><button className="btn vtg-email-button" type="button" onClick={email} disabled={sending}>{sending ? t("contactSending") : t("contactSendEmail")}</button></div>
       {notice && <p className="vtg-contact-notice" role="status">{notice}</p>}
     </form>
     <div className="links vtg-contact-socials">{SOCIALS.map(([label, href, id]) => <a key={id} id={id} href={href} target="_blank" rel="noopener noreferrer">{label}</a>)}</div>

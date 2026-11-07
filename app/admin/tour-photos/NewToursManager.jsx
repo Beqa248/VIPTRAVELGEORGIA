@@ -6,6 +6,7 @@ const empty = {archived:false,title:"",slug:"",description:"",duration_days:1,ca
 const categories=["mountains","waterfalls","culture","winter","coast","lakes","transfers","other"];
 function makeSlug(s){return s.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,75)}
 export default function NewToursManager({archivedOnly=false}){
+ const [translationBusy,setTranslationBusy]=useState(false);
  const [tours,setTours]=useState([]),[draft,setDraft]=useState(null),[busy,setBusy]=useState(false),[error,setError]=useState(""),[notice,setNotice]=useState(""),[cover,setCover]=useState(null),[gallery,setGallery]=useState([]),[removed,setRemoved]=useState([]),[query,setQuery]=useState("");
  async function load(){const {data,error}=await supabase.from("custom_tours").select("*").order("sort_order",{ascending:true}).order("created_at",{ascending:true});if(error)setError(error.message);else setTours(data||[])}
  useEffect(()=>{load()},[]);
@@ -14,7 +15,22 @@ export default function NewToursManager({archivedOnly=false}){
   if(t) supabase.from("tour_prices").select("price_mode,price_amount,price_currency,price_unit").eq("slug",t.slug).maybeSingle().then(({data})=>{if(data)setDraft(d=>d?.slug===t.slug?{...d,...data}:d)});setCover(null);setGallery([]);setRemoved([]);setError("");setNotice("")}
  function set(k,v){setDraft(d=>({...d,[k]:v}))}
  async function upload(files,slug){let out=[];for(const file of files){if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>6*1024*1024)throw Error("Images must be JPG, PNG or WebP, up to 6 MB each.");const path=`custom-tours/${slug}/${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,"")}`;const {error}=await supabase.storage.from("tour-media").upload(path,file,{contentType:file.type});if(error)throw error;out.push(supabase.storage.from("tour-media").getPublicUrl(path).data.publicUrl)}return out}
- async function save(e){e.preventDefault();setError("");setNotice("");setBusy(true);try{const slug=makeSlug(draft.slug||draft.title);if(!slug||!draft.title.trim())throw Error("Enter a tour name and a valid URL slug.");if(draft.price_mode==="starting"&&(!Number.isFinite(Number(draft.price_amount))||Number(draft.price_amount)<=0))throw Error("Enter a starting price greater than zero.");const newCover=cover?(await upload([cover],slug))[0]:null;const newPhotos=await upload(gallery,slug);const payload={title:draft.title.trim(),slug,description:draft.description.trim(),duration_days:Number(draft.duration_days)||1,category:draft.category,itinerary:draft.itinerary,published:!!draft.published,cover_url:newCover||draft.cover_url||null,archived:!!draft.archived,gallery_images:[...(draft.gallery_images||[]).filter(x=>!removed.includes(x)),...newPhotos],sort_order:Number(draft.sort_order)||100,price_mode:draft.price_mode||"hidden",price_amount:draft.price_mode==="starting"?Number(draft.price_amount):null,price_currency:draft.price_currency||"USD",price_unit:draft.price_unit||"car"};let result;if(draft.id){result=await supabase.from("custom_tours").update(payload).eq("id",draft.id)}else{result=await supabase.from("custom_tours").insert(payload)}if(result.error)throw result.error;
+ async function generateTranslations(){
+  if(!draft?.title?.trim() || !draft?.description?.trim()){setError("Enter the tour name and description first.");return;}
+  setTranslationBusy(true);setError("");setNotice("");
+  try {
+   const next={...(draft.translations||{})};
+   for(const lang of ["ka","ru","he"]){
+    const response=await fetch("/api/translate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({target:lang,texts:[draft.title,draft.description,draft.itinerary||""]})});
+    const payload=await response.json();
+    if(!response.ok||!payload.translations)throw Error(`${lang}: ${payload.error||"Translation failed"}`);
+    next[lang]={title:payload.translations[0],description:payload.translations[1],itinerary:payload.translations[2]};
+   }
+   setDraft(d=>({...d,translations:next}));setNotice("Translations generated. Review them below, then save the tour.");
+  }catch(e){setError(e.message||"Translation failed. Please try later.");}
+  finally{setTranslationBusy(false)}
+ }
+ async function save(e){e.preventDefault();setError("");setNotice("");setBusy(true);try{const slug=makeSlug(draft.slug||draft.title);if(!slug||!draft.title.trim())throw Error("Enter a tour name and a valid URL slug.");if(draft.price_mode==="starting"&&(!Number.isFinite(Number(draft.price_amount))||Number(draft.price_amount)<=0))throw Error("Enter a starting price greater than zero.");const newCover=cover?(await upload([cover],slug))[0]:null;const newPhotos=await upload(gallery,slug);const payload={title:draft.title.trim(),slug,description:draft.description.trim(),duration_days:Number(draft.duration_days)||1,category:draft.category,itinerary:draft.itinerary,published:!!draft.published,cover_url:newCover||draft.cover_url||null,archived:!!draft.archived,gallery_images:[...(draft.gallery_images||[]).filter(x=>!removed.includes(x)),...newPhotos],sort_order:Number(draft.sort_order)||100,translations:draft.translations||{},price_mode:draft.price_mode||"hidden",price_amount:draft.price_mode==="starting"?Number(draft.price_amount):null,price_currency:draft.price_currency||"USD",price_unit:draft.price_unit||"car"};let result;if(draft.id){result=await supabase.from("custom_tours").update(payload).eq("id",draft.id)}else{result=await supabase.from("custom_tours").insert(payload)}if(result.error)throw result.error;
 const {error:priceError}=await supabase.from("tour_prices").upsert({slug,price_mode:draft.price_mode||"hidden",price_amount:draft.price_mode==="starting"?Number(draft.price_amount):null,price_currency:draft.price_currency||"USD",price_unit:draft.price_unit||"car"},{onConflict:"slug"});
 if(priceError)throw priceError;await load();setDraft(null);setNotice("Tour saved successfully. Published tours appear on the Tours page.")}catch(e){setError(e.message||"Could not save tour.")}finally{setBusy(false)}}
  async function del(t){if(t.is_original){setError("Original tours cannot be permanently deleted; use Hide to remove them from the website.");return;}if(!window.confirm(`Permanently delete ${t.title}?`))return;setBusy(true);setError("");const {error}=await supabase.from("custom_tours").delete().eq("id",t.id);if(error)setError(error.message);else{await load();setNotice("Tour deleted.")}setBusy(false)}
@@ -38,6 +54,14 @@ if(priceError)throw priceError;await load();setDraft(null);setNotice("Tour saved
    <label>Category<select value={draft.category} onChange={e=>set("category",e.target.value)}>{categories.map(c=><option key={c} value={c}>{c[0].toUpperCase()+c.slice(1)}</option>)}</select></label>
    <label className={css.wide}>Short description<textarea required rows="3" value={draft.description} onChange={e=>set("description",e.target.value)} placeholder="What makes this trip special?"/></label>
    <label className={css.wide}>Itinerary — one day per paragraph<textarea rows="7" value={draft.itinerary||""} onChange={e=>set("itinerary",e.target.value)} placeholder={"Day 1: ...\n\nDay 2: ..."}/></label>
+   <div className={css.wide} style={{border:"1px solid #d6e1d8",borderRadius:12,padding:16}}>
+    <strong>Free translations (Georgian, Russian, Hebrew)</strong>
+    <p>Generate once, review and edit each language, then save. Free service daily limits apply.</p>
+    <button type="button" disabled={busy||translationBusy} onClick={generateTranslations}>{translationBusy?"Generating translations…":"Generate translations — free"}</button>
+    {[["ka","Georgian"],["ru","Russian"],["he","Hebrew"]].map(([lang,label])=><details key={lang} style={{marginTop:12}}><summary>{label} translation</summary>
+      {[["title","Tour name"],["description","Description"],["itinerary","Itinerary"]].map(([field,fieldLabel])=><label key={field} style={{display:"block",marginTop:10}}>{fieldLabel}<textarea rows={field==="itinerary"?5:2} value={draft.translations?.[lang]?.[field]||""} onChange={e=>setDraft(d=>({...d,translations:{...(d.translations||{}),[lang]:{...(d.translations?.[lang]||{}),[field]:e.target.value}}}))}/></label>)}
+    </details>)}
+   </div>
    <fieldset className={css.wide} style={{border:"1px solid #d6e1d8",borderRadius:12,padding:16,display:"grid",gap:12}}>
      <legend style={{fontWeight:700,color:"#173c32",padding:"0 6px"}}>Tour pricing</legend>
      <label>Price display<select value={draft.price_mode||"hidden"} onChange={e=>set("price_mode",e.target.value)}><option value="starting">Starting price</option><option value="request">Price on request</option><option value="hidden">Hide price</option></select></label>
