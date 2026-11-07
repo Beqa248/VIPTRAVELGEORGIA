@@ -1,16 +1,11 @@
-VIPTravelGeorgia — forest-green header, Subaru round logo, social icon footer
+VIPTravelGeorgia compact footer fix
 
-Copy the following files to the same paths in your GitHub repository:
-  components/SiteHeader.jsx
-  components/SiteHeader.module.css
-  components/SiteFooter.jsx
-  components/SiteFooter.module.css
-  public/viptravelgeorgia-round-logo.png
+Replace these two files in your GitHub repository:
+- components/SiteFooter.jsx
+- components/SiteFooter.module.css
 
-Commit and deploy with Vercel. No Supabase changes, no API keys.
-The header uses +995 558 17 61 08. Footer uses existing verified
-Instagram, Facebook, WhatsApp and Telegram links from your code.
-TikTok, YouTube and LinkedIn were NOT added because their account URLs
-were not present in the provided project; adding guessed links would be unsafe.
-The logo is a generated artistic illustration, not a literal photo of your car.
-The navigation separator is close to the top/header row.
+Also upload public/viptravelgeorgia-round-logo.png if not already present.
+Commit to GitHub to trigger Vercel deployment.
+
+Only four icons are included: Instagram, Facebook, WhatsApp, Telegram.
+Their existing VIPTravelGeorgia URLs are preserved. Header and other components are untouched.

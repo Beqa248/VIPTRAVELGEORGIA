@@ -15,7 +15,7 @@ const socials = [
 ];
 export default function SiteFooter(){return <footer className={styles.footer}>
   <div className={styles.inner}>
-    <div className={styles.rule}/>
+    <div className={styles.brand}><img src="/viptravelgeorgia-round-logo.png" alt="VIPTravelGeorgia logo"/><div><strong>VIPTravel<span>Georgia</span></strong><small>PRIVATE TOURS & TRANSFERS</small></div></div>
     <div className={styles.socials}>{socials.map(s=><a key={s.name} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={`Open ${s.name}`} title={s.name}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{icons[s.icon]}</svg></a>)}</div>
     <p>© {new Date().getFullYear()} VIPTravelGeorgia. All rights reserved.</p>
   </div>
