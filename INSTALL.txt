@@ -1,1 +1,1 @@
-Replace components/SiteFooter.jsx and components/SiteFooter.module.css in GitHub. This patch only changes footer layout. No database changes. Test Vercel Preview before production.
+Replace only components/site-context.jsx in GitHub. Commit and redeploy Vercel. This fixes escaped slashes in the JavaScript regular expression.

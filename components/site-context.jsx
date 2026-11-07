@@ -17,7 +17,7 @@ export function LanguageProvider({children, initialLang="en"}) {
   },[lang]);
   function setLang(next) {
     if (!LANGS.includes(next)) return;
-    const path = LANGS.includes(prefix) ? pathname.replace(/^\\/(en|ka|ru|he)(?=\\/|$)/,"") || "/" : pathname;
+    const path = LANGS.includes(prefix) ? pathname.replace(/^\/(en|ka|ru|he)(?=\/|$)/,"") || "/" : pathname;
     setLanguage(next);
     router.push("/"+next+(path==="/"?"":path));
   }
