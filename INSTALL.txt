@@ -1,1 +1,1 @@
-Replace middleware.js in the ROOT of your GitHub repository. Commit changes and redeploy on Vercel. No other files need replacing for this syntax error.
+Replace only components/pages/home.jsx and lib/translations.json in GitHub. This changes only the Prices & Booking deposit text block on the homepage, with translated text and bold formatting. No other components changed.

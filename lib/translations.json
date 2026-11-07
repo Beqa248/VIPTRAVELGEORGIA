@@ -267,7 +267,13 @@
     "reviewFormError": "Unable to submit review:",
     "reviewFormSuccess": "Thank you! Your review was submitted for approval.",
     "recentToursIntro": "Photographs from our recent adventures across Georgia.",
-    "recentToursEmpty": "New tour photographs coming soon."
+    "recentToursEmpty": "New tour photographs coming soon.",
+    "depositInfoHeading": "Booking & Deposit Information",
+    "depositInfoLeadBefore": "A ",
+    "depositInfoLeadBold": "20% deposit is recommended, but not required",
+    "depositInfoLeadAfter": ", to help secure your preferred travel dates and confirm your reservation.",
+    "depositInfoDetails": "You can also request a booking without paying a deposit. Our team will contact you to confirm availability, pricing, and payment arrangements.",
+    "depositInfoNoPayment": "No online payment is required to submit a booking request."
   },
   "ru": {
     "h1": "Частные туры из Батуми",
@@ -537,7 +543,13 @@
     "reviewFormError": "Не удалось отправить отзыв:",
     "reviewFormSuccess": "Спасибо! Ваш отзыв отправлен на проверку.",
     "recentToursIntro": "Фотографии наших недавних путешествий по Грузии.",
-    "recentToursEmpty": "Фотографии новых туров скоро появятся."
+    "recentToursEmpty": "Фотографии новых туров скоро появятся.",
+    "depositInfoHeading": "Информация о бронировании и предоплате",
+    "depositInfoLeadBefore": "",
+    "depositInfoLeadBold": "Предоплата 20% рекомендуется, но не является обязательной",
+    "depositInfoLeadAfter": ", чтобы помочь закрепить желаемые даты поездки и подтвердить бронирование.",
+    "depositInfoDetails": "Вы также можете отправить запрос на бронирование без предоплаты. Наша команда свяжется с вами, чтобы подтвердить доступность, стоимость и условия оплаты.",
+    "depositInfoNoPayment": "Для отправки запроса на бронирование онлайн-оплата не требуется."
   },
   "ka": {
     "h1": "კერძო ტურები ბათუმიდან",
@@ -807,7 +819,13 @@
     "reviewFormError": "შეფასების გაგზავნა ვერ მოხერხდა:",
     "reviewFormSuccess": "გმადლობთ! თქვენი შეფასება გაგზავნილია დასამტკიცებლად.",
     "recentToursIntro": "ფოტოები ჩვენი ბოლო მოგზაურობებიდან საქართველოს სხვადასხვა კუთხეში.",
-    "recentToursEmpty": "ახალი ტურების ფოტოები მალე დაემატება."
+    "recentToursEmpty": "ახალი ტურების ფოტოები მალე დაემატება.",
+    "depositInfoHeading": "ჯავშნისა და დეპოზიტის ინფორმაცია",
+    "depositInfoLeadBefore": "",
+    "depositInfoLeadBold": "რეკომენდებულია 20%-იანი დეპოზიტი, თუმცა სავალდებულო არ არის",
+    "depositInfoLeadAfter": ", რათა დაგეხმაროთ სასურველი თარიღების დაჯავშნასა და ჯავშნის დადასტურებაში.",
+    "depositInfoDetails": "ჯავშნის მოთხოვნის გაგზავნა დეპოზიტის გარეშეც შეგიძლიათ. ჩვენი გუნდი დაგიკავშირდებათ ხელმისაწვდომობის, ფასისა და გადახდის პირობების დასადასტურებლად.",
+    "depositInfoNoPayment": "ჯავშნის მოთხოვნის გასაგზავნად ონლაინ გადახდა საჭირო არ არის."
   },
   "he": {
     "h1": "טיולים פרטיים מבטומי",
@@ -1079,6 +1097,12 @@
     "reviewFormError": "לא ניתן לשלוח את הביקורת:",
     "reviewFormSuccess": "תודה! הביקורת שלכם נשלחה לאישור.",
     "recentToursIntro": "תמונות מההרפתקאות האחרונות שלנו ברחבי גאורגיה.",
-    "recentToursEmpty": "תמונות מסיורים חדשים יתווספו בקרוב."
+    "recentToursEmpty": "תמונות מסיורים חדשים יתווספו בקרוב.",
+    "depositInfoHeading": "מידע על הזמנה ומקדמה",
+    "depositInfoLeadBefore": "",
+    "depositInfoLeadBold": "מומלץ לשלם מקדמה של 20%, אך אין חובה לעשות זאת",
+    "depositInfoLeadAfter": ", כדי לסייע בשמירת תאריכי הנסיעה המועדפים עליכם ובאישור ההזמנה.",
+    "depositInfoDetails": "ניתן גם לשלוח בקשת הזמנה ללא תשלום מקדמה. הצוות שלנו ייצור איתכם קשר כדי לאשר זמינות, מחיר והסדרי תשלום.",
+    "depositInfoNoPayment": "אין צורך בתשלום מקוון כדי לשלוח בקשת הזמנה."
   }
 }
