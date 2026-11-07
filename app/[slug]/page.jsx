@@ -34,3 +34,15 @@ export default async function DynamicPage({ params }) { const { slug } = await p
   }
   else if (legacyTourSlugs.has(slug)) notFound();
   return <><Page /><TourEditableContent slug={slug} /><TourMedia slug={slug} /></>; }
+
+import { PAGE_SEO, LEGACY_TOUR_SLUGS, tourMetadata, seoMetadata, getPublicDb } from "../../lib/seo";
+export async function generateMetadata({ params }) {
+ const { slug } = await params;
+ if (LEGACY_TOUR_SLUGS.includes(slug)) {
+   try { const db = await getPublicDb(); if (db) { const {data} = await db.from("custom_tours").select("title,description,cover_url,published,archived").eq("slug",slug).maybeSingle(); if (data?.published && !data.archived) return tourMetadata(data, `/${slug}`); } } catch {}
+   return {robots:{index:false,follow:false}};
+ }
+ const path = `/${slug}`;
+ if (PAGE_SEO[path]) return seoMetadata(path, ...PAGE_SEO[path]);
+ return { robots: { index:false, follow:false } };
+}

@@ -22,5 +22,17 @@ export default async function CustomTourPage({params}){
    const titleLike=/^(?:\*\*)?(?:Departure|Return|Stop\s*\d+|Day\s*\d+|Tour Duration|Please Note|Important|Duration|Note)/i.test(first)||/^#{1,6}\s/.test(first);
    return [{title:titleLike?clean(first):"",body:(titleLike?lines.slice(1):lines).map(clean).join(" ")}];
  });
- return <main className={styles.page}><div className={styles.wrap}><a href="/tours" className={styles.back}>← All tours</a><div className={styles.hero}>{tour.cover_url&&<img src={tour.cover_url} alt={tour.title}/>}<div className={styles.intro}><span>{tour.duration_days} day(s) · {tour.category}</span><h1><TranslatedText text={tour.title} translations={tour.translations} field="title"/></h1><p><TranslatedText text={tour.description} translations={tour.translations} field="description"/></p>{label&&<p className="vtg-tour-price">{label}</p>}</div></div>{parts.length>0&&<section><h2>Your itinerary</h2><div className={styles.itinerary}>{parts.map((part,i)=><div className={styles.itineraryStop} key={i}>{part.title&&<h3><TranslatedText text={part.title}/></h3>}{part.body&&<p><TranslatedText text={part.body}/></p>}</div>)}</div></section>}{!!tour.gallery_images?.length&&<section><h2>Photo gallery</h2><div className={styles.gallery}>{tour.gallery_images.map((url,i)=><img key={url} src={url} alt={`${tour.title} photo ${i+1}`} loading="lazy"/>)}</div></section>}<section className={styles.cta}><h2>Interested in this tour?</h2><p>Contact us for dates, pricing and a personalized itinerary.</p><a href={`/contact?tour=${encodeURIComponent(tour.title)}`}>Request this tour →</a></section></div></main>
+ return <main className={styles.page}><div className={styles.wrap}><a href="/tours" className={styles.back}>← All tours</a><div className={styles.hero}>{tour.cover_url&&<img src={tour.cover_url} alt={tour.title}/>}<div className={styles.intro}><span>{tour.duration_days} day(s) · {tour.category}</span><h1><TranslatedText text={tour.title}/></h1><p><TranslatedText text={tour.description}/></p>{label&&<p className="vtg-tour-price">{label}</p>}</div></div>{parts.length>0&&<section><h2>Your itinerary</h2><div className={styles.itinerary}>{parts.map((part,i)=><div className={styles.itineraryStop} key={i}>{part.title&&<h3><TranslatedText text={part.title}/></h3>}{part.body&&<p><TranslatedText text={part.body}/></p>}</div>)}</div></section>}{!!tour.gallery_images?.length&&<section><h2>Photo gallery</h2><div className={styles.gallery}>{tour.gallery_images.map((url,i)=><img key={url} src={url} alt={`${tour.title} photo ${i+1}`} loading="lazy"/>)}</div></section>}<section className={styles.cta}><h2>Interested in this tour?</h2><p>Contact us for dates, pricing and a personalized itinerary.</p><a href={`/contact?tour=${encodeURIComponent(tour.title)}`}>Request this tour →</a></section></div></main>
+}
+
+import { getPublicDb, tourMetadata } from "../../../lib/seo";
+export async function generateMetadata({ params }) {
+ const {slug} = await params;
+ try {
+  const db = await getPublicDb();
+  if (!db) return {robots:{index:false,follow:false}};
+  const {data} = await db.from("custom_tours").select("title,description,cover_url,published,archived").eq("slug",slug).maybeSingle();
+  if (!data?.published || data.archived) return {robots:{index:false,follow:false}};
+  return tourMetadata(data, `/tour/${encodeURIComponent(slug)}`);
+ } catch { return {robots:{index:false,follow:false}}; }
 }

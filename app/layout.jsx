@@ -1,3 +1,4 @@
+import SeoBusinessJsonLd from "../components/SeoBusinessJsonLd";
 import ConditionalSiteChrome from "../components/ConditionalSiteChrome";
 import "./globals.css";
 import "./site-wide-refresh.css";
@@ -11,5 +12,6 @@ import "./contact-layout-fix.css";
 import "./contact-unified-and-footer.css";
 import "./gallery-highlights-fixes.css";
 import { LanguageProvider } from "../components/site-context";
-export const metadata = { title: "VIPTravelGeorgia — Private Tours", description: "Private tours across Georgia from Batumi" };
-export default function RootLayout({ children }) { return <html lang="en"><body><LanguageProvider><ConditionalSiteChrome>{children}</ConditionalSiteChrome></LanguageProvider></body></html>; }
+import { seoMetadata, DEFAULT_DESCRIPTION } from "../lib/seo";
+export const metadata = seoMetadata("/", "Private Tours in Georgia | VIPTravelGeorgia", DEFAULT_DESCRIPTION);
+export default function RootLayout({ children }) { return <html lang="en"><body><SeoBusinessJsonLd/><LanguageProvider><ConditionalSiteChrome>{children}</ConditionalSiteChrome></LanguageProvider></body></html>; }
