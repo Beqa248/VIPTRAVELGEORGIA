@@ -13,3 +13,11 @@
 .right .language:last-child select{width:78px!important;min-width:78px!important}
 @media(max-width:750px){.right .language:last-child select{width:62px!important;min-width:62px!important;font-size:11px!important}}
 @media(max-width:420px){.right .language:last-child{padding:4px 3px}.right .language:last-child select{width:55px!important;min-width:55px!important;font-size:10px!important}}
+
+/* Language and currency selectors */
+.header select:focus,
+.header select:focus-visible,
+.header select:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
