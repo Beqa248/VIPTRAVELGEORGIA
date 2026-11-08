@@ -1,1 +1,1 @@
-Replace components/RegionTiles.jsx and app/globals.css. Large centered titles may wrap to two lines on smaller cards. Based on preceding patch; merge CSS if edited since. No full build performed.
+Replace components/RegionTiles.jsx only. Fix: TranslatedText renders as a div rather than a nested span inside bold, avoiding conflicting global .rtile b and .rtile span styles. No CSS replacement needed.

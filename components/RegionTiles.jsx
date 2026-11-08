@@ -13,6 +13,6 @@ export default function RegionTiles(){
  const title=r.title||(r.titleKey?t(r.titleKey):r.slug);
  const url=r.image_url||r.image||"/images/photo-027.jpg";
  const href=r.id?`/regions/${r.id}`:(r.link_url||r.href||"/tours");
- return <div key={r.id||r.slug} className="vtg-highlight-item"><a className="rtile" style={{backgroundImage:`url("${url.replaceAll('"','%22')}")`}} href={href}><b className="vtg-region-title"><TranslatedText text={title}/></b></a></div>
+ return <div key={r.id||r.slug} className="vtg-highlight-item"><a className="rtile" style={{alignItems:"stretch",justifyContent:"flex-end",textAlign:"center",padding:"12px 10px 20px",backgroundImage:`url("${url.replaceAll('"','%22')}")`}} href={href}><TranslatedText as="div" text={title} className="vtg-region-heading" style={{position:"relative",zIndex:2,display:"block",width:"100%",boxSizing:"border-box",padding:"0 4px",margin:0,color:"#fff",fontFamily:"Arial,Helvetica,sans-serif",fontSize:"clamp(32px, 3.2vw, 42px)",fontWeight:900,lineHeight:1.03,letterSpacing:"-0.045em",textAlign:"center",whiteSpace:"normal",overflowWrap:"break-word",textShadow:"0 3px 12px rgba(0,0,0,.9)"}}/></a></div>
  })}</div>
 }
