@@ -12,7 +12,7 @@ const options = [
 ];
 const signals = {
   m: /mountain|alpine|caucasus|kazbegi|svaneti|beshumi|goderdzi|gomis|hiking|trek|peak|viewpoint|juta|koruldi/i,
-  w: /waterfall|canyon|gorge|cave|river|martvili|prometheus|machakhela|mirveti|makhuntseti/i,
+  w: /\b(?:waterfalls?|canyons?|gorges?|martvili|okatse|dashbashi|kinchkha|makhuntseti|mirveti|machakhela)\b/i,
   h: /history|historic|culture|cultural|fortress|castle|monastery|church|folklore|heritage|ancient|museum|bridge|ushguli|mtskheta/i,
   s: /\b(?:sea|seaside|coast|coastal|beach|beaches|seashore|black sea|kobuleti|shekvetili|batumi|ureki|chakvi|gonio|kvariati|sarpi|tsikhisdziri)\b/i,
   l: /lake|village|forest|nature|green|rural|cottage|heshkili|koruldi|ushguli/i,
@@ -24,7 +24,10 @@ function classify(tour) {
   // which should not turn a mountain/culture tour into a sea holiday.
   const primary = [tour.title, tour.category].filter(Boolean).join(" ");
   const coast = /\b(?:beach|beaches|seaside|coastal|coast|sea\s+(?:and|&|holiday|relaxation|tour|escape)|batumi|kobuleti|shekvetili|ureki|chakvi|gonio|kvariati|sarpi|tsikhisdziri)\b/i;
-  return options.filter(option => option.key === "s" ? coast.test(primary) : signals[option.key].test(haystack)).map(option => option.key);
+  // Waterfall/canyon matching requires a named attraction or explicit category/title.
+  // Broad terms such as river, cave and nature are not sufficient.
+  const waterfallText = [tour.title, tour.category, tour.overview, tour.itinerary].filter(Boolean).map(value => typeof value === "string" ? value : JSON.stringify(value)).join(" ");
+  return options.filter(option => option.key === "s" ? coast.test(primary) : option.key === "w" ? signals.w.test(waterfallText) : signals[option.key].test(haystack)).map(option => option.key);
 }
 function tourHref(tour) { return tour.slug === "airport-transfers" ? "/contact" : `/tour/${encodeURIComponent(tour.slug)}`; }
 export default function TripPlanner({ hideIntro = false, hideFootnote = false }) {
