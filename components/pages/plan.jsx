@@ -2,10 +2,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLanguage } from "../site-context";
 import styles from "./plan.module.css";
+import usePublished from "../usePublished";
 
 const PHONE = "995558176108";
 export default function Page() {
   const { t } = useLanguage();
+  const { rows: vehicleRows, loaded: vehiclesLoaded } = usePublished("vehicles");
+  const availableCars = useMemo(() => vehicleRows.filter(v => v && v.name && !v.archived).sort((a,b) => (a.sort_order ?? 999999) - (b.sort_order ?? 999999)), [vehicleRows]);
   const [tours, setTours] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
@@ -75,7 +78,7 @@ export default function Page() {
         <label><span data-k="pfStart">{t("pfStart")}</span><select id="pfStart" value={start} onChange={e => setStart(e.target.value)}><option>Batumi</option><option>Kutaisi</option><option>Tbilisi</option><option value="Other place (see notes)">Other place (see notes)</option></select></label>
         <label><span data-k="pfLen">{t("pfLen")}</span><select id="pfLen" value={length} onChange={e => setLength(e.target.value)}>{["1 day","2-3 days","4-7 days","8-14 days","Flexible"].map(x => <option key={x}>{x}</option>)}</select></label>
         <label><span data-k="pfPeople">{t("pfPeople")}</span><select id="pfPeople" value={people} onChange={e => setPeople(e.target.value)}>{["1 person","2 people","3-4 people","5 or more people"].map(x => <option key={x}>{x}</option>)}</select></label>
-        <label><span data-k="pfCar">{t("pfCar")}</span><select id="pfCar" value={car} onChange={e => setCar(e.target.value)}>{["Not sure yet","Subaru Crosstrek 4x4","Jeep Wrangler","Minivan","Mercedes Luxury","Classic Mercedes Charlotte"].map(x => <option key={x}>{x}</option>)}</select></label>
+        <label><span data-k="pfCar">{t("pfCar")}</span><select id="pfCar" value={car} onChange={e => setCar(e.target.value)}><option value="Not sure yet">{t("notSure")}</option>{availableCars.map(v => <option key={v.id || v.name} value={v.name}>{v.name}</option>)}</select>{vehiclesLoaded && availableCars.length === 0 && <small className={styles.status}>No published cars available yet.</small>}</label>
         <label><span data-k="pfWhen">{t("pfWhen")}</span><select id="pfSeason" value={season} onChange={e => setSeason(e.target.value)}>{["Flexible","Spring","Summer","Autumn","Winter"].map(x => <option key={x}>{x}</option>)}</select></label>
         <label><span data-k="pfDates">{t("pfDates")}</span><input id="pfDates" value={dates} onChange={e => setDates(e.target.value)} placeholder="e.g. 15–20 July"/></label>
         <label className={styles.full}><span data-k="pfNotes">{t("pfNotes")}</span><textarea id="pfNotes" rows={4} value={notes} onChange={e => setNotes(e.target.value)} placeholder="Preferences, destinations, pickup details, or questions"/></label>
