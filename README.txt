@@ -1,1 +1,1 @@
-Replace only app/regions/[id]/page.jsx. Removes the large duplicate hero banner; retains the title, description, photo gallery and lightbox. No database changes.
+Replace components/RegionTiles.jsx only. Source: VIPTRAVELGEORGIA-main(1).zip. Title size 21-26px, stronger text shadow. No other files changed.
