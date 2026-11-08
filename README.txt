@@ -1,1 +1,1 @@
-Replace components/RegionTiles.jsx only. Larger bold centered title at bottom of each existing region card. No CSS or database changes. Based on latest Region_CacheFlash_And_Title_FIX patch.
+Replace components/RegionTiles.jsx and app/globals.css. Large centered titles may wrap to two lines on smaller cards. Based on preceding patch; merge CSS if edited since. No full build performed.

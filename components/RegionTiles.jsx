@@ -13,6 +13,6 @@ export default function RegionTiles(){
  const title=r.title||(r.titleKey?t(r.titleKey):r.slug);
  const url=r.image_url||r.image||"/images/photo-027.jpg";
  const href=r.id?`/regions/${r.id}`:(r.link_url||r.href||"/tours");
- return <div key={r.id||r.slug} className="vtg-highlight-item"><a className="rtile" style={{backgroundImage:`url("${url.replaceAll('"','%22')}")`,display:"flex",alignItems:"center",justifyContent:"flex-end",textAlign:"center",padding:"14px 10px 20px"}} href={href}><b className="vtg-region-title" style={{display:"block",width:"100%",fontFamily:"system-ui, sans-serif",fontSize:"clamp(22px, 2.2vw, 28px)",fontWeight:800,lineHeight:1.12,color:"#fff",textShadow:"0 2px 10px rgba(0,0,0,.9)",position:"relative",zIndex:2}}><TranslatedText text={title}/></b></a></div>
+ return <div key={r.id||r.slug} className="vtg-highlight-item"><a className="rtile" style={{backgroundImage:`url("${url.replaceAll('"','%22')}")`}} href={href}><b className="vtg-region-title"><TranslatedText text={title}/></b></a></div>
  })}</div>
 }
