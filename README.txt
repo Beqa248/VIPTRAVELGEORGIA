@@ -1,8 +1,5 @@
-Replace only these files at the same paths in GitHub:
-app/aligned-home-blocks.css
-app/gallery-highlights-fixes.css
+Replace these files in the same GitHub paths:
+- lib/ui.jsx (removes duplicate navigation including public Admin link)
+- components/TripPlanner.jsx (filters recommendations by interest and duration)
 
-Homepage carousel and Cars page photos use square image frames with object-fit: cover.
-Applies automatically to future cars added in Admin. No database or JS changes.
-IMPORTANT: cover crops the edges of portrait/wide photos. Source photos remain unchanged.
-The full Next.js build has not been run.
+No SQL required. Existing main SiteHeader remains. The Admin route itself is not removed; verify authentication separately.
