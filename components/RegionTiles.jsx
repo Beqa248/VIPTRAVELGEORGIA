@@ -12,6 +12,6 @@ export default function RegionTiles(){
  const title=r.title||(r.titleKey?t(r.titleKey):r.slug);
  const url=r.image_url||r.image||"/images/photo-027.jpg";
  const href=r.id?`/regions/${r.id}`:(r.link_url||r.href||"/tours");
- return <div key={r.id||r.slug} className="vtg-highlight-item"><a className="rtile" style={{backgroundImage:`url("${url.replaceAll('"','%22')}")`}} href={href}><b><TranslatedText text={title}/></b></a></div>
+ return <div key={r.id||r.slug} className="vtg-highlight-item"><a className="rtile" style={{backgroundImage:`linear-gradient(to top, rgba(0,0,0,.55), transparent 58%), url("${url.replaceAll('"','%22')}")`}} href={href}><b style={{fontSize:"clamp(20px, 2vw, 24px)",fontWeight:800,lineHeight:1.2,textShadow:"0 2px 6px rgba(0,0,0,.75)"}}><TranslatedText text={title}/></b></a></div>
  })}</div>
 }
