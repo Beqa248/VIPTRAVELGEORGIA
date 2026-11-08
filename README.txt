@@ -1,1 +1,1 @@
-Replace components/RegionTiles.jsx only. Fix: TranslatedText renders as a div rather than a nested span inside bold, avoiding conflicting global .rtile b and .rtile span styles. No CSS replacement needed.
+Replace components/RegionTiles.jsx only. One-line region titles, lighter font weight, responsive font sizing based on card width and title length. All current and future regions use the same rendering rule. No CSS changes required.
