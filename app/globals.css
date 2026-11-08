@@ -460,3 +460,11 @@ body:has(.adminSubRoot) .vtg-shell { min-height:0!important; }
 .vtg-tour-list-grid .vtg-tour-list-card>.t{display:flex;flex:1;flex-direction:column;}
 .vtg-tour-list-grid .vtg-tour-list-card>.t>.lnk{margin-top:auto;padding-top:12px;}
 .vtg-tour-list-grid .vtg-tour-list-card>.t>p:not(.lnk):not(.vtg-tour-price){display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden;}
+
+/* Georgia Highlights: readable cover titles */
+.rgrid .rtile .vtg-region-title {
+  display:block; font-family:system-ui,sans-serif; font-size:clamp(21px,2vw,26px) !important;
+  line-height:1.2 !important; font-weight:800 !important; color:#fff !important;
+  text-shadow:0 2px 8px rgba(0,0,0,.85); letter-spacing:-.02em;
+}
+.rgrid .rtile::after { background:linear-gradient(180deg,transparent 38%,rgba(0,0,0,.78) 100%); }

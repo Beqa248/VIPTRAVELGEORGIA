@@ -1,1 +1,1 @@
-Replace components/RegionTiles.jsx only. Source: VIPTRAVELGEORGIA-main(1).zip. Title size 21-26px, stronger text shadow. No other files changed.
+Replace components/RegionTiles.jsx and app/globals.css. Based on VIPTRAVELGEORGIA-main(1).zip. Fixes initial default-regions flash and region title styling. Existing site CSS retained. No full production build performed.
