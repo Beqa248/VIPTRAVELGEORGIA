@@ -1,1 +1,1 @@
-Replace components/RegionTiles.jsx and app/globals.css. Based on VIPTRAVELGEORGIA-main(1).zip. Fixes initial default-regions flash and region title styling. Existing site CSS retained. No full production build performed.
+Replace components/RegionTiles.jsx only. Larger bold centered title at bottom of each existing region card. No CSS or database changes. Based on latest Region_CacheFlash_And_Title_FIX patch.
