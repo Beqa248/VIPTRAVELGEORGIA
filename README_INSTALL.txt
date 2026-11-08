@@ -1,1 +1,7 @@
-Replace the 7 files at their matching paths in GitHub main. Back up current files first. The top dashboard header is shared; all seven sections switch in-place at /admin. The lower duplicate navigation is removed for embedded sections. Existing tour editor includes title, description, duration, category, sort order, overview, itinerary, pricing, and photos. No database migration included; tour_content/custom_tours/tour pricing schema must already be installed from previous patches. This patch is assembled from the last uploaded project and earlier replacement files, not the current live GitHub checkout. Next.js build has NOT been run.
+VIPTravelGeorgia patch — region cover cards, detail galleries, region archive.
+1. Run SUPABASE_REGIONS_ARCHIVE_MIGRATION.sql in Supabase SQL Editor FIRST.
+2. Upload app/ and components/ files from this ZIP to corresponding GitHub paths.
+3. Admin > Georgia Highlights: Archive and Restore; restored items remain unpublished until published.
+4. Homepage: cover photo + title only; click card to open /regions/<UUID> with description and photos.
+5. Tours archive ALREADY EXISTS in your source: app/admin/tour-photos/NewToursManager.jsx and SUPABASE_ARCHIVED_TOURS.sql. Do not overwrite it. Ensure SUPABASE_ARCHIVED_TOURS.sql was run previously.
+6. This patch is based on VIPTRAVELGEORGIA-main (2).zip; if live source has newer changes in these files, merge rather than blindly overwrite.
