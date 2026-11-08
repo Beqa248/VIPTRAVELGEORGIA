@@ -14,11 +14,11 @@ const signals = {
   m: /mountain|alpine|caucasus|kazbegi|svaneti|beshumi|goderdzi|gomis|hiking|trek|peak|viewpoint|juta|koruldi/i,
   w: /waterfall|canyon|gorge|cave|river|martvili|prometheus|machakhela|mirveti|makhuntseti/i,
   h: /history|historic|culture|cultural|fortress|castle|monastery|church|folklore|heritage|ancient|museum|bridge|ushguli|mtskheta/i,
-  s: /sea|coast|beach|botanical|relax|spa|sulfur|kobuleti|shekvetili|batumi|dendrological/i,
+  s: /\b(?:sea|seaside|coast|coastal|beach|beaches|seashore|black sea|kobuleti|shekvetili|batumi|ureki|chakvi|gonio|kvariati|sarpi|tsikhisdziri)\b/i,
   l: /lake|village|forest|nature|green|rural|cottage|heshkili|koruldi|ushguli/i,
 };
 function classify(tour) {
-  const haystack = [tour.title, tour.description, tour.category, tour.overview, tour.itinerary].filter(Boolean).join(" ");
+  const haystack = [tour.title, tour.description, tour.category, tour.overview, tour.itinerary].filter(Boolean).map(value => typeof value === "string" ? value : JSON.stringify(value)).join(" ");
   return options.filter(option => signals[option.key].test(haystack)).map(option => option.key);
 }
 function tourHref(tour) { return tour.slug === "airport-transfers" ? "/contact" : `/tour/${encodeURIComponent(tour.slug)}`; }
