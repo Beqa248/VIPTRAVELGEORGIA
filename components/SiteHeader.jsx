@@ -7,7 +7,7 @@ import styles from "./SiteHeader.module.css";
 const contactLabels = { en: "Contact us 24/7", ka: "დაგვიკავშირდით 24/7", ru: "Свяжитесь с нами 24/7", he: "צרו קשר 24/7" };
 const nav = [["/", "nHome"], ["/tours", "nTours"], ["/travel", "nTravel"], ["/cars", "nCars"], ["/videos", "nVid"], ["/recent-tours", "recentTours"], ["/reviews", "revH"], ["/contact", "nCont"]];
 export default function SiteHeader() {
-  const { lang, setLang, t } = useLanguage();
+  const { lang, setLang, t, currency, setCurrency } = useLanguage();
   const path = usePathname();
   return <header className={styles.header}>
     <div className={`${styles.main} wrap`}>
@@ -24,6 +24,12 @@ export default function SiteHeader() {
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c6 6 6 12 0 18M12 3c-6 6-6 12 0 18"/></svg>
           <select aria-label="Website language" value={lang} onChange={e=>setLang(e.target.value)}>
             <option value="en">EN</option><option value="ka">KA</option><option value="ru">RU</option><option value="he">HE</option>
+          </select>
+        </label>
+        <label className={styles.language} aria-label="Display currency">
+          <span aria-hidden="true" style={{fontWeight:700,color:"#D9B76B"}}>$</span>
+          <select aria-label="Display currency" value={currency} onChange={e=>setCurrency(e.target.value)}>
+            <option value="USD">USD $</option><option value="EUR">EUR €</option><option value="GEL">GEL ₾</option>
           </select>
         </label>
       </div>

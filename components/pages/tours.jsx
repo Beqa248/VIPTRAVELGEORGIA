@@ -6,7 +6,7 @@ import chooser from "./tourChooser.module.css";
 import { tourPriceLabel } from "../../lib/tourPricing";
 import { useLanguage } from "../site-context";
 export default function Page() {
-    const { t } = useLanguage();
+    const { t, formatPrice } = useLanguage();
     const [selectedTour, setSelectedTour] = useState("all");
     const [allTours, setAllTours] = useState(null);
     const [prices,setPrices] = useState({});
@@ -20,7 +20,7 @@ export default function Page() {
     <section id="tours"><div className="wrap"><h2 data-k="toursH">{t("toursH")}</h2>
     <div className={chooser.chooser}><label htmlFor="vtg-tour-choice">{t("chooseYourTour")}</label><div className={chooser.controls}><select id="vtg-tour-choice" value={selectedTour} onChange={e => setSelectedTour(e.target.value)}><option value="all">{t("allTours")}</option>{visibleTours.map(tour=><option key={tour.slug} value={tour.slug}><TranslatedText text={tour.title}/></option>)}</select>{selectedTour!=="all"&&<button type="button" onClick={()=>setSelectedTour("all")}>{t("showAllTours")}</button>}</div></div>
     {allTours===null?<p role="status" aria-live="polite">{t("loadingTours")}</p>:<div className="grid vtg-tour-list-grid">
-    {visibleTours.filter(tour=>selectedTour==="all"||selectedTour===tour.slug).map(tour=><div key={tour.slug} className="card vtg-tour-list-card"><div className="pic" style={{backgroundImage:tour.cover_url?`url(${JSON.stringify(tour.cover_url)})`:"none",backgroundColor:"#dce8df"}}></div><div className="t"><h3><TranslatedText text={tour.title}/></h3><p><TranslatedText text={tourTexts[tour.slug] || tour.description}/></p>{tourPriceLabel(prices[tour.slug]||tour)&&<p className="vtg-tour-price">{tourPriceLabel(prices[tour.slug]||tour)}</p>}<p className="lnk"><a href={(tour.original||tour.is_original) && !tour.itinerary && !(tour.gallery_images||[]).length ? (tour.slug==="airport-transfers"?"/contact":`/${tour.slug}`) : `/tour/${tour.slug}`}>{tour.slug==="airport-transfers"?t("askAboutTour"):t("seeTourDetails")}</a></p></div></div>)}
+    {visibleTours.filter(tour=>selectedTour==="all"||selectedTour===tour.slug).map(tour=><div key={tour.slug} className="card vtg-tour-list-card"><div className="pic" style={{backgroundImage:tour.cover_url?`url(${JSON.stringify(tour.cover_url)})`:"none",backgroundColor:"#dce8df"}}></div><div className="t"><h3><TranslatedText text={tour.title}/></h3><p><TranslatedText text={tourTexts[tour.slug] || tour.description}/></p>{tourPriceLabel(prices[tour.slug]||tour, formatPrice)&&<p className="vtg-tour-price">{tourPriceLabel(prices[tour.slug]||tour, formatPrice)}</p>}<p className="lnk"><a href={(tour.original||tour.is_original) && !tour.itinerary && !(tour.gallery_images||[]).length ? (tour.slug==="airport-transfers"?"/contact":`/${tour.slug}`) : `/tour/${tour.slug}`}>{tour.slug==="airport-transfers"?t("askAboutTour"):t("seeTourDetails")}</a></p></div></div>)}
     </div>}</div></section>
     </div>
     </>);
