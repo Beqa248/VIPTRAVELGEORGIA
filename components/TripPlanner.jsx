@@ -19,14 +19,19 @@ const signals = {
 };
 function classify(tour) {
   const haystack = [tour.title, tour.description, tour.category, tour.overview, tour.itinerary].filter(Boolean).map(value => typeof value === "string" ? value : JSON.stringify(value)).join(" ");
-  return options.filter(option => signals[option.key].test(haystack)).map(option => option.key);
+  // Coastal trips must be explicitly identified by their title or category.
+  // Itineraries and descriptions often mention Batumi or the Black Sea incidentally,
+  // which should not turn a mountain/culture tour into a sea holiday.
+  const primary = [tour.title, tour.category].filter(Boolean).join(" ");
+  const coast = /\b(?:beach|beaches|seaside|coastal|coast|sea\s+(?:and|&|holiday|relaxation|tour|escape)|batumi|kobuleti|shekvetili|ureki|chakvi|gonio|kvariati|sarpi|tsikhisdziri)\b/i;
+  return options.filter(option => option.key === "s" ? coast.test(primary) : signals[option.key].test(haystack)).map(option => option.key);
 }
 function tourHref(tour) { return tour.slug === "airport-transfers" ? "/contact" : `/tour/${encodeURIComponent(tour.slug)}`; }
 export default function TripPlanner({ hideIntro = false, hideFootnote = false }) {
   const { t } = useLanguage();
   const [days, setDays] = useState(3);
   const [people, setPeople] = useState(2);
-  const [interests, setInterests] = useState(["m", "w"]);
+  const [interests, setInterests] = useState([]);
   const [searched, setSearched] = useState(false);
   const [tours, setTours] = useState([]);
   const [loading, setLoading] = useState(true);
