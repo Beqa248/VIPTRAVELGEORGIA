@@ -9,14 +9,14 @@
 }
 
 .inner {
-  width: calc(100% - 40px);
-  max-width: none;
+  width: calc(100% - 48px);
+  max-width: 1500px;
   margin-inline: auto;
 }
 
 .columns {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
   align-items: start;
   gap: clamp(20px, 5vw, 65px);
 }
@@ -147,4 +147,15 @@
   .columns {
     grid-template-columns: minmax(0, 1fr);
   }
+}
+/* Center Explore between brand and contact; show links in two columns. */
+.columns > :nth-child(2) { justify-self: center; }
+.columns > :nth-child(3) { justify-self: end; }
+.explore { grid-template-columns: repeat(2, minmax(0, max-content)); column-gap: clamp(18px, 2.5vw, 38px); row-gap: 4px; }
+@media (max-width: 850px) {
+  .columns > :nth-child(2), .columns > :nth-child(3) { justify-self: start; }
+}
+@media (max-width: 520px) {
+  .columns > :nth-child(2), .columns > :nth-child(3) { justify-self: stretch; }
+  .explore { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
