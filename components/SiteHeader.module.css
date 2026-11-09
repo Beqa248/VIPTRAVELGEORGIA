@@ -10,7 +10,7 @@
 
 .main,
 .navInner {
-  width: calc(100% - clamp(32px, 4vw, 80px));
+  width: calc(100% - 40px);
   max-width: none;
   margin-inline: auto;
 }
