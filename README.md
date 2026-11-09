@@ -1,33 +1,33 @@
-# VIP Travel Georgia — Next.js JavaScript + Supabase-hosted images
+# VIP Travel Georgia
 
-This is a **Next.js App Router JavaScript/JSX** project. The 114 original images are **not included**; they are already in your Supabase Storage bucket `website-images`.
+Next.js App Router website for private tours and transfers in Georgia. It uses
+Supabase for published tours, regions, and media. Public pages are available in
+English, Georgian, Russian, and Hebrew.
 
-## How images work
+## Local development
 
-All existing image references such as `/images/photo-001.jpg`, including CSS hero backgrounds, are preserved. `next.config.mjs` rewrites `/images/:path*` to the **public** Supabase Storage URL. This keeps the original page layout and image assignments without rewriting every component. Images are fetched through the Next.js deployment URL, which proxies them to Supabase. No service-role key is required for public image viewing.
+1. Use Node.js 22 or the Node.js version configured for the Vercel project.
+2. Copy `.env.example` to `.env.local`. For the live catalog and images, set
+   `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` using the
+   project's public values. Never put a service-role key in a public variable.
+3. Run `npm ci`, then `npm run dev`, and open `http://localhost:3000`.
+4. Run `npm run build` to verify the production build.
 
-**Important:** The bucket must be public and the uploaded files must be at the bucket root with the same names (for example `photo-001.jpg`, `photo-113.jpg`, `share.jpg`). Check one direct URL before deployment:
-`https://YOUR-PROJECT.supabase.co/storage/v1/object/public/website-images/photo-001.jpg`
+Original photos at `/images/photo-001.jpg` and similar paths are served from
+the public Supabase bucket `website-images`. CMS photos can also come from the
+configured project's public `tour-media` bucket. The home and tour catalog use
+responsive images; the original files stay in Storage.
 
-## GitHub → Vercel deployment
+The app can build without Supabase configuration. Tour and image availability in
+a preview still depends on using the appropriate public project settings.
 
-1. Create a GitHub repository or use your existing website repository. **Back up the existing repository/branch first.**
-2. Upload **the contents** of this ZIP (not the containing folder) to the repository root. This ZIP has no `public/images` directory. If updating an existing repository, **delete old `public/images` files from GitHub** separately; uploading this ZIP alone will not delete existing files.
-3. Open Vercel → Add New → Project → Import Git Repository (or open existing project → Settings → Git and confirm repository).
-4. Set Framework Preset: **Next.js**; Root Directory: **./** (unless your files are in a subfolder); Build Command: `npm run build` (default); Install Command: `npm install` (default).
-5. In Vercel → Project → Settings → Environment Variables, set `NEXT_PUBLIC_SUPABASE_URL` to the **project URL**, e.g. `https://abcxyz.supabase.co` (no trailing `/`). Enable Production and Preview, and Development if used. **Do not use a secret or service-role key.**
-6. Deploy / Redeploy **after** adding the environment variable. Visit `/` and `/cars`, and verify the hero background and photographs. Test `https://YOUR-VERCEL-DOMAIN/images/photo-001.jpg` too.
-7. Only promote the deployment to your live domain after reviewing it.
+## Deploying on Vercel
 
-## Local run
+Use the existing linked Vercel project and the Next.js preset, with the repository
+root as the project directory. Set the two public Supabase variables for Preview
+and Production. Refer to [DEPLOY_CHECKLIST.md](DEPLOY_CHECKLIST.md) before promoting
+a branch preview.
 
-Copy `.env.example` to `.env.local`, set the URL, then:
-
-```bash
-npm install
-npm run dev
-```
-
-## Limitations
-
-This is the prior JavaScript/JSX migration with only the image-delivery change. It has not been verified by a complete Next.js production build in this environment. Some original interactive behaviors and translations may still require work; the admin, booking, AI, and payment features are **not guaranteed operational** and real payment processing is not connected. The rewrite does not create an admin media uploader; it only displays your already-uploaded images. New images added to Supabase can be used without including them in a ZIP, but displaying new images in a new page/slot still requires a content or code update unless an admin-driven gallery is built.
+The site's canonical origin is `https://viptravelgeorgia.vercel.app`. If the
+production hostname changes, update `SITE_URL` in `lib/seo.js` and verify the
+sitemap, canonical URLs, and language alternates on the new domain.

@@ -12,13 +12,14 @@ import "./contact-layout-fix.css";
 import "./contact-unified-and-footer.css";
 import "./gallery-highlights-fixes.css";
 import { headers } from "next/headers";
-import { PAGE_SEO, localizedMetadata } from "../lib/seo";
+import { getLocale, pageMetadata } from "../lib/seo";
 import { LanguageProvider } from "../components/site-context";
-import { seoMetadata, DEFAULT_DESCRIPTION } from "../lib/seo";
+
 export async function generateMetadata() {
- const h=await headers(); const lang=h.get("x-vtg-locale") || "en";
- const path=h.get("x-vtg-path") || "/";
- const [title,description]=PAGE_SEO[path] || PAGE_SEO["/"];
- return localizedMetadata(path,title,description,undefined,lang);
+  const requestHeaders = await headers();
+  return {
+    ...pageMetadata(requestHeaders.get("x-vtg-path"), requestHeaders.get("x-vtg-locale")),
+    icons: { icon: "/favicon.svg" },
+  };
 }
-export default async function RootLayout({ children }) { const h=await headers(); const lang=h.get("x-vtg-locale") || "en"; return <html lang={lang} dir={lang==="he"?"rtl":"ltr"}><body><SeoBusinessJsonLd/><LanguageProvider initialLang={lang}><ConditionalSiteChrome>{children}</ConditionalSiteChrome></LanguageProvider></body></html>; }
+export default async function RootLayout({ children }) { const h=await headers(); const lang=getLocale(h.get("x-vtg-locale")); return <html lang={lang} dir={lang==="he"?"rtl":"ltr"}><body><SeoBusinessJsonLd/><LanguageProvider initialLang={lang}><ConditionalSiteChrome>{children}</ConditionalSiteChrome></LanguageProvider></body></html>; }

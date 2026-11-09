@@ -1,3 +1,6 @@
 "use client";
 import ContactForm from "../ContactForm";
-export default function Contact(){return <div data-p="contact"><ContactForm /></div>;}
+
+export default function Contact({ initialTour }) {
+  return <div data-p="contact"><ContactForm key={initialTour} initialTour={initialTour} /></div>;
+}

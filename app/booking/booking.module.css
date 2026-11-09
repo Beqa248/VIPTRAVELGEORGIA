@@ -1,0 +1,148 @@
+.page {
+  width: min(100% - 32px, 960px);
+  margin-inline: auto;
+  padding-block: clamp(30px, 6vw, 75px);
+  color: #183d33;
+  font-family: system-ui, sans-serif;
+}
+
+.heading {
+  margin-block-end: 25px;
+}
+
+.heading h1 {
+  margin: 6px 0 10px;
+  font-size: clamp(31px, 5vw, 52px);
+  line-height: 1.13;
+  letter-spacing: -.035em;
+}
+
+.heading p {
+  max-width: 66ch;
+  margin: 0;
+  color: #50635a;
+}
+
+.heading p:first-child {
+  color: #715126;
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.page .panel {
+  padding: clamp(16px, 3vw, 28px);
+  border: 1px solid #d9e1d8;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.page .panel h2 {
+  margin: 0 0 14px;
+  color: inherit;
+  font-size: clamp(22px, 3vw, 30px);
+  line-height: 1.2;
+}
+
+.panel h2::after {
+  display: none;
+}
+
+.panel label {
+  margin-block-end: 5px;
+}
+
+.panel input {
+  min-height: 46px;
+}
+
+.totals {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 14px;
+  border-radius: 9px;
+  background: #edf3ea;
+}
+
+.totals dt,
+.note {
+  color: #50635a;
+  font-size: 14px;
+}
+
+.totals dd {
+  margin: 0;
+  font-size: clamp(16px, 2.25vw, 24px);
+  font-weight: 750;
+  overflow-wrap: anywhere;
+}
+
+.note {
+  margin-block-end: 0;
+}
+
+.page .request {
+  border-color: #284e41;
+  background: #12362d;
+  color: #fff;
+}
+
+.request p {
+  margin: 0 0 12px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-block-start: 19px;
+}
+
+.actions a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 46px;
+  padding: 8px 14px;
+  border: 1px solid #ecd095;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.actions .primary {
+  background: #ecd095;
+  color: #162e25;
+}
+
+.actions .primary:hover {
+  background: #f7dfa8;
+}
+
+.actions .secondary:hover {
+  background: #255648;
+}
+
+.panel input:focus-visible {
+  outline: 2px solid #236958;
+  outline-offset: 3px;
+}
+
+.actions a:focus-visible {
+  outline: 2px solid #ecd095;
+  outline-offset: 3px;
+}
+
+@media (max-width: 720px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -1,36 +1,30 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useLanguage } from "./site-context";
+import usePublishedTours from "./usePublishedTours";
 import VehicleSelect from "./VehicleSelect";
 
 const EMAIL = "SubTravelGeorgia@gmail.com";
 const PHONE = "995558176108";
+const EXTRA_SERVICES = [
+  { slug: "airport-transfers", title: "Airport transfer" },
+  { slug: "custom-tour", title: "Other / custom" },
+];
 const SOCIALS = [
   ["WhatsApp", "https://wa.me/995558176108", "wa"],
   ["Telegram", "https://t.me/SubTravelGeorgia", "tg"],
   ["Facebook", "https://www.facebook.com/share/19PjaiQedA/", "fb"],
   ["Instagram", "https://www.instagram.com/viptravelgeorgia/", "ig"],
 ];
-export default function ContactForm() {
+export default function ContactForm({ initialTour = "" }) {
   const { t } = useLanguage();
-  const [tours, setTours] = useState([]);
-  const [tourError, setTourError] = useState(false);
+  const { tours, error: tourError } = usePublishedTours();
+  const tourOptions = [...tours, ...EXTRA_SERVICES];
+  const suggestedTour = tourOptions.find(option => option.slug === initialTour || option.title === initialTour)?.title ?? "";
+  const [chosenTour, setChosenTour] = useState(null);
+  const selectedTour = chosenTour === null ? suggestedTour : tourOptions.find(option => option.title === chosenTour)?.title ?? "";
   const [sending, setSending] = useState(false);
   const [notice, setNotice] = useState("");
-  useEffect(() => {
-    let mounted = true;
-    async function load() {
-      try {
-        const response = await fetch("/api/published-tours", { cache: "no-store" });
-        const payload = await response.json();
-        if (!response.ok) throw new Error(payload.error || "Unable to load tours");
-        if (mounted) { setTours(payload.tours || []); setTourError(false); }
-      } catch (error) { if (mounted) setTourError(true); }
-    }
-    load();
-    window.addEventListener("focus", load);
-    return () => { mounted = false; window.removeEventListener("focus", load); };
-  }, []);
   function details(form) {
     const data = new FormData(form);
     return {
@@ -61,6 +55,7 @@ export default function ContactForm() {
       if (!response.ok) throw new Error(result.error || "Message could not be sent.");
       setNotice("Your message was sent successfully. Thank you!");
       form.reset();
+      setChosenTour(null);
     } catch (error) { setNotice(error.message || "Unable to send. Please try WhatsApp."); }
     finally { setSending(false); }
   }
@@ -69,7 +64,15 @@ export default function ContactForm() {
     <form className="vtg-contact-form" onSubmit={whatsapp}>
       <label><span data-k="fName">{t("fName")}</span><input name="name" maxLength={100} required /></label>
       <label><span>Email (for reply)</span><input name="email" type="email" maxLength={180} required placeholder="you@example.com" /></label>
-      <label><span>Tour or Service</span><select name="region" defaultValue="" required><option value="" disabled>Select a tour or service</option>{tours.map(x => <option key={x.slug} value={x.title}>{x.title}</option>)}<option value="Airport transfer">Airport transfer</option><option value="Other / custom">Other / custom</option></select>{tourError && <small>Tour list unavailable; choose Other / custom or try again later.</small>}</label>
+      <label>
+        <span>Tour or Service</span>
+        <select name="region" value={selectedTour} onChange={event => setChosenTour(event.target.value)} required>
+          <option value="" disabled>Select a tour or service</option>
+          {tours.map(tour => <option key={tour.slug} value={tour.title}>{tour.title}</option>)}
+          {EXTRA_SERVICES.map(service => <option key={`service:${service.slug}`} value={service.title}>{service.title}</option>)}
+        </select>
+        {tourError && <small>Tour list unavailable; choose Other / custom or try again later.</small>}
+      </label>
       <label><span data-k="fCar">{t("fCar")}</span><VehicleSelect name="vehicle" /></label>
       <label><span data-k="fDates">{t("fDates")}</span><input name="dates" maxLength={180} placeholder="e.g. 12–16 June, 3 people" /></label>
       <label className="vtg-contact-message"><span data-k="fMsg">{t("fMsg")}</span><textarea name="message" maxLength={4000} rows={6} required /></label>

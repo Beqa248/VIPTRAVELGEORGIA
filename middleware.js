@@ -23,7 +23,9 @@ export function middleware(request) {
     const preferred = request.cookies.get("vtg-locale")?.value;
     const chosen = LANGS.has(preferred) ? preferred : "en";
     url.pathname = "/" + chosen + (pathname === "/" ? "" : pathname);
-    return NextResponse.redirect(url, 308);
+    const redirect = NextResponse.redirect(url, 307);
+    redirect.headers.set("Cache-Control", "private, no-store");
+    return redirect;
   }
 
   const original = "/" + segments.slice(1).join("/");
@@ -34,11 +36,13 @@ export function middleware(request) {
   headers.set("x-vtg-path", url.pathname);
 
   const response = NextResponse.rewrite(url, { request: { headers } });
-  response.cookies.set("vtg-locale", lang, {
-    path: "/",
-    sameSite: "lax",
-    maxAge: 31536000,
-  });
+  if (request.cookies.get("vtg-locale")?.value !== lang) {
+    response.cookies.set("vtg-locale", lang, {
+      path: "/",
+      sameSite: "lax",
+      maxAge: 31536000,
+    });
+  }
   return response;
 }
 

@@ -1,86 +1,201 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { supabase } from "../../lib/supabase";
-import { tourPriceLabel } from "../../lib/tourPricing";
-import VehicleCards from "../VehicleCards";
+import Image from "next/image";
+import Link from "next/link";
+import { localizedPath } from "../../lib/localizedPath";
+import { tourPriceLabel, tourPriceLabels } from "../../lib/tourPricing";
+import CardPhoto from "../CardPhoto";
 import ContactForm from "../ContactForm";
-import TripPlanner from "../TripPlanner";
-
 import ReviewsList from "../ReviewsList";
+import TripPlanner from "../TripPlanner";
+import VehicleCards from "../VehicleCards";
 import { useLanguage } from "../site-context";
-export default function Page() {
-    const { t, formatPrice } = useLanguage();
-    const [homePrices,setHomePrices] = useState({});
-    const [homeTours,setHomeTours]=useState(null);
-    useEffect(()=>{
-      if(!supabase)return;
-      let active=true;
-      supabase.from("custom_tours").select("slug,title,cover_url,published,archived,sort_order,itinerary,gallery_images,is_original").order("sort_order",{ascending:true})
-        .then(({data,error})=>{if(active)setHomeTours(error?[]:(data||[]));});
-      return ()=>{active=false};
-    },[]);
-    useEffect(() => {
-      if (!supabase) return;
-      let active=true;
-      supabase.from("tour_prices").select("slug,price_mode,price_amount,price_currency,price_unit")
-        .then(({data,error}) => {
-          if (!active || error) return;
-          setHomePrices(Object.fromEntries((data||[]).map(x=>[x.slug,x])));
-        });
-      return () => { active=false; };
-    }, []);
-    return (<>
-    <div className="" data-p="home">
-    <div className="hero" id="top"><div className="wrap">
-    <h1 data-k="h1">{t("h1")}</h1><p data-k="sub">{t("sub")}</p>
-    <a className="btn" href="/plan" data-k="cta">{t("cta")}</a><a className="btn alt" href="/tours" data-k="see">{t("see")}</a>
-    </div></div>
-    <section id="hTours"><div className="wrap"><h2 data-k="popH">{t("popH")}</h2><div className="tiles">{(()=>{
-      const merged=homeTours||[];
-      return (homeTours===null?[]:merged).filter(x=>x.published===true && !x.archived&&!x.archived).sort((a,b)=>(a.sort_order??100)-(b.sort_order??100)).slice(0,6).map(tour=><a key={tour.slug} className="tile" style={{backgroundImage:tour.cover_url?`url(${JSON.stringify(tour.cover_url)})`:"none"}} href={tour.slug==="airport-transfers"?"/contact":tour.is_original&&!tour.itinerary&&!tour.gallery_images?.length?`/${tour.slug}`:`/tour/${tour.slug}`}><span>{tour.title}{homePrices[tour.slug]&&<small className="vtg-home-tour-price">{tourPriceLabel(homePrices[tour.slug],formatPrice)}</small>}</span></a>);
-    })()}</div><p style={{ "marginTop": "16px" }}><a className="btn" href="/tours" data-k="allTours">{t("allTours")}</a></p></div></section>
-    <div className="vtg-plan-band"><div className="vtg-plan-inner"><div className="vtg-plan-header"><span className="vtg-eyebrow">{t("journeyStart")}</span><h2>{t("planH")}</h2><p>{t("journeyIntro")}</p><div className="vtg-extras vtg-plan-actions"><a href="/planner">{t("aiPlanner")}</a><a href="/custom-tour">{t("buildTour")}</a><a href="/assistant">{t("travelAssistant")}</a></div></div><div className="vtg-plan-row"><TripPlanner hideIntro hideFootnote /><section className="howsec"><div className="wrap"><h2 data-k="howH">{t("howH")}</h2><div className="steps"><div className="step"><b>1</b><h3 data-k="how1t">{t("how1t")}</h3><p data-k="how1d">{t("how1d")}</p></div><div className="step"><b>2</b><h3 data-k="how2t">{t("how2t")}</h3><p data-k="how2d">{t("how2d")}</p></div><div className="step"><b>3</b><h3 data-k="how3t">{t("how3t")}</h3><p data-k="how3d">{t("how3d")}</p></div></div></div></section></div><div className="vtg-plan-benefits"><span>{t("benefitPrivate")}</span><span className="vtg-benefit-dot">·</span><span>{t("benefitFlexible")}</span><span className="vtg-benefit-dot">·</span><span>{t("benefitGuide")}</span></div></div></div>
-    <div className="vtg-about-row"><section id="hGuide"><div className="wrap guide"><div><div className="vtg-guide-title"><div className="gbadge" id="gbadge">🚙</div><h2 data-k="guideH">{t("guideH")}</h2></div><p data-k="guideT" style={{ "maxWidth": "640px" }}>{t("guideT")}</p>
-    <ul className="gl"><li data-k="factLang">{t("factLang")}</li><li data-k="guideCar">{t("guideCar")}</li><li data-k="factPrivate">{t("factPrivate")}</li><li data-k="factStart">{t("factStart")}</li></ul>
-    <div className="vtg-guide-actions"><a className="btn" href="/reviews" data-k="guideRev">{t("guideRev")}</a><a className="btn vtg-recent-tours-btn" href="/recent-tours">See Recent Tours</a></div></div></div></section>
-    <section className="why"><div className="wrap"><h2 data-k="whyH">{t("whyH")}</h2>
-    <ul><li data-k="w1">{t("w1")}</li><li data-k="w2">{t("w2")}</li><li data-k="w3">{t("w3")}</li><li data-k="w4">{t("w4")}</li></ul></div></section></div>
-    <div className="vtg-cars-pricing-row">
-<section id="hCars">
-  <div className="wrap">
-    <h2 data-k="carsH">{t("carsH")}</h2>
+import styles from "./home.module.css";
 
-    <VehicleCards /><p style={{ marginTop: "14px" }}>
-      <a className="btn" href="/cars" data-k="nCars">
-        {t("nCars")}
-      </a>
-    </p>
-  </div>
-</section>
-    <section id="hPrice"><div className="wrap"><h2>{t("pricesBooking")}</h2><p>{t("pricesIntro")}</p><div className="vtg-deposit-info" style={{marginTop:"12px",marginBottom:"12px"}}>
-  <h3 style={{fontSize:"1.02rem",fontWeight:700,margin:"0 0 8px"}}>{t("depositInfoHeading")}</h3>
-  <p style={{margin:"0 0 8px"}}>{t("depositInfoLeadBefore")}<strong>{t("depositInfoLeadBold")}</strong>{t("depositInfoLeadAfter")}</p>
-  <p style={{margin:"0 0 8px"}}>{t("depositInfoDetails")}</p>
-  <p style={{margin:0}}><strong>{t("depositInfoNoPayment")}</strong></p>
-</div><div className="vtg-price-actions"><a className="btn" href="https://wa.me/995558176108?text=Hello%21%20I%27d%20like%20a%20price%20quote%20for%20a%20private%20tour." target="_blank" rel="noopener noreferrer">{t("askPriceWhatsapp")}</a><a className="btn vtg-outline" href="/booking">{t("calculatePrice")}</a></div></div></section></div>
+const steps = [1, 2, 3];
+const faq = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-<style jsx global>{`
-/* Compact only the Prices & Booking panel; preserve exact deposit copy. */
-.vtg-shell [data-p="home"] .vtg-cars-pricing-row #hPrice>.wrap {padding-top:24px!important;padding-bottom:24px!important;}
-.vtg-shell [data-p="home"] .vtg-cars-pricing-row #hPrice h2 {margin-bottom:12px!important;}
-.vtg-shell [data-p="home"] .vtg-cars-pricing-row #hPrice p {font-size:clamp(14px,1.08vw,16px)!important;line-height:1.48!important;}
-.vtg-shell [data-p="home"] .vtg-cars-pricing-row #hPrice .vtg-deposit-info {margin-top:12px!important;margin-bottom:12px!important;}
-.vtg-shell [data-p="home"] .vtg-cars-pricing-row #hPrice .vtg-deposit-info h3 {margin-bottom:8px!important;font-size:1.02rem!important;}
-.vtg-shell [data-p="home"] .vtg-cars-pricing-row #hPrice .vtg-deposit-info p {margin-bottom:8px!important;}
-.vtg-shell [data-p="home"] .vtg-cars-pricing-row #hPrice .vtg-deposit-info p:last-child {margin-bottom:0!important;}
-.vtg-shell [data-p="home"] .vtg-cars-pricing-row #hPrice .vtg-price-actions {padding-top:12px!important;margin-top:auto!important;}
-@media(max-width:850px){.vtg-shell [data-p="home"] .vtg-cars-pricing-row #hPrice>.wrap {padding-top:20px!important;padding-bottom:20px!important;}}
-`}</style>
-    <section id="hRev"><div className="wrap"><h2 data-k="revH">{t("revH")}</h2><ReviewsList limit={3} /><p style={{ "marginTop": "14px" }}><a className="btn" href="/reviews" data-k="allRev">{t("allRev")}</a></p><p id="hGyg" style={{ "marginTop": "12px" }}></p></div></section>
-    <section id="hSeason" className="why"><div className="wrap"><h2 data-k="seasonH">{t("seasonH")}</h2><div className="seas"><p data-k="s1">{t("s1")}</p><p data-k="s2">{t("s2")}</p><p data-k="s3">{t("s3")}</p><p data-k="s4">{t("s4")}</p><p data-k="s5">{t("s5")}</p></div><p data-k="seasonNote" style={{ "color": "var(--mut)", "fontSize": "14px", "marginTop": "12px" }}>{t("seasonNote")}</p></div></section>
-    <div className="vtg-contact-alignment"><div className="vtg-contact-row"><section id="hFaq"><div className="wrap"><h2 data-k="faqH">{t("faqH")}</h2><details><summary data-k="f1q">{t("f1q")}</summary><p data-k="f1a">{t("f1a")}</p></details><details><summary data-k="f2q">{t("f2q")}</summary><p data-k="f2a">{t("f2a")}</p></details><details><summary data-k="f3q">{t("f3q")}</summary><p data-k="f3a">{t("f3a")}</p></details><details><summary data-k="f4q">{t("f4q")}</summary><p data-k="f4a">{t("f4a")}</p></details><details><summary data-k="f5q">{t("f5q")}</summary><p data-k="f5a">{t("f5a")}</p></details><details><summary data-k="f6q">{t("f6q")}</summary><p data-k="f6a">{t("f6a")}</p></details><details><summary data-k="f7q">{t("f7q")}</summary><p data-k="f7a">{t("f7a")}</p></details><details><summary data-k="f8q">{t("f8q")}</summary><p data-k="f8a">{t("f8a")}</p></details><details><summary data-k="f9q">{t("f9q")}</summary><p data-k="f9a">{t("f9a")}</p></details></div></section>
-    <ContactForm />
-    </div></div></div>
-    </>);
+function Arrow() {
+  return <span className={styles.arrow} aria-hidden="true">→</span>;
+}
+
+function TourCard({ tour, lang, formatPrice, t }) {
+  const title = tour.translations?.[lang]?.title || tour.title;
+  const price = tourPriceLabel(tour, formatPrice, tourPriceLabels[lang]);
+
+  return (
+    <article className={styles.tourCard}>
+      <Link href={localizedPath(lang, tour.path)} className={styles.tourLink}>
+        <div className={styles.tourPhoto}>
+          <CardPhoto src={tour.cover_url} sizes="(max-width: 600px) 90vw, (max-width: 850px) 44vw, (max-width: 1360px) 30vw, 400px" />
+        </div>
+        <div className={styles.tourBody}>
+          <h3>{title}</h3>
+          {price && <p>{price}</p>}
+          <span className={styles.tourDetails}>{t(tour.path === "/contact" ? "askAboutTour" : "seeTourDetails")} <Arrow /></span>
+        </div>
+      </Link>
+    </article>
+  );
+}
+
+export default function Home({ tours = null }) {
+  const { lang, t, formatPrice } = useLanguage();
+  const href = (path) => localizedPath(lang, path);
+
+  return (
+    <div className={styles.home} data-p="home">
+      <div className={styles.hero} id="top">
+        <Image src="/images/photo-001.jpg" className={styles.heroPhoto} alt="" fill priority sizes="100vw" />
+        <div className={`${styles.container} ${styles.heroContent}`}>
+          <p className={styles.eyebrow}>{t("homeLocation")}</p>
+          <h1>{t("h1")}</h1>
+          <p className={styles.heroLead}>{t("sub")}</p>
+          <div className={styles.actions}>
+            <a href="#hTours" className={styles.heroPrimary}>{t("see")} <Arrow /></a>
+            <Link href={href("/plan")} className={styles.heroSecondary}>{t("cta")}</Link>
+          </div>
+        </div>
+      </div>
+
+      <ul className={`${styles.container} ${styles.benefits}`}>
+        <li>{t("benefitPrivate")}</li>
+        <li>{t("benefitFlexible")}</li>
+        <li>{t("benefitGuide")}</li>
+      </ul>
+
+      <section className={styles.section} id="hTours" aria-labelledby="popular-tours" tabIndex={-1}>
+        <div className={styles.container}>
+          <div className={styles.sectionHeading}>
+            <div>
+              <p className={styles.eyebrow}>{t("homeToursLabel")}</p>
+              <h2 id="popular-tours">{t("popH")}</h2>
+            </div>
+            <Link href={href("/tours")} className={styles.outlineButton}>{t("allTours")} <Arrow /></Link>
+          </div>
+          {tours?.length ? (
+            <div className={styles.tourGrid}>
+              {tours.map((tour) => <TourCard key={tour.slug} tour={tour} lang={lang} formatPrice={formatPrice} t={t} />)}
+            </div>
+          ) : (
+            <div className={styles.tourEmpty}>
+              <p>{t(tours ? "homeToursEmpty" : "homeToursUnavailable")}</p>
+              <Link href={href("/contact")} className={styles.textLink}>{t("nCont")} <Arrow /></Link>
+            </div>
+          )}
+        </div>
+      </section>
+
+      <section className={`${styles.section} ${styles.planning}`} aria-labelledby="plan-heading">
+        <div className={styles.container}>
+          <div className={styles.sectionHeading}>
+            <div>
+              <p className={styles.eyebrow}>{t("journeyStart")}</p>
+              <h2 id="plan-heading">{t("planH")}</h2>
+              <p className={styles.lead}>{t("journeyIntro")}</p>
+            </div>
+          </div>
+          <div className={styles.planGrid}>
+            <TripPlanner hideIntro hideFootnote />
+            <div className={styles.planSide}>
+              <h3>{t("howH")}</h3>
+              <ol className={styles.steps}>
+                {steps.map((step) => (
+                  <li key={step}>
+                    <span className={styles.stepNumber} aria-hidden="true">{step}</span>
+                    <div>
+                      <h4>{t(`how${step}t`)}</h4>
+                      <p>{t(`how${step}d`)}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+              <div className={styles.tools}>
+                <Link href={href("/planner")}>{t("aiPlanner")} <Arrow /></Link>
+                <Link href={href("/custom-tour")}>{t("buildTour")} <Arrow /></Link>
+                <Link href={href("/assistant")}>{t("travelAssistant")} <Arrow /></Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className={`${styles.container} ${styles.section} ${styles.twoColumns}`}>
+        <section className={styles.panel} id="hGuide">
+          <h2>{t("guideH")}</h2>
+          <p>{t("guideT")}</p>
+          <ul className={styles.facts}>
+            {["factLang", "guideCar", "factPrivate", "factStart"].map((key) => <li key={key}>{t(key)}</li>)}
+          </ul>
+          <div className={styles.actions}>
+            <Link href={href("/reviews")} className={styles.outlineButton}>{t("guideRev")}</Link>
+            <Link href={href("/recent-tours")} className={styles.textLink}>{t("recentTours")} <Arrow /></Link>
+          </div>
+        </section>
+        <section className={`${styles.panel} ${styles.sagePanel}`}>
+          <h2>{t("whyH")}</h2>
+          <ul className={styles.facts}>
+            {[1, 2, 3, 4].map((item) => <li key={item}>{t(`w${item}`)}</li>)}
+          </ul>
+        </section>
+      </div>
+
+      <div className={styles.bookingBand}>
+        <div className={`${styles.container} ${styles.section} ${styles.twoColumns}`}>
+          <section className={styles.panel} id="hCars">
+            <h2>{t("carsH")}</h2>
+            <VehicleCards />
+            <Link href={href("/cars")} className={styles.textLink}>{t("nCars")} <Arrow /></Link>
+          </section>
+          <section className={`${styles.panel} ${styles.bookingPanel}`} id="hPrice">
+            <h2>{t("pricesBooking")}</h2>
+            <p>{t("pricesIntro")}</p>
+            <div className={styles.deposit}>
+              <h3>{t("depositInfoHeading")}</h3>
+              <p>{t("depositInfoLeadBefore")}<strong>{t("depositInfoLeadBold")}</strong>{t("depositInfoLeadAfter")}</p>
+              <p>{t("depositInfoDetails")}</p>
+              <p><strong>{t("depositInfoNoPayment")}</strong></p>
+            </div>
+            <div className={styles.actions}>
+              <Link href={href("/booking")} className={styles.primaryButton}>{t("calculatePrice")} <Arrow /></Link>
+              <a className={styles.textLink} href="https://wa.me/995558176108?text=Hello%21%20I%27d%20like%20a%20price%20quote%20for%20a%20private%20tour." target="_blank" rel="noopener noreferrer">{t("askPriceWhatsapp")}</a>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <section className={`${styles.section} ${styles.reviews}`} id="guest-reviews">
+        <div className={styles.container}>
+          <div className={styles.sectionHeading}>
+            <h2>{t("revH")}</h2>
+            <Link href={href("/reviews")} className={styles.outlineButton}>{t("allRev")} <Arrow /></Link>
+          </div>
+          <ReviewsList limit={3} />
+        </div>
+      </section>
+
+      <section className={`${styles.section} ${styles.season}`} id="travel-seasons">
+        <div className={styles.container}>
+          <h2>{t("seasonH")}</h2>
+          <ul className={styles.seasons}>
+            {[1, 2, 3, 4, 5].map((item) => <li key={item}>{t(`s${item}`)}</li>)}
+          </ul>
+          <p className={styles.lead}>{t("seasonNote")}</p>
+        </div>
+      </section>
+
+      <div className={`${styles.container} ${styles.section} ${styles.twoColumns} ${styles.contactGrid}`}>
+        <section className={styles.panel} id="hFaq">
+          <h2>{t("faqH")}</h2>
+          {faq.map((item) => (
+            <details key={item}>
+              <summary>{t(`f${item}q`)}</summary>
+              <p>{t(`f${item}a`)}</p>
+            </details>
+          ))}
+        </section>
+        <ContactForm />
+      </div>
+    </div>
+  );
 }

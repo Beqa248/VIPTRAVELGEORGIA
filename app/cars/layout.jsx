@@ -1,8 +1,7 @@
 import { headers } from "next/headers";
-import { PAGE_SEO, localizedMetadata } from "../../lib/seo";
+import { pageMetadata } from "../../lib/seo";
 export async function generateMetadata() {
- const h=await headers(); const lang=h.get("x-vtg-locale") || "en";
- const [title,description]=PAGE_SEO["/cars"];
- return localizedMetadata("/cars",title,description,undefined,lang);
+  const requestHeaders = await headers();
+  return pageMetadata("/cars", requestHeaders.get("x-vtg-locale") || "en");
 }
 export default function SeoLayout({children}) {return children;}

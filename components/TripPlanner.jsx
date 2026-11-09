@@ -1,6 +1,7 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useLanguage } from "./site-context";
+import usePublishedTours from "./usePublishedTours";
 import styles from "./TripPlanner.module.css";
 
 const options = [
@@ -36,38 +37,16 @@ export default function TripPlanner({ hideIntro = false, hideFootnote = false })
   const [people, setPeople] = useState(2);
   const [interests, setInterests] = useState([]);
   const [searched, setSearched] = useState(false);
-  const [tours, setTours] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState(false);
-  useEffect(() => {
-    let active = true;
-    const load = async () => {
-      try {
-        const response = await fetch("/api/published-tours", { cache: "no-store" });
-        const payload = await response.json();
-        if (!response.ok) throw new Error(payload.error || "Unable to load tours");
-        if (active) { setTours(payload.tours || []); setLoadError(false); }
-      } catch (error) {
-        console.error("Plan My Trip:", error);
-        if (active) { setTours([]); setLoadError(true); }
-      } finally { if (active) setLoading(false); }
-    };
-    load();
-    const refresh = () => { if (document.visibilityState === "visible") load(); };
-    const focus = () => load();
-    document.addEventListener("visibilitychange", refresh);
-    window.addEventListener("focus", focus);
-    return () => { active = false; document.removeEventListener("visibilitychange", refresh); window.removeEventListener("focus", focus); };
-  }, []);
+  const { tours, loading, error: loadError } = usePublishedTours();
   const toggle = key => { setInterests(old => old.includes(key) ? old.filter(x => x !== key) : [...old, key]); setSearched(false); };
-  const matches = useMemo(() => tours.map(tour => {
+  const matches = useMemo(() => (loadError ? [] : tours).map(tour => {
     const tags = classify(tour);
     const duration = Math.max(1, Number(tour.duration_days) || 1);
     const matched = tags.filter(tag => interests.includes(tag)).length;
     // Exact duration is a hard requirement. Interests rank tours only within that duration.
     return { ...tour, score: matched, matched, duration };
   }).filter(tour => tour.duration === days && (interests.length > 0 && tour.matched > 0))
-    .sort((a,b) => b.score - a.score || String(a.title).localeCompare(String(b.title))), [tours, days, interests]);
+    .sort((a,b) => b.score - a.score || String(a.title).localeCompare(String(b.title))), [tours, days, interests, loadError]);
   const customText = `Hello! I would like a custom Georgia itinerary for ${days} day${days === 1 ? "" : "s"}, ${people} traveler${people === 1 ? "" : "s"}. Interests: ${options.filter(o => interests.includes(o.key)).map(o => o.label).join(", ") || "open to suggestions"}. Please recommend a route and price.`;
   const whatsapp = `https://wa.me/995558176108?text=${encodeURIComponent(customText)}`;
   return <section id="hPlan" className={styles.section}><div className="wrap">

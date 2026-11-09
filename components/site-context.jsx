@@ -25,7 +25,7 @@ export function LanguageProvider({children, initialLang="en"}) {
     if (!LANGS.includes(next)) return;
     const path = LANGS.includes(prefix) ? pathname.replace(/^\/(en|ka|ru|he)(?=\/|$)/,"") || "/" : pathname;
     setLanguage(next);
-    router.push("/"+next+(path==="/"?"":path));
+    router.push("/"+next+(path==="/"?"":path)+window.location.search+window.location.hash);
   }
   const t=k=>(translations[lang]?.[k] || translations.en?.[k] || k);
   return <Context.Provider value={{lang,setLang,t,currency,setCurrency,rates,formatPrice}}>{children}</Context.Provider>;

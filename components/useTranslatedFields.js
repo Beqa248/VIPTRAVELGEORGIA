@@ -1,14 +1,49 @@
 "use client";
-import {useEffect,useMemo,useState} from "react";
-import {useLanguage} from "./site-context";
-const cache=new Map();
-export default function useTranslatedFields(fields){
- const {lang}=useLanguage(); const [translated,setTranslated]=useState(null);
- const values=useMemo(()=>fields.map(x=>String(x||"")),[JSON.stringify(fields)]);
- const signature=JSON.stringify([lang,values]);
- useEffect(()=>{let active=true;setTranslated(null);if(lang==="en"||!values.some(Boolean))return()=>{active=false};
- const existing=cache.get(signature);if(existing){setTranslated(existing);return()=>{active=false};}
- fetch("/api/translate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({texts:values,target:lang})}).then(r=>r.ok?r.json():null).then(data=>{if(active&&data?.translations?.length===values.length){cache.set(signature,data.translations);setTranslated(data.translations)}}).catch(()=>{});
- return()=>{active=false};},[signature]);
- return translated||values;
+
+import { useEffect, useState } from "react";
+import { useLanguage } from "./site-context";
+
+const cache = new Map();
+const pending = new Map();
+const CACHE_LIMIT = 250;
+
+function translate(signature, values, lang) {
+  if (cache.has(signature)) return Promise.resolve(cache.get(signature));
+  if (pending.has(signature)) return pending.get(signature);
+  const request = fetch("/api/translate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ texts: values, target: lang }),
+  })
+    .then((response) => response.ok ? response.json() : null)
+    .then((data) => {
+      if (!Array.isArray(data?.translations) || data.translations.length !== values.length) return null;
+      if (cache.size >= CACHE_LIMIT) cache.delete(cache.keys().next().value);
+      cache.set(signature, data.translations);
+      return data.translations;
+    })
+    .catch(() => null)
+    .finally(() => pending.delete(signature));
+  pending.set(signature, request);
+  return request;
+}
+
+export default function useTranslatedFields(fields) {
+  const { lang } = useLanguage();
+  const values = fields.map((value) => String(value ?? ""));
+  const signature = JSON.stringify([lang, values]);
+  const [result, setResult] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    const [target, source] = JSON.parse(signature);
+    if (target === "en" || !source.some(Boolean)) return;
+
+    translate(signature, source, target).then((translations) => {
+      if (active && translations) setResult({ signature, translations });
+    });
+    return () => { active = false; };
+  }, [signature]);
+
+  return result?.signature === signature ? result.translations : values;
 }

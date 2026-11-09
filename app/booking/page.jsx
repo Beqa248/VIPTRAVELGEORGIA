@@ -1,5 +1,59 @@
-// @ts-nocheck
-'use client';
-import { useState } from 'react';
-const words = { en: { title: 'Reserve your private tour', sub: 'Confirm your itinerary with us before paying your 20% deposit.', price: 'Agreed tour price (GEL)', deposit: '20% deposit', balance: 'Remaining balance', note: 'This is a quote calculator only. No card payment is taken here.', back: 'Back to website', contact: 'Discuss and confirm via WhatsApp' }, ru: { title: 'Бронирование индивидуального тура', sub: 'Сначала согласуйте маршрут и стоимость, затем внесите предоплату 20%.', price: 'Согласованная цена (GEL)', deposit: 'Предоплата 20%', balance: 'Остаток к оплате', note: 'Это только калькулятор. Оплата картой пока недоступна.', back: 'На главную', contact: 'Согласовать в WhatsApp' }, he: { title: 'הזמנת טיול פרטי', sub: 'אשרו איתנו את המסלול והמחיר לפני תשלום מקדמה של 20%.', price: 'מחיר הטיול המוסכם (GEL)', deposit: 'מקדמה של 20%', balance: 'יתרה לתשלום', note: 'זהו מחשבון בלבד. אין אפשרות לתשלום בכרטיס בשלב זה.', back: 'חזרה לאתר', contact: 'תיאום ואישור ב-WhatsApp' } };
-export default function Booking() { const [lang, setLang] = useState('en'), [price, setPrice] = useState('1000'); let t = words[lang], amount = Math.max(0, Number(price) || 0); return <main dir={lang === 'he' ? 'rtl' : 'ltr'} style={{ background: '#fffaf2', minHeight: '100vh', fontFamily: 'Arial,sans-serif', color: '#164a43' }}><header style={{ background: 'white', padding: '20px 5%', borderBottom: '3px solid #f58200', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}><a href="/" style={{ fontSize: 22, fontWeight: 800, color: '#f27600', textDecoration: 'none' }}>VIPTravelGeorgia</a><div>{['en', 'ru', 'he'].map(l => <button key={l} onClick={() => setLang(l)} style={{ margin: 3, padding: 9, borderRadius: 7, border: '1px solid #ddd', background: l === lang ? '#008a80' : 'white', color: l === lang ? 'white' : '#173e39' }}>{l.toUpperCase()}</button>)}</div></header><section style={{ maxWidth: 640, margin: '60px auto', padding: '0 20px' }}><h1>{t.title}</h1><p>{t.sub}</p><div style={{ background: 'white', border: '1px solid #e6d9c9', borderRadius: 14, padding: 25 }}><label>{t.price}<input aria-label={t.price} type="number" min="0" value={price} onChange={e => setPrice(e.target.value)} style={{ width: '100%', padding: 14, margin: '12px 0 20px', boxSizing: 'border-box', borderRadius: 8, border: '1px solid #d7c8b8' }}/></label><div style={{ background: '#f7f0e5', padding: 18, borderRadius: 10 }}><div>{t.deposit}</div><strong style={{ fontSize: 32 }}>{(amount * .2).toFixed(2)} GEL</strong><p>{t.balance}: {(amount * .8).toFixed(2)} GEL</p></div><p style={{ fontSize: 13, color: '#665f57' }}>{t.note}</p><a href={'https://wa.me/995558176108?text=' + encodeURIComponent('Hello! I would like to confirm a private tour priced at ' + amount + ' GEL with a 20% deposit of ' + (amount * .2).toFixed(2) + ' GEL.')} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block', padding: 14, background: '#f58200', color: 'white', borderRadius: 8, textDecoration: 'none' }}>{t.contact}</a></div><p><a href="/" style={{ color: '#007e72' }}>{t.back}</a></p></section></main>; }
+"use client";
+
+import Link from "next/link";
+import { useState } from "react";
+import { chromeLabels } from "../../lib/chromeLabels";
+import { localizedPath } from "../../lib/localizedPath";
+import { useLanguage } from "../../components/site-context";
+import styles from "./booking.module.css";
+
+export default function Booking() {
+  const { lang, t } = useLanguage();
+  const [price, setPrice] = useState("");
+  const value = Number(price);
+  const amount = Number.isFinite(value) && value > 0 ? value : 0;
+  const currency = new Intl.NumberFormat(lang, { style: "currency", currency: "GEL" });
+  const deposit = amount * 0.2;
+  const message = amount
+    ? `Hello! I would like to confirm a private tour priced at ${amount} GEL with a 20% deposit of ${deposit.toFixed(2)} GEL.`
+    : "Hello! I would like to discuss a private tour and request a booking.";
+
+  return (
+    <div className={styles.page}>
+      <div className={styles.heading}>
+        <p>{t("homeLocation")}</p>
+        <h1>{t("pricesBooking")}</h1>
+        <p>{t("pricesIntro")}</p>
+      </div>
+      <div className={styles.grid}>
+        <section className={styles.panel} aria-labelledby="calculator-heading">
+          <h2 id="calculator-heading">{t("calculatePrice")}</h2>
+          <label htmlFor="agreed-price">{t("agreedTourPrice")}</label>
+          <input id="agreed-price" type="number" min="0" step="0.01" inputMode="decimal"
+            value={price} placeholder="1000" onChange={(event) => setPrice(event.target.value)} />
+          <dl className={styles.totals}>
+            <div>
+              <dt>{t("bookingDeposit")}</dt>
+              <dd><output htmlFor="agreed-price">{amount ? currency.format(deposit) : "—"}</output></dd>
+            </div>
+            <div>
+              <dt>{t("bookingBalance")}</dt>
+              <dd><output htmlFor="agreed-price">{amount ? currency.format(amount - deposit) : "—"}</output></dd>
+            </div>
+          </dl>
+          <p className={styles.note}>{t("depositInfoNoPayment")}</p>
+        </section>
+        <section className={`${styles.panel} ${styles.request}`} aria-labelledby="request-heading">
+          <h2 id="request-heading">{chromeLabels[lang].booking}</h2>
+          <p>{t("depositInfoLeadBefore")}<strong>{t("depositInfoLeadBold")}</strong>{t("depositInfoLeadAfter")}</p>
+          <p>{t("depositInfoDetails")}</p>
+          <div className={styles.actions}>
+            <Link href={localizedPath(lang, "/contact")} className={styles.primary}>{t("nCont")}</Link>
+            <a className={styles.secondary} href={`https://wa.me/995558176108?text=${encodeURIComponent(message)}`}
+              target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}

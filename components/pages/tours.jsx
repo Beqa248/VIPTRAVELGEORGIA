@@ -1,27 +1,137 @@
 "use client";
-import TranslatedText from "../TranslatedText";
-import { useEffect, useState } from "react";
-import { supabase } from "../../lib/supabase";
-import chooser from "./tourChooser.module.css";
-import { tourPriceLabel } from "../../lib/tourPricing";
+
+import { useId, useState } from "react";
+import { localizedPath } from "../../lib/localizedPath";
+import { tourPriceLabel, tourPriceLabels } from "../../lib/tourPricing";
+import CardPhoto from "../CardPhoto";
 import { useLanguage } from "../site-context";
-export default function Page() {
-    const { t, formatPrice } = useLanguage();
-    const [selectedTour, setSelectedTour] = useState("all");
-    const [allTours, setAllTours] = useState(null);
-    const [prices,setPrices] = useState({});
-    const [tourTexts,setTourTexts] = useState({});
-    useEffect(()=>{if(!supabase)return;let active=true;supabase.from("tour_content").select("slug,overview").then(({data,error})=>{if(active&&!error)setTourTexts(Object.fromEntries((data||[]).map(x=>[x.slug,x.overview])))});return()=>{active=false}},[]);
-    useEffect(()=>{if(!supabase)return;let active=true;supabase.from("tour_prices").select("slug,price_mode,price_amount,price_currency,price_unit").then(({data,error})=>{if(active&&!error)setPrices(Object.fromEntries((data||[]).map(row=>[row.slug,row])))});return()=>{active=false}},[]);
-    const visibleTours = (allTours ?? []).filter(t=>t.published&&!t.archived).sort((a,b)=>(a.sort_order??100)-(b.sort_order??100));
-    useEffect(() => { if (!supabase) {setAllTours([]);return;} let active=true; supabase.from("custom_tours").select("slug,title,description,cover_url,duration_days,category,published,archived,sort_order,itinerary,gallery_images,is_original,price_mode,price_amount,price_currency,price_unit").order("sort_order",{ascending:true}).then(({data,error})=>{if(!active)return; if(error){setAllTours([]);return;} setAllTours(data||[]);});return ()=>{active=false}; }, []);
-    return (<>
-    <div className="" data-p="tours">
-    <section id="tours"><div className="wrap"><h2 data-k="toursH">{t("toursH")}</h2>
-    <div className={chooser.chooser}><label htmlFor="vtg-tour-choice">{t("chooseYourTour")}</label><div className={chooser.controls}><select id="vtg-tour-choice" value={selectedTour} onChange={e => setSelectedTour(e.target.value)}><option value="all">{t("allTours")}</option>{visibleTours.map(tour=><option key={tour.slug} value={tour.slug}><TranslatedText text={tour.title}/></option>)}</select>{selectedTour!=="all"&&<button type="button" onClick={()=>setSelectedTour("all")}>{t("showAllTours")}</button>}</div></div>
-    {allTours===null?<p role="status" aria-live="polite">{t("loadingTours")}</p>:<div className="grid vtg-tour-list-grid">
-    {visibleTours.filter(tour=>selectedTour==="all"||selectedTour===tour.slug).map(tour=><div key={tour.slug} className="card vtg-tour-list-card"><div className="pic" style={{backgroundImage:tour.cover_url?`url(${JSON.stringify(tour.cover_url)})`:"none",backgroundColor:"#dce8df"}}></div><div className="t"><h3><TranslatedText text={tour.title}/></h3><p><TranslatedText text={tourTexts[tour.slug] || tour.description}/></p>{tourPriceLabel(prices[tour.slug]||tour, formatPrice)&&<p className="vtg-tour-price">{tourPriceLabel(prices[tour.slug]||tour, formatPrice)}</p>}<p className="lnk"><a href={(tour.original||tour.is_original) && !tour.itinerary && !(tour.gallery_images||[]).length ? (tour.slug==="airport-transfers"?"/contact":`/${tour.slug}`) : `/tour/${tour.slug}`}>{tour.slug==="airport-transfers"?t("askAboutTour"):t("seeTourDetails")}</a></p></div></div>)}
-    </div>}</div></section>
+import useTranslatedFields from "../useTranslatedFields";
+import styles from "./tourChooser.module.css";
+
+const COPY = {
+  en: {
+    label: "Explore Georgia", title: "Find your tour", intro: "From mountain passes to wine country, find a route that fits your time and interests.",
+    search: "Search tours", placeholder: "Destination or tour name", duration: "Duration", any: "Any duration",
+    one: "Day tours", many: "Multi-day tours", day: "1 day", days: "{n} days", count: "Tours found: {n}", reset: "Clear filters",
+    empty: "No tours match these filters", emptyHint: "Try a different destination or clear the filters.",
+    unavailable: "The tour catalog is temporarily unavailable", noTours: "No tours are listed right now",
+    contactHint: "Tell us where you’d like to go and we’ll help you plan a route.", contact: "Contact us",
+  },
+  ka: {
+    label: "აღმოაჩინეთ საქართველო", title: "იპოვეთ თქვენი ტური", intro: "მთის უღელტეხილებიდან ღვინის მხარეებამდე — აირჩიეთ მარშრუტი თქვენი დროისა და ინტერესების მიხედვით.",
+    search: "ტურების ძიება", placeholder: "დანიშნულება ან ტურის სახელი", duration: "ხანგრძლივობა", any: "ნებისმიერი ხანგრძლივობა",
+    one: "ერთდღიანი ტურები", many: "მრავალდღიანი ტურები", day: "1 დღე", days: "{n} დღე", count: "ნაპოვნი ტურები: {n}", reset: "ფილტრების გასუფთავება",
+    empty: "ამ ფილტრებით ტური ვერ მოიძებნა", emptyHint: "სცადეთ სხვა დანიშნულება ან გაასუფთავეთ ფილტრები.",
+    unavailable: "ტურების კატალოგი დროებით მიუწვდომელია", noTours: "ამჟამად ტურები არ არის დამატებული",
+    contactHint: "გვითხარით, სად გსურთ წასვლა, და მარშრუტის დაგეგმვაში დაგეხმარებით.", contact: "დაგვიკავშირდით",
+  },
+  ru: {
+    label: "Откройте Грузию", title: "Найдите свой тур", intro: "От горных перевалов до винных регионов — выберите маршрут по своим интересам и времени.",
+    search: "Поиск туров", placeholder: "Направление или название тура", duration: "Длительность", any: "Любая длительность",
+    one: "Однодневные туры", many: "Многодневные туры", day: "1 день", days: "Дней: {n}", count: "Найдено туров: {n}", reset: "Сбросить фильтры",
+    empty: "По этим фильтрам туры не найдены", emptyHint: "Попробуйте другое направление или сбросьте фильтры.",
+    unavailable: "Каталог туров временно недоступен", noTours: "Сейчас в каталоге нет туров",
+    contactHint: "Расскажите, куда вы хотите поехать, и мы поможем составить маршрут.", contact: "Связаться с нами",
+  },
+  he: {
+    label: "גלו את גאורגיה", title: "מצאו את הסיור שלכם", intro: "ממעברי הרים ועד אזורי יין, בחרו מסלול שמתאים לזמן ולתחומי העניין שלכם.",
+    search: "חיפוש סיורים", placeholder: "יעד או שם הסיור", duration: "משך הסיור", any: "כל משך",
+    one: "טיולי יום", many: "טיולים של כמה ימים", day: "יום אחד", days: "{n} ימים", count: "סיורים שנמצאו: {n}", reset: "ניקוי מסננים",
+    empty: "לא נמצאו סיורים שמתאימים למסננים", emptyHint: "נסו יעד אחר או נקו את המסננים.",
+    unavailable: "קטלוג הסיורים אינו זמין כרגע", noTours: "אין כרגע סיורים בקטלוג",
+    contactHint: "ספרו לנו לאן תרצו להגיע ונעזור לכם לתכנן מסלול.", contact: "צרו קשר",
+  },
+};
+
+function TourCard({ tour, copy }) {
+  const { lang, t, formatPrice } = useLanguage();
+  const saved = lang === "en" ? null : tour.translations?.[lang];
+  const [title, description] = useTranslatedFields([
+    saved?.title ? "" : tour.title,
+    saved?.description ? "" : tour.description?.slice(0, 450),
+  ]);
+  const price = tourPriceLabel(tour, formatPrice, tourPriceLabels[lang]);
+  const duration = Number(tour.duration_days);
+  return (
+    <article className={styles.card}>
+      <div className={styles.cover}>
+        <CardPhoto src={tour.cover_url} sizes="(max-width: 510px) 94vw, (max-width: 820px) 46vw, (max-width: 1220px) 30vw, 368px" />
+      </div>
+      <div className={styles.cardBody}>
+        {duration > 0 && <span className={styles.duration}>{duration === 1 ? copy.day : copy.days.replace("{n}", duration)}</span>}
+        <h2>{saved?.title || title || tour.slug}</h2>
+        <p className={styles.description}>{saved?.description || description}</p>
+        {price && <p className={styles.price}>{price}</p>}
+        <a className={styles.details} href={localizedPath(lang, tour.path)}>
+          {tour.slug === "airport-transfers" ? t("askAboutTour") : t("seeTourDetails")}
+          <span className={styles.arrow} aria-hidden="true">→</span>
+        </a>
+      </div>
+    </article>
+  );
+}
+
+export default function TourCatalog({ tours }) {
+  const { lang } = useLanguage();
+  const copy = COPY[lang] || COPY.en;
+  const id = useId();
+  const [query, setQuery] = useState("");
+  const [duration, setDuration] = useState("any");
+  const terms = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const results = (tours ?? []).filter((tour) => {
+    const days = Number(tour.duration_days);
+    if (duration === "one" && !(days > 0 && days <= 1)) return false;
+    if (duration === "many" && !(days > 1)) return false;
+    const haystack = [tour.slug?.replaceAll("-", " "), tour.title, tour.category, tour.translations?.[lang]?.title]
+      .filter(Boolean).join(" ").toLowerCase();
+    return terms.every((term) => haystack.includes(term));
+  });
+  const reset = () => { setQuery(""); setDuration("any"); };
+
+  return (
+    <div className={styles.catalog}>
+      <div className={styles.banner}>
+        <div className={styles.wrap}>
+          <p className={styles.eyebrow}>{copy.label}</p>
+          <h1>{copy.title}</h1>
+          <p className={styles.intro}>{copy.intro}</p>
+        </div>
+      </div>
+      <div className={styles.content}>
+        <div className={styles.wrap}>
+          {tours?.length > 0 && (
+            <>
+              <div className={styles.filters} role="search" aria-label={copy.search}>
+                <div>
+                  <label htmlFor={id + "-query"}>{copy.search}</label>
+                  <input id={id + "-query"} type="search" value={query} placeholder={copy.placeholder} onChange={(event) => setQuery(event.target.value)} />
+                </div>
+                <div>
+                  <label htmlFor={id + "-duration"}>{copy.duration}</label>
+                  <select id={id + "-duration"} value={duration} onChange={(event) => setDuration(event.target.value)}>
+                    <option value="any">{copy.any}</option>
+                    <option value="one">{copy.one}</option>
+                    <option value="many">{copy.many}</option>
+                  </select>
+                </div>
+                <button type="button" onClick={reset} disabled={!query && duration === "any"}>{copy.reset}</button>
+              </div>
+              <p className={styles.count} role="status">{copy.count.replace("{n}", results.length)}</p>
+            </>
+          )}
+          {results.length > 0 ? (
+            <div className={styles.grid}>{results.map((tour) => <TourCard key={tour.slug} tour={tour} copy={copy} />)}</div>
+          ) : (
+            <div className={styles.empty}>
+              <h2>{tours?.length ? copy.empty : tours === null ? copy.unavailable : copy.noTours}</h2>
+              <p>{tours?.length ? copy.emptyHint : copy.contactHint}</p>
+              {tours?.length > 0
+                ? <button type="button" onClick={reset}>{copy.reset}</button>
+                : <a href={localizedPath(lang, "/contact")}>{copy.contact}</a>}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
-    </>);
+  );
 }
