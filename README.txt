@@ -1,1 +1,1 @@
-Replace only components/SiteFooter.jsx in GitHub. Adds Cars (/cars) and Reviews (/reviews) to Explore. Keep your current SiteFooter.module.css unchanged.
+Replace only components/SiteFooter.module.css in your current project. Preserve SiteFooter.jsx (with Cars and Reviews links). No other files are modified.
