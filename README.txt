@@ -1,1 +1,1 @@
-Replace components/pages/home.module.css in GitHub. This changes homepage layout CSS only. Based on uploaded main(4) code; no JSX, data, header, footer, translations or admin files are included. Test desktop and mobile after deployment.
+Based on VIPTRAVELGEORGIA-main(6).zip. Upload files preserving paths. Changes: hero benefits relocated immediately below hero; full-width footer redesign. Other homepage sections unchanged. Back up existing files first.

@@ -71,3 +71,12 @@ header{background:var(--vtg-sage)!important}
 @media(max-width:1100px){.vtg-shell #hSeason .seas{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:850px){.vtg-shell .vtg-plan-row,.vtg-shell .vtg-about-row,.vtg-shell .vtg-cars-pricing-row,.vtg-shell .vtg-contact-row{grid-template-columns:1fr!important}.vtg-shell .vtg-plan-row .howsec .steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.vtg-shell #hSeason .seas{grid-template-columns:repeat(2,minmax(0,1fr))}.vtg-shell #hTours .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.vtg-shell .wrap,header .wrap,header nav .wrap,footer .wrap,.vtg-shell .hero .wrap{width:calc(100% - 32px)!important}.vtg-shell .vtg-plan-inner{width:100%;padding:0 16px}.vtg-shell .vtg-about-row,.vtg-shell .vtg-cars-pricing-row,.vtg-shell .vtg-contact-row{padding:32px 16px}.vtg-shell .vtg-plan-row .howsec .steps{grid-template-columns:1fr}.vtg-shell #hTours .tiles,.vtg-shell #hSeason .seas{grid-template-columns:1fr}.vtg-shell .vtg-contact-row #contact form{grid-template-columns:1fr}}
+
+/* Hero trust strip — directly below hero, before popular tours */
+.vtg-shell [data-p="home"] .vtg-hero-benefit-strip{width:100%;background:#f5f4ee;border-bottom:1px solid #dce5dc;box-sizing:border-box}
+.vtg-shell [data-p="home"] .vtg-hero-benefit-inner{width:min(90%,1560px);margin:0 auto;padding:14px 0}
+.vtg-shell [data-p="home"] .vtg-hero-benefit-inner .vtg-plan-benefits{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;align-items:center!important;margin:0!important;padding:0!important;gap:0!important;background:transparent!important;border:0!important;box-shadow:none!important;width:100%!important;max-width:none!important}
+.vtg-shell [data-p="home"] .vtg-hero-benefit-inner .vtg-plan-benefits>span:not(.vtg-benefit-dot){display:block!important;text-align:center!important;font-size:13px!important;font-weight:650!important;color:#153d35!important;padding:5px 12px!important}
+.vtg-shell [data-p="home"] .vtg-hero-benefit-inner .vtg-plan-benefits>span:not(.vtg-benefit-dot)+span:not(.vtg-benefit-dot){border-left:1px solid #d5e0d8!important}
+.vtg-shell [data-p="home"] .vtg-hero-benefit-inner .vtg-benefit-dot{display:none!important}
+@media(max-width:600px){.vtg-shell [data-p="home"] .vtg-hero-benefit-inner{width:96%}.vtg-shell [data-p="home"] .vtg-hero-benefit-inner .vtg-plan-benefits>span:not(.vtg-benefit-dot){font-size:11px!important;padding:4px 6px!important}}
