@@ -25,7 +25,7 @@ function PhotoPicker({ name, multiple = false, label, help, onSelected }) {
       <span className={styles.uploadIcon}>↑</span>
       <strong>{label}</strong>
       <small>{help}</small>
-      <input name={name} type="file" multiple={multiple} accept={name === "video" ? "video/mp4,video/webm,video/quicktime" : "image/jpeg,image/png,image/webp"} onChange={(e) => onSelected(name, Array.from(e.target.files || []))} />
+      <input name={name} type="file" multiple={multiple} accept={["video", "recent_videos"].includes(name) ? "video/mp4,video/webm,video/quicktime" : "image/jpeg,image/png,image/webp"} onChange={(e) => onSelected(name, Array.from(e.target.files || []))} />
     </label>
   );
 }
@@ -180,13 +180,17 @@ export default function Admin() {
         if (!editing) payload.sort_order = Math.max(0, ...rows.map(item => Number(item.sort_order) || 0)) + 1;
       } else {
         const images = await upload(f.getAll("images"), "image");
+        const videos = await upload(f.getAll("recent_videos"), "video");
+        const cover = (await upload(f.getAll("recent_cover"), "image"))[0] || editing?.cover_url || images[0] || null;
         payload = {
           title: String(f.get("title") || "").trim(), description: String(f.get("description") || ""),
           tour_date: f.get("tour_date") || null,
           images: [...(editing?.images || []).filter(url => !removed.includes(url)), ...images],
+          cover_url: cover,
+          video_urls: [...(editing?.video_urls || []).filter(url => !removed.includes(url)), ...videos],
           published: f.get("published") === "on",
         };
-        if (!payload.images.length) throw Error("Add at least one tour photograph.");
+        if (!payload.images.length && !payload.cover_url && !payload.video_urls.length) throw Error("Add a cover photo, tour photograph, or video.");
         if (!editing) payload.sort_order = Math.max(0, ...rows.map(item => Number(item.sort_order) || 0)) + 1;
       }
       if (!payload.name && !payload.title) throw Error("A name or title is required.");
@@ -327,10 +331,12 @@ export default function Admin() {
                 </div>
                 <div className={styles.uploadGrid}>
                   {tab === "videos" ? <><PhotoPicker name="video" label="Upload video" help="MP4, WebM or MOV · up to 100 MB" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/><PhotoPicker name="cover" label="Cover photograph" help="JPG, PNG or WebP · up to 6 MB" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/></>
-                  : <PhotoPicker name="images" multiple label="Add photographs" help="Select multiple JPG, PNG or WebP files · 6 MB each" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/>}
+                  : tab === "recent_tours" ? <><PhotoPicker name="recent_cover" label="Cover photo" help="Main card image · JPG/PNG/WebP · 6 MB" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/><PhotoPicker name="images" multiple label="Tour photographs" help="Multiple JPG, PNG or WebP · 6 MB each" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/><PhotoPicker name="recent_videos" multiple label="Tour videos" help="Multiple MP4, WebM or MOV · up to 100 MB each" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/></> : <PhotoPicker name="images" multiple label="Add photographs" help="Select multiple JPG, PNG or WebP files · 6 MB each" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/>}
                 </div>
                 {Object.values(selectedFiles).flat().length > 0 && <p className={styles.fileNote}>✓ Selected: {Object.values(selectedFiles).flat().map(f => f.name).join(", ")}</p>}
                 {editing?.video_url && tab === "videos" && <video controls className={styles.videoPreview} src={editing.video_url}/>}
+                {tab === "recent_tours" && editing?.cover_url && <div className={styles.existingPhotos}><div className={styles.photoTile}><img src={editing.cover_url} alt="Current cover photo"/></div></div>}
+                {tab === "recent_tours" && editing?.video_urls?.length > 0 && <><h3 className={styles.subheading}>Current videos <small>Tick videos to remove when saving</small></h3><div className={styles.existingPhotos}>{editing.video_urls.map(url => <label key={url} className={styles.photoTile}><video src={url} controls preload="metadata" style={{width:"100%",maxHeight:170}}/><span><input type="checkbox" checked={removed.includes(url)} onChange={e => setRemoved(old => e.target.checked ? [...old,url] : old.filter(item => item !== url))}/> Remove</span></label>)}</div></>}
                 {tab !== "videos" && editing?.images?.length > 0 && <><h3 className={styles.subheading}>Current photographs <small>Tick photos to remove when saving</small></h3><div className={styles.existingPhotos}>{editing.images.map((url, index) => <label key={`${url}-${index}`} className={`${styles.photoTile} ${removed.includes(url) ? styles.photoRemoved : ""}`}><img src={url} alt={`Photo ${index + 1}`} /><span><input type="checkbox" checked={removed.includes(url)} onChange={e => setRemoved(old => e.target.checked ? [...old, url] : old.filter(item => item !== url))}/> Remove</span></label>)}</div></>}
                 <div className={styles.formActions}><label className={styles.publishToggle}><input type="checkbox" name="published" defaultChecked={editing?.published ?? true}/> Published on website</label><div className={styles.actionButtons}><button type="button" className={styles.secondary} onClick={() => { setFormOpen(false); setEditing(null); setRemoved([]); }}>Cancel</button><button type="submit" className={styles.primary} disabled={busy}>{busy ? "Saving / uploading…" : editing ? "Save changes" : "Create content"}</button></div></div>
                 </>}
@@ -344,13 +350,13 @@ export default function Admin() {
               <div className={styles.cards}>{!loadingRows && filteredRows.map(row => {
                 const actualIndex = rows.findIndex(item => item.id === row.id);
                 const visible = tab === "reviews" ? row.approved : row.published;
-                const photo = row.images?.[0] || row.cover_url;
+                const photo = row.cover_url || row.images?.[0];
                 return <article key={row.id} className={styles.itemCard}>
                   <div className={styles.itemPhoto}>{photo ? <img src={photo} alt={row.name || row.title || "Content thumbnail"}/> : <span>{tab === "vehicles" ? "🚙" : tab === "videos" ? "▶" : tab === "reviews" ? "★" : "🏔"}</span>}</div>
                   <div className={styles.itemDetails}><div className={styles.itemTop}><h3>{row.name || row.title || "Guest review"}</h3><span className={`${styles.status} ${visible ? styles.statusOn : styles.statusOff}`}>{visible ? (tab === "reviews" ? "Approved" : "Published") : (tab === "reviews" ? "Pending" : "Hidden")}</span></div>
                     {tab === "reviews" && <p className={styles.reviewText}>{"★".repeat(Math.max(0, Math.min(5, Number(row.rating) || 0)))} · {row.country || ""} · {row.text || ""}</p>}
-                    {tab === "reviews" && <small className={styles.meta}>{row.source || "Website"}{row.tour ? ` · ${row.tour}` : ""}{row.review_date ? ` · ${row.review_date}` : ""}</small>}{row.description && <p className={styles.description}>{row.description}</p>}{tab === "recent_tours" && <small className={styles.meta}>{row.tour_date || "No tour date"} · {(row.images || []).length} photos</small>}
-                    {tab === "vehicles" && <small className={styles.meta}>Position {actualIndex + 1} · {row.passengers || 0} passengers · {(row.images || []).length} photos</small>}
+                    {tab === "reviews" && <small className={styles.meta}>{row.source || "Website"}{row.tour ? ` · ${row.tour}` : ""}{row.review_date ? ` · ${row.review_date}` : ""}</small>}{row.description && <p className={styles.description}>{row.description}</p>}{tab === "recent_tours" && <small className={styles.meta}>{row.tour_date || "No tour date"} · {(row.images || []).length} photos · {(row.video_urls || []).length} videos</small>}
+                    {tab === "vehicles" && <small className={styles.meta}>Position {actualIndex + 1} · {row.passengers || 0} passengers · {(row.images || []).length} photos · {(row.video_urls || []).length} videos</small>}
                     <div className={styles.itemActions}>
                       {tab === "reviews" ? <><button type="button" className={styles.secondary} disabled={busy} onClick={() => openForm(row)}>✎ Edit review</button><button type="button" className={styles.secondary} disabled={busy} onClick={() => change(row.id, { approved: !row.approved })}>{row.approved ? "◉ Hide" : "✓ Approve"}</button></>
                       : <><button type="button" className={styles.secondary} disabled={busy} onClick={() => openForm(row)}>✎ Edit / Photos</button><button type="button" className={styles.secondary} disabled={busy} onClick={() => change(row.id, { published: !row.published })}>{row.published ? "◉ Hide" : "◉ Publish"}</button></>}
