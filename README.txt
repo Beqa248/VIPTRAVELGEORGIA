@@ -1,1 +1,1 @@
-Based on VIPTRAVELGEORGIA-main(6).zip. Upload files preserving paths. Changes: hero benefits relocated immediately below hero; full-width footer redesign. Other homepage sections unchanged. Back up existing files first.
+Replace only components/SiteFooter.jsx in GitHub. Adds Cars (/cars) and Reviews (/reviews) to Explore. Keep your current SiteFooter.module.css unchanged.

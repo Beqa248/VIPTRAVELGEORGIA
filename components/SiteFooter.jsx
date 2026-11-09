@@ -21,7 +21,7 @@ export default function SiteFooter(){return <footer className={styles.footer}>
         <p className={styles.brandDescription}>Private tours and transfers across Georgia, tailored to your journey.</p>
         <p className={styles.brandTagline}>Personalized travel experiences</p>
       </div>
-      <nav className={styles.explore} aria-label="Footer navigation"><h3>Explore</h3><div className={styles.exploreLinks}><a href="/tours">Tours</a><a href="/travel">Georgia Highlights</a><a href="/recent-tours">Recent Tours</a><a href="/contact">Contact</a></div></nav>
+      <nav className={styles.explore} aria-label="Footer navigation"><h3>Explore</h3><div className={styles.exploreLinks}><a href="/tours">Tours</a><a href="/travel">Georgia Highlights</a><a href="/recent-tours">Recent Tours</a><a href="/contact">Contact</a><a href="/cars">Cars</a><a href="/reviews">Reviews</a></div></nav>
       <div className={styles.quickInfo}><h3>Travel with us</h3><p>Private tours</p><p>Flexible itineraries</p><p>Hotel assistance</p><p>Airport transfers</p></div>
       <div className={styles.contactBlock}><h3>Contact us 24/7</h3><div className={styles.contactDetails}><a href="tel:+995558176108">+995 558 17 61 08</a><a href="mailto:SubTravelGeorgia@gmail.com">SubTravelGeorgia@gmail.com</a></div><div className={styles.socials}>{socials.map(s=><a key={s.name} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={`Open ${s.name}`} title={s.name}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{icons[s.icon]}</svg></a>)}</div></div>
     </div>
