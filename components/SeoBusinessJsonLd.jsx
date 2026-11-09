@@ -2,7 +2,7 @@ import { SITE_URL } from "../lib/seo";
 export default function SeoBusinessJsonLd() {
   const organization = {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": "TravelAgency",
     "@id": `${SITE_URL}/#organization`,
     name: "VIPTravelGeorgia",
     url: SITE_URL,

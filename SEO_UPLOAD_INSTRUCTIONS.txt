@@ -1,0 +1,26 @@
+VIPTravelGeorgia SEO patch — based on VIPTRAVELGEORGIA-main(7).zip
+
+UPLOAD/REPLACE ONLY:
+- lib/seo.js
+- components/SeoBusinessJsonLd.jsx
+- .env.example (documentation only; not a live environment setting)
+
+WHAT CHANGED:
+- Site URL is now configurable via NEXT_PUBLIC_SITE_URL, defaulting to the current Vercel URL.
+- English home/tours/cars SEO titles are more descriptive.
+- Existing Organization JSON-LD type becomes TravelAgency (other verified details preserved).
+- Existing sitemap, robots, hreflang, OG/Twitter metadata and tour/region metadata remain in place.
+- No CSS, layouts, page JSX, booking, admin, or Supabase code was modified.
+
+AFTER BUYING THE DOMAIN:
+1. Add the domain to Vercel > Project > Settings > Domains, and configure DNS.
+2. Choose one primary HTTPS hostname and redirect the other (www/non-www).
+3. Vercel > Project > Settings > Environment Variables: add NEXT_PUBLIC_SITE_URL
+   value e.g. https://viptravelgeorgia.com (no trailing slash).
+4. Apply to Production and redeploy. Verify /robots.txt and /sitemap.xml,
+   inspect page source for canonical and hreflang URLs.
+5. Set up Google Search Console and submit the sitemap.
+
+NOTE: This is a safe targeted patch, not a guarantee of rankings or indexing.
+The patch does not replace your logo or create a new social preview image.
+Test a production build after uploading.
