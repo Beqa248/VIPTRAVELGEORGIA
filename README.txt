@@ -1,1 +1,1 @@
-Replace only components/pages/plan.jsx. Keep plan.module.css from the previous modern form patch. Preferred car now uses the same usePublished("vehicles") source as the Cars page.
+Replace components/pages/home.module.css in GitHub. This changes homepage layout CSS only. Based on uploaded main(4) code; no JSX, data, header, footer, translations or admin files are included. Test desktop and mobile after deployment.
