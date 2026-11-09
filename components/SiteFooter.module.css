@@ -52,3 +52,7 @@
   .brandDescription { margin-top: 18px; }
   .bottom { flex-direction: column; align-items: flex-start; }
 }
+/* Center Explore heading above both link columns */
+.explore h3 {
+  text-align: center;
+}
