@@ -1,55 +1,261 @@
-/* VIPTravelGeorgia footer: four balanced columns, full-bleed background. */
+
+/* VIPTravelGeorgia Footer — Clean, balanced, responsive */
+
 .footer {
-  width: 100%; box-sizing: border-box;
-  background: #153d35; color: #f5f4ee;
+  width: 100%;
+  box-sizing: border-box;
+  background: #153d35;
+  color: #f5f4ee;
   border-top: 2px solid #d9b76b;
   padding: 32px clamp(24px, 4vw, 72px) 20px;
   font-family: system-ui, sans-serif;
 }
-.inner { width: 100%; max-width: 1540px; margin: 0 auto; box-sizing: border-box; }
+
+.inner {
+  width: 100%;
+  max-width: 1540px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Four balanced columns */
+
 .main {
   display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1.12fr) minmax(0, .85fr) minmax(0, 1.05fr);
+  grid-template-columns:
+    minmax(0, 1.35fr)
+    minmax(0, 1.12fr)
+    minmax(0, 0.85fr)
+    minmax(0, 1.05fr);
   gap: clamp(26px, 3.2vw, 58px);
   align-items: start;
   padding-bottom: 22px;
 }
-.brandColumn, .explore, .quickInfo, .contactBlock { min-width: 0; text-align: left; }
-.brand { display: flex; align-items: center; gap: 15px; min-width: 0; }
-/* Crop the square PNG to its circular badge: the green square is in the image itself. */
-.brand img {
-  display: block; width: 82px; height: 82px; flex: 0 0 82px;
-  object-fit: cover; border-radius: 50%;
-  clip-path: circle(47% at 50% 50%);
-}
-.brand strong { display: block; font: 700 clamp(19px, 1.55vw, 27px)/1.2 Georgia, serif; color: #fff; white-space: nowrap; }
-.brand strong span { color: #d9b76b; }
-.brand small { display: block; color: #d9b76b; font-size: 10px; letter-spacing: .9px; margin-top: 8px; }
-.brandDescription { max-width: 340px; margin: 22px 0 10px; color: #e0eae5; font-size: 14px; line-height: 1.75; }
-.brandTagline { margin: 0; color: #d9b76b; font-size: 13px; line-height: 1.6; }
-.main h3 { font: 700 21px/1.3 Georgia, serif; color: #d9b76b; margin: 8px 0 24px; }
-.exploreLinks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 20px; }
-.exploreLinks a, .contactDetails a { color: #f5f4ee; text-decoration: none; font-size: 14px; line-height: 1.55; overflow-wrap: anywhere; }
-.exploreLinks a:hover, .contactDetails a:hover { color: #d9b76b; }
-.quickInfo p { margin: 0 0 17px; font-size: 14px; line-height: 1.55; color: #e0eae5; }
-.contactDetails { display: flex; flex-direction: column; gap: 17px; }
-.socials { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
-.socials a { display: inline-flex; justify-content: center; align-items: center; width: 44px; height: 44px; flex: 0 0 44px; border: 1px solid #7c998d; border-radius: 50%; color: #fff; text-decoration: none; transition: background .2s, transform .2s; }
-.socials a:hover, .socials a:focus-visible { background: #255b4a; transform: translateY(-2px); }
-.socials svg { width: 21px; height: 21px; }
-.bottom { display: flex; align-items: center; justify-content: space-between; gap: 16px; border-top: 1px solid #557568; padding-top: 19px; color: #d2e2da; font-size: 12px; }
-.bottom p { margin: 0; }
-@media (max-width: 1250px) {
-  .main { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 38px 52px; }
-  .exploreLinks { max-width: 380px; }
-}
-@media (max-width: 650px) {
-  .footer { padding: 36px 22px 20px; }
-  .main { grid-template-columns: minmax(0, 1fr); gap: 30px; padding-bottom: 32px; }
-  .main h3 { margin: 0 0 16px; }
-  .brand strong { white-space: normal; }
-  .brand img { width: 72px; height: 72px; flex-basis: 72px; }
-  .brandDescription { margin-top: 18px; }
-  .bottom { flex-direction: column; align-items: flex-start; }
+
+.brandColumn,
+.explore,
+.quickInfo,
+.contactBlock {
+  min-width: 0;
+  text-align: left;
 }
 
+/* Brand and logo */
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-width: 0;
+}
+
+.brand img {
+  display: block;
+  width: 82px;
+  height: 82px;
+  flex: 0 0 82px;
+  object-fit: cover;
+  border-radius: 50%;
+  clip-path: circle(47% at 50% 50%);
+}
+
+.brand strong {
+  display: block;
+  font: 700 clamp(19px, 1.55vw, 27px)/1.2 Georgia, serif;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.brand strong span {
+  color: #d9b76b;
+}
+
+.brand small {
+  display: block;
+  color: #d9b76b;
+  font-size: 10px;
+  letter-spacing: 0.9px;
+  margin-top: 8px;
+}
+
+.brandDescription {
+  max-width: 340px;
+  margin: 18px 0 8px;
+  color: #e0eae5;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.brandTagline {
+  margin: 0;
+  color: #d9b76b;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* Section headings */
+
+.main h3 {
+  font: 700 21px/1.3 Georgia, serif;
+  color: #d9b76b;
+  margin: 8px 0 20px;
+}
+
+/* Center Explore heading above both link columns */
+
+.explore h3 {
+  text-align: center;
+}
+
+/* Explore links */
+
+.exploreLinks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 20px;
+}
+
+.exploreLinks a,
+.contactDetails a {
+  color: #f5f4ee;
+  text-decoration: none;
+  font-size: 14px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.exploreLinks a:hover,
+.contactDetails a:hover {
+  color: #d9b76b;
+}
+
+/* Travel with us */
+
+.quickInfo p {
+  margin: 0 0 14px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #e0eae5;
+}
+
+/* Contact information */
+
+.contactDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Social media */
+
+.socials {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.socials a {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  border: 1px solid #7c998d;
+  border-radius: 50%;
+  color: #ffffff;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.socials a:hover,
+.socials a:focus-visible {
+  background: #255b4a;
+  transform: translateY(-2px);
+}
+
+.socials svg {
+  width: 21px;
+  height: 21px;
+}
+
+/* Footer bottom */
+
+.bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid #557568;
+  padding-top: 15px;
+  color: #d2e2da;
+  font-size: 12px;
+}
+
+.bottom p {
+  margin: 0;
+}
+
+/* Tablet */
+
+@media (max-width: 1250px) {
+  .main {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 30px 40px;
+  }
+
+  .exploreLinks {
+    max-width: 380px;
+  }
+
+  .explore h3 {
+    text-align: left;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 650px) {
+  .footer {
+    padding: 28px 22px 18px;
+  }
+
+  .main {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 26px;
+    padding-bottom: 24px;
+  }
+
+  .main h3 {
+    margin: 0 0 16px;
+  }
+
+  .exploreLinks {
+    max-width: 100%;
+  }
+
+  .explore h3 {
+    text-align: center;
+  }
+
+  .brand strong {
+    white-space: normal;
+  }
+
+  .brand img {
+    width: 72px;
+    height: 72px;
+    flex-basis: 72px;
+  }
+
+  .brandDescription {
+    margin-top: 16px;
+  }
+
+  .bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
