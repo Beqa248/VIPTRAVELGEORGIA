@@ -3,7 +3,7 @@
   width: 100%; box-sizing: border-box;
   background: #153d35; color: #f5f4ee;
   border-top: 2px solid #d9b76b;
-  padding: 54px clamp(24px, 4vw, 72px) 24px;
+  padding: 32px clamp(24px, 4vw, 72px) 20px;
   font-family: system-ui, sans-serif;
 }
 .inner { width: 100%; max-width: 1540px; margin: 0 auto; box-sizing: border-box; }
@@ -12,7 +12,7 @@
   grid-template-columns: minmax(0, 1.35fr) minmax(0, 1.12fr) minmax(0, .85fr) minmax(0, 1.05fr);
   gap: clamp(26px, 3.2vw, 58px);
   align-items: start;
-  padding-bottom: 42px;
+  padding-bottom: 22px;
 }
 .brandColumn, .explore, .quickInfo, .contactBlock { min-width: 0; text-align: left; }
 .brand { display: flex; align-items: center; gap: 15px; min-width: 0; }
@@ -44,7 +44,7 @@
   .exploreLinks { max-width: 380px; }
 }
 @media (max-width: 650px) {
-  .footer { padding: 38px 22px 20px; }
+  .footer { padding: 36px 22px 20px; }
   .main { grid-template-columns: minmax(0, 1fr); gap: 30px; padding-bottom: 32px; }
   .main h3 { margin: 0 0 16px; }
   .brand strong { white-space: normal; }
@@ -52,7 +52,4 @@
   .brandDescription { margin-top: 18px; }
   .bottom { flex-direction: column; align-items: flex-start; }
 }
-/* Center Explore heading above both link columns */
-.explore h3 {
-  text-align: center;
-}
+
