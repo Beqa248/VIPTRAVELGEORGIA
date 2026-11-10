@@ -12,10 +12,10 @@
   margin-inline: auto;
 }
 .banner {
-  background: linear-gradient(90deg, rgba(10, 49, 40, .97) 0%, rgba(10, 49, 40, .85) 28%, rgba(10, 49, 40, .35) 60%, rgba(10, 49, 40, .06) 100%), url("/images/tours-caucasus-hero.webp") center 47% / cover no-repeat, #153b31;
+  background: linear-gradient(90deg, rgba(10, 49, 40, .97) 0%, rgba(10, 49, 40, .85) 28%, rgba(10, 49, 40, .35) 60%, rgba(10, 49, 40, .06) 100%), url("/images/tours-caucasus-hero.webp") center 55% / cover no-repeat, #153b31;
   color: #fffaf0;
-  padding: clamp(64px, 8vw, 115px) 0 clamp(68px, 8vw, 115px);
-  min-height: clamp(360px, 29vw, 510px);
+  padding: clamp(35px, 4vw, 60px) 0;
+  min-height: clamp(340px, 24vw, 420px);
   display: flex;
   align-items: center;
 }
@@ -158,3 +158,5 @@
   .grid, .filters { grid-template-columns: minmax(0, 1fr); }
 }
 .catalog h2::after { display: none; }
+
+@media (max-width: 700px) { .banner { min-height: 350px; padding: 36px 0; background-position: center, 60% 50%; } }

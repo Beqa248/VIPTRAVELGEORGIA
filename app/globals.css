@@ -502,3 +502,11 @@ body:has(.adminSubRoot) .vtg-shell { min-height:0!important; }
 }
 .rgrid .rtile {padding:12px 10px 20px !important;}
 @media(max-width:600px){.rgrid .rtile b.vtg-region-title{font-size:clamp(36px,9vw,46px) !important;}}
+
+/* Cinematic hero treatment on existing Home and Georgia Highlights imagery. */
+.vtg-shell [data-p="home"] > .hero {background-image:linear-gradient(90deg,rgba(9,43,34,.91) 0%,rgba(9,43,34,.61) 43%,rgba(9,43,34,.09) 100%),url(/images/photo-001.jpg)!important;background-position:center,center 52%!important;background-size:cover!important;min-height:clamp(380px,32vw,510px)!important;padding:65px 0 55px!important;}
+.vtg-shell [data-p="home"] > .hero::before {background:transparent!important;}
+.vtg-shell [data-p="travel"] .banner#bn-highlights {min-height:clamp(350px,27vw,445px)!important;background-position:center 54%!important;}
+.vtg-shell [data-p="travel"] .banner#bn-highlights::before {background:linear-gradient(90deg,rgba(8,38,31,.83) 0%,rgba(8,38,31,.43) 47%,rgba(8,38,31,.06) 100%)!important;}
+.vtg-shell [data-p="travel"] .banner#bn-highlights .wrap {min-height:clamp(350px,27vw,445px)!important;justify-content:center!important;gap:18px!important;}
+@media(max-width:700px){.vtg-shell [data-p="home"] > .hero{min-height:400px!important;padding:50px 0!important;background-position:center,58% center!important}.vtg-shell [data-p="travel"] .banner#bn-highlights{background-position:58% center!important}}

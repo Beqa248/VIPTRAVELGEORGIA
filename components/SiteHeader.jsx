@@ -33,9 +33,10 @@ export default function SiteHeader() {
   const path = pathname.replace(/^\/(en|ka|ru|he)(?=\/|$)/, "") || "/";
   const labels = chromeLabels[lang] || chromeLabels.en;
   const [openPath, setOpenPath] = useState(null);
+  const [activeDropdown, setActiveDropdown] = useState(null);
   const toggle = useRef(null);
   const open = openPath === pathname;
-  const close = () => setOpenPath(null);
+  const close = () => { setOpenPath(null); setActiveDropdown(null); };
   const href = (url) => localizedPath(lang, url);
 
   function handleEscape(event) {
@@ -64,17 +65,25 @@ export default function SiteHeader() {
               <strong dir="ltr">+995 558 17 61 08</strong>
             </span>
           </a>
-          <label className={styles.control}>
+          <div className={`${styles.control} ${styles.dropdown}`} onBlur={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget)) setActiveDropdown(null);
+          }}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
               <circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c6 6 6 12 0 18M12 3c-6 6-6 12 0 18" />
             </svg>
-            <select aria-label={labels.language} value={lang} onChange={(event) => { close(); setLang(event.target.value); }}>
-              <option value="en" lang="en">EN</option>
-              <option value="ka" lang="ka">KA</option>
-              <option value="ru" lang="ru">RU</option>
-              <option value="he" lang="he">HE</option>
-            </select>
-          </label>
+            <button type="button" className={styles.dropdownTrigger} aria-label={labels.language}
+              aria-haspopup="true" aria-expanded={activeDropdown === "language"}
+              onClick={() => setActiveDropdown(activeDropdown === "language" ? null : "language")}
+              onKeyDown={(event) => { if (event.key === "Escape") setActiveDropdown(null); }}>
+              {lang.toUpperCase()} <span aria-hidden="true">⌄</span>
+            </button>
+            {activeDropdown === "language" && <div className={styles.dropdownMenu} role="group" aria-label={labels.language}>
+              {[["en", "EN"], ["ka", "KA"], ["ru", "RU"], ["he", "HE"]].map(([value, label]) => (
+                <button type="button" key={value} lang={value} aria-pressed={lang === value}
+                  className={styles.dropdownOption} onClick={() => { setLang(value); close(); }}>{label}</button>
+              ))}
+            </div>}
+          </div>
           <button ref={toggle} type="button" className={styles.toggle} aria-expanded={open} aria-controls="site-navigation"
             aria-label={open ? labels.close : labels.open} onClick={() => setOpenPath(open ? null : pathname)}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
@@ -102,14 +111,22 @@ export default function SiteHeader() {
               <PhoneIcon />
               <span dir="ltr">+995 558 17 61 08</span>
             </a>
-            <label className={`${styles.control} ${styles.currency}`}>
-              <span className={styles.currencyLabel}>{labels.currency}</span>
-              <select aria-label={labels.currency} value={currency} onChange={(event) => setCurrency(event.target.value)}>
-                <option value="USD">USD $</option>
-                <option value="EUR">EUR €</option>
-                <option value="GEL">GEL ₾</option>
-              </select>
-            </label>
+            <div className={`${styles.control} ${styles.currency} ${styles.dropdown}`} onBlur={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget)) setActiveDropdown(null);
+            }}>
+              <button type="button" className={styles.dropdownTrigger} aria-label={labels.currency}
+                aria-haspopup="true" aria-expanded={activeDropdown === "currency"}
+                onClick={() => setActiveDropdown(activeDropdown === "currency" ? null : "currency")}
+                onKeyDown={(event) => { if (event.key === "Escape") setActiveDropdown(null); }}>
+                {currency === "USD" ? "USD $" : currency === "EUR" ? "EUR €" : "GEL ₾"} <span aria-hidden="true">⌄</span>
+              </button>
+              {activeDropdown === "currency" && <div className={styles.dropdownMenu} role="group" aria-label={labels.currency}>
+                {[["USD", "USD $"], ["EUR", "EUR €"], ["GEL", "GEL ₾"]].map(([value, label]) => (
+                  <button type="button" key={value} aria-pressed={currency === value}
+                    className={styles.dropdownOption} onClick={() => { setCurrency(value); setActiveDropdown(null); }}>{label}</button>
+                ))}
+              </div>}
+            </div>
             <Link href={href("/booking")} className={styles.booking}
               aria-current={path === "/booking" ? "page" : undefined} onClick={close}>
               {labels.booking}

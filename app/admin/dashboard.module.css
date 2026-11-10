@@ -17,3 +17,10 @@
 .shell .nav {position:static!important;display:flex!important;flex:none;visibility:visible!important;opacity:1!important;transform:none!important;margin:0!important;padding:12px clamp(20px,4vw,48px) 22px!important;border-radius:0 0 20px 20px!important;background:#173c35;z-index:auto!important;}
 .shell .content {position:static!important;margin:0!important;padding:34px clamp(16px,4vw,48px)!important;transform:none!important;}
 .shell .embeddedSection {position:static!important;display:block;margin:0;padding:0;}
+
+/* Keep admin header legible even when global header styles load. */
+.shell .dashboard > .topbar {background:#123a31!important;color:#fff!important;border:1px solid #2c5949!important;border-bottom:0!important;}
+.shell .dashboard > .topbar .adminHeaderTitle {color:#fff!important;text-shadow:none!important;font-weight:800!important;opacity:1!important;}
+.shell .dashboard > .topbar .signOut {background:#245747!important;color:#fff!important;border:1px solid #9ab9aa!important;font-weight:700!important;opacity:1!important;}
+.shell .dashboard > .topbar .signOut:hover {background:#346e59!important;}
+.shell .dashboard > .topbar .signOut:focus-visible {outline:2px solid #c6e4d5;outline-offset:2px;}
