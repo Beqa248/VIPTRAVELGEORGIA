@@ -1,1 +1,1 @@
-Replace only components/SiteFooter.module.css in your current project. Preserve SiteFooter.jsx (with Cars and Reviews links). No other files are modified.
+Replace app/sitemap.xml/route.js with this file. Keep app/sitemap.js deleted. public/sitemap.xsl can be deleted as unused. Deploy on Vercel and open /sitemap.xml in a fresh tab. XML will display in the browser native XML tree view where supported.

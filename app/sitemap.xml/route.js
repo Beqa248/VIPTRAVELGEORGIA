@@ -70,7 +70,6 @@ export async function GET() {
 
   const xml = [
     '<?xml version="1.0" encoding="UTF-8"?>',
-    '<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>',
     `<urlset xmlns="${XML_NS}" xmlns:xhtml="${XHTML_NS}">`,
     ...urls,
     "</urlset>",
