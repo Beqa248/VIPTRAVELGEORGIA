@@ -1,16 +1,18 @@
-VIPTravelGeorgia — Lighthouse Image Delivery patch
+VIPTravelGeorgia — Mobile image delivery optimization (changed files only)
 
-Replace only: components/pages/home.jsx
+Files to replace at repository root:
+  components/pages/home.jsx
+  components/VehicleCards.jsx
+  components/pages/tours.jsx
 
-What changes:
-- Home popular-tour cards use existing CardPhoto/Next Image instead of CSS background-image.
-- Images can be resized/converted by Next.js Image Optimization, with responsive sizes and lazy loading.
-- Existing hero and layout remain unchanged.
+Changes:
+- Home popular-tour backgrounds use the existing CardPhoto/next/image component, retaining layout and links.
+- Home vehicle carousel photos use Next Image responsive optimization for configured Supabase or local /images/ sources, preserving a native img fallback for other sources.
+- Tours listing supplies responsive sizes for single-column mobile and multi-column desktop.
 
-Prerequisites: Keep existing components/CardPhoto.jsx, lib/imageSources.mjs and next.config.mjs unchanged.
-Vercel NEXT_PUBLIC_SUPABASE_URL must be configured for Supabase remotePatterns.
+Requirements:
+- Keep existing components/CardPhoto.jsx, lib/imageSources.mjs, next.config.mjs.
+- Vercel NEXT_PUBLIC_SUPABASE_URL must be configured for Supabase images.
+- This does NOT remove all Lighthouse warnings. The JPG hero and local image cache warnings require the original image files and a versioned asset/cache strategy; CSS blocking needs a separate audit.
 
-This addresses image delivery and network payload on Home, not all Lighthouse warnings.
-Some Supabase cache warnings and render-blocking CSS require separate work.
-
-After deploy, verify images on Home and retest PageSpeed mobile.
+Upload only these 3 files into the matching GitHub paths; deploy, then check mobile Home, Tours, car carousel and run PageSpeed 3 times.

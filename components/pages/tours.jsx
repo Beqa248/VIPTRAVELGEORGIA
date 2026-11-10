@@ -55,7 +55,7 @@ function TourCard({ tour, copy }) {
   return (
     <article className={styles.card}>
       <div className={styles.cover}>
-        <CardPhoto src={tour.cover_url} sizes="(max-width: 510px) 94vw, (max-width: 820px) 46vw, (max-width: 1220px) 30vw, 368px" />
+        <CardPhoto src={tour.cover_url} sizes="(max-width: 600px) calc(100vw - 32px), (max-width: 820px) 46vw, (max-width: 1220px) 30vw, 440px" />
       </div>
       <div className={styles.cardBody}>
         {duration > 0 && <span className={styles.duration}>{duration === 1 ? copy.day : copy.days.replace("{n}", duration)}</span>}
