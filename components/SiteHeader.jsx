@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useRef, useState } from "react";
 import { chromeLabels } from "../lib/chromeLabels";
@@ -51,7 +52,7 @@ export default function SiteHeader() {
       <a className={styles.skip} href="#main-content">{labels.skip}</a>
       <div className={styles.main}>
         <Link href={href("/")} className={styles.brand} onClick={close}>
-          <img src="/viptravelgeorgia-round-logo.webp" alt="" width="192" height="192" className={styles.brandLogo} />
+          <Image src="/viptravelgeorgia-round-logo.webp" alt="" width={77} height={77} sizes="77px" priority className={styles.brandLogo} />
           <span className={styles.brandText}>
             <strong>VIPTravel<span>Georgia</span></strong>
             <small>{labels.tagline}</small>

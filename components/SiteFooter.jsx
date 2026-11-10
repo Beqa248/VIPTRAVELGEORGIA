@@ -1,5 +1,6 @@
 "use client";
 import styles from "./SiteFooter.module.css";
+import Image from "next/image";
 
 const icons = {
   instagram: <><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none"/></>,
@@ -17,7 +18,7 @@ export default function SiteFooter(){return <footer className={styles.footer}>
   <div className={styles.inner}>
     <div className={styles.main}>
       <div className={styles.brandColumn}>
-        <div className={styles.brand}><img src="/viptravelgeorgia-round-logo.png" alt="VIPTravelGeorgia logo"/><div><strong>VIPTravel<span>Georgia</span></strong><small>PRIVATE TOURS & TRANSFERS</small></div></div>
+        <div className={styles.brand}><Image src="/viptravelgeorgia-round-logo.webp" alt="VIPTravelGeorgia logo" width={96} height={96} sizes="96px" /><div><strong>VIPTravel<span>Georgia</span></strong><small>PRIVATE TOURS & TRANSFERS</small></div></div>
         <p className={styles.brandDescription}>Private tours and transfers across Georgia, tailored to your journey.</p>
         <p className={styles.brandTagline}>Personalized travel experiences</p>
       </div>
