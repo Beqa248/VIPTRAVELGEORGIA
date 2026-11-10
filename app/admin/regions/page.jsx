@@ -14,12 +14,12 @@ export default function RegionsAdmin({embedded=false}){
  async function load(){const {data,error}=await supabase.from("travel_regions").select("*").order("sort_order",{ascending:true}).order("created_at",{ascending:true});if(error)setError(error.message);else setItems(data||[])}
  async function save(e){e.preventDefault();if(!form?.title?.trim())return;setBusy(true);setError("");setNotice("");try{
  let image_url=form.image_url||"";
- if(file){if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>6*1024*1024)throw Error("Use JPG, PNG or WebP up to 6 MB.");const path=`regions/${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,"")}`;const {error:upError}=await supabase.storage.from("tour-media").upload(path,file,{contentType:file.type});if(upError)throw upError;image_url=supabase.storage.from("tour-media").getPublicUrl(path).data.publicUrl}
+ if(file){if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>6*1024*1024)throw Error("Use JPG, PNG or WebP up to 6 MB.");const path=`regions/${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,"")}`;const {error:upError}=await supabase.storage.from("tour-media").upload(path,file,{contentType:file.type,cacheControl:"86400"});if(upError)throw upError;image_url=supabase.storage.from("tour-media").getPublicUrl(path).data.publicUrl}
  const gallery_images=[...(form.gallery_images||[])];
  for(const picture of galleryFiles){
   if(!["image/jpeg","image/png","image/webp"].includes(picture.type)||picture.size>6*1024*1024)throw Error("Gallery images must be JPG, PNG or WebP under 6 MB.");
   const path=`regions/gallery/${crypto.randomUUID()}-${picture.name.replace(/[^a-zA-Z0-9._-]/g,"")}`;
-  const {error:uploadError}=await supabase.storage.from("tour-media").upload(path,picture,{contentType:picture.type});
+  const {error:uploadError}=await supabase.storage.from("tour-media").upload(path,picture,{contentType:picture.type,cacheControl:"86400"});
   if(uploadError)throw uploadError;
   gallery_images.push(supabase.storage.from("tour-media").getPublicUrl(path).data.publicUrl);
  }

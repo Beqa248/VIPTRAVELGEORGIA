@@ -14,7 +14,7 @@ export default function NewToursManager({archivedOnly=false}){
   setDraft(t?{...t}:{...empty});
   if(t) supabase.from("tour_prices").select("price_mode,price_amount,price_currency,price_unit").eq("slug",t.slug).maybeSingle().then(({data})=>{if(data)setDraft(d=>d?.slug===t.slug?{...d,...data}:d)});setCover(null);setGallery([]);setRemoved([]);setError("");setNotice("")}
  function set(k,v){setDraft(d=>({...d,[k]:v}))}
- async function upload(files,slug){let out=[];for(const file of files){if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>6*1024*1024)throw Error("Images must be JPG, PNG or WebP, up to 6 MB each.");const path=`custom-tours/${slug}/${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,"")}`;const {error}=await supabase.storage.from("tour-media").upload(path,file,{contentType:file.type});if(error)throw error;out.push(supabase.storage.from("tour-media").getPublicUrl(path).data.publicUrl)}return out}
+ async function upload(files,slug){let out=[];for(const file of files){if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>6*1024*1024)throw Error("Images must be JPG, PNG or WebP, up to 6 MB each.");const path=`custom-tours/${slug}/${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,"")}`;const {error}=await supabase.storage.from("tour-media").upload(path,file,{contentType:file.type,cacheControl:"86400"});if(error)throw error;out.push(supabase.storage.from("tour-media").getPublicUrl(path).data.publicUrl)}return out}
  async function generateTranslations(){
   if(!draft?.title?.trim() || !draft?.description?.trim()){setError("Enter the tour name and description first.");return;}
   setTranslationBusy(true);setError("");setNotice("");

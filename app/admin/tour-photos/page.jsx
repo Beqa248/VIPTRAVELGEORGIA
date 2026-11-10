@@ -107,7 +107,7 @@ export default function TourPhotosAdmin({embedded=false}) {
       if (!["image/jpeg", "image/png", "image/webp"].includes(file.type) || file.size > 6 * 1024 * 1024)
         throw new Error("Use JPG, PNG or WebP images smaller than 6 MB.");
       const path = `${slug}/${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "")}`;
-      const { error: uploadError } = await supabase.storage.from("tour-media").upload(path, file, { contentType: file.type });
+      const { error: uploadError } = await supabase.storage.from("tour-media").upload(path, file, { contentType: file.type, cacheControl: "86400" });
       if (uploadError) throw uploadError;
       result.push(supabase.storage.from("tour-media").getPublicUrl(path).data.publicUrl);
     }

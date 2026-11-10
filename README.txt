@@ -1,7 +1,6 @@
-VIPTravelGeorgia mobile LCP patch
+VIPTravelGeorgia - Supabase upload cache patch
 
-Replace app/page.jsx in your GitHub repository with the included file.
-This preloads /images/photo-001.jpg (the current Home CSS hero image) with high fetch priority.
-No CSS, layout, or other pages are changed.
-IMPORTANT: Confirm /images/photo-001.jpg is accessible on the deployed site.
-After Vercel deploys, retest PageSpeed Insights Mobile.
+Replace only the 4 files at their exact paths in GitHub.
+New tour-media images get cacheControl 86400 (24 hours). Video uploads are unchanged.
+Existing images are NOT modified. This patch does NOT compress images or guarantee a PageSpeed increase.
+No Supabase bucket settings need changing.

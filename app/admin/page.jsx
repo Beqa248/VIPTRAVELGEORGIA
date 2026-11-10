@@ -133,7 +133,7 @@ export default function Admin() {
       }
       const bucket = video ? "tour-videos" : "tour-media";
       const name = `${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "")}`;
-      const { error: uploadError } = await client.storage.from(bucket).upload(name, file, { upsert: false, contentType: file.type });
+      const { error: uploadError } = await client.storage.from(bucket).upload(name, file, { upsert: false, contentType: file.type, ...(video ? {} : { cacheControl: "86400" }) });
       if (uploadError) throw uploadError;
       urls.push(client.storage.from(bucket).getPublicUrl(name).data.publicUrl);
     }
