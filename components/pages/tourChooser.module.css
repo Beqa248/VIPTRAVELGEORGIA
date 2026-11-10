@@ -200,13 +200,13 @@
 }
 
 /* Tours listing only: match the wider page gutters without changing the hero. */
-.catalog .content.wrap {
+.catalog .content > .wrap {
   width: calc(100% - 2 * clamp(20px, 3vw, 48px));
   max-width: 1600px;
   margin-inline: auto;
 }
 @media (max-width: 700px) {
-  .catalog .content.wrap {
+  .catalog .content > .wrap {
     width: calc(100% - 32px);
   }
 }
@@ -229,4 +229,17 @@
     padding-block: 34px;
   }
   .catalog .banner .wrap { transform: none; }
+}
+
+/* Correct DOM structure: .content contains a child .wrap (not the same element).
+   Keep Tours filters and cards wider, while hero stays untouched. */
+.catalog .content > .wrap {
+  width: calc(100% - 2 * clamp(20px, 3vw, 48px));
+  max-width: 1600px;
+  margin-inline: auto;
+}
+@media (max-width: 700px) {
+  .catalog .content > .wrap {
+    width: calc(100% - 32px);
+  }
 }
