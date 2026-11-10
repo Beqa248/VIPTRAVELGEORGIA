@@ -1,1 +1,7 @@
-Replace app/sitemap.xml/route.js with this file. Keep app/sitemap.js deleted. public/sitemap.xsl can be deleted as unused. Deploy on Vercel and open /sitemap.xml in a fresh tab. XML will display in the browser native XML tree view where supported.
+VIPTravelGeorgia mobile LCP patch
+
+Replace app/page.jsx in your GitHub repository with the included file.
+This preloads /images/photo-001.jpg (the current Home CSS hero image) with high fetch priority.
+No CSS, layout, or other pages are changed.
+IMPORTANT: Confirm /images/photo-001.jpg is accessible on the deployed site.
+After Vercel deploys, retest PageSpeed Insights Mobile.
