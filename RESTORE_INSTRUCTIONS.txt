@@ -1,0 +1,1 @@
+Restore the four files to their matching paths in GitHub, replacing the previous optimization patch. Source: VIPTRAVELGEORGIA-main(20261110-194957).zip, before the last optimization patch. Deploy on Vercel. Compare median of three Mobile tests. This is a rollback, not a new performance improvement; 94 cannot be guaranteed. Do not upload INSTALL.txt as website code.

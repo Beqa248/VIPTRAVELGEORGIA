@@ -5,7 +5,6 @@ const nextConfig = {
     localPatterns: [{ pathname: "/images/**", search: "" }],
     remotePatterns: storageImagePatterns,
     formats: ["image/avif", "image/webp"],
-    minimumCacheTTL: 86400,
   },
   async headers() {
     return [
