@@ -33,6 +33,15 @@ async function publishedUpdateDates(table, key) {
   return new Map((data || []).map(item => [String(item[key]), validDate(item.updated_at)]));
 }
 
+function sitemapHints(path) {
+  if (path === "") return { changefreq: "weekly", priority: "1.0" };
+  if (path === "/tours") return { changefreq: "weekly", priority: "0.9" };
+  if (path.startsWith("/tour/")) return { changefreq: "monthly", priority: "0.8" };
+  if (path.startsWith("/regions/")) return { changefreq: "monthly", priority: "0.7" };
+  if (path === "/cars" || path === "/travel") return { changefreq: "monthly", priority: "0.8" };
+  return { changefreq: "monthly", priority: "0.6" };
+}
+
 export async function GET(request) {
   const [tours, regionIds, tourDates, regionDates] = await Promise.all([
     getPublishedTourRoutes(),
@@ -67,6 +76,7 @@ export async function GET(request) {
         langs: SEO_LANGS,
         localizedPath,
         siteName: "VIPTravelGeorgia",
+        sitemapHints,
       }),
       {
         headers: {
@@ -81,6 +91,7 @@ export async function GET(request) {
 
   const urls = [];
   for (const [path, lastmod] of paths) {
+    const { changefreq, priority } = sitemapHints(path);
     const alternatives = alternateUrls(path);
     for (const lang of SEO_LANGS) {
       const loc = SITE_URL + localizedPath(lang, path);
@@ -91,6 +102,8 @@ export async function GET(request) {
         "  <url>",
         `    <loc>${escapeXml(loc)}</loc>`,
         ...(lastmod ? [`    <lastmod>${escapeXml(lastmod)}</lastmod>`] : []),
+        `    <changefreq>${changefreq}</changefreq>`,
+        `    <priority>${priority}</priority>`,
         alternateTags,
         "  </url>",
       ].join("\n"));
