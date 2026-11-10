@@ -510,3 +510,43 @@ body:has(.adminSubRoot) .vtg-shell { min-height:0!important; }
 .vtg-shell [data-p="travel"] .banner#bn-highlights::before {background:linear-gradient(90deg,rgba(8,38,31,.83) 0%,rgba(8,38,31,.43) 47%,rgba(8,38,31,.06) 100%)!important;}
 .vtg-shell [data-p="travel"] .banner#bn-highlights .wrap {min-height:clamp(350px,27vw,445px)!important;justify-content:center!important;gap:18px!important;}
 @media(max-width:700px){.vtg-shell [data-p="home"] > .hero{min-height:400px!important;padding:50px 0!important;background-position:center,58% center!important}.vtg-shell [data-p="travel"] .banner#bn-highlights{background-position:58% center!important}}
+
+
+/* Unified hero presentation — Home and Georgia Highlights. */
+.vtg-shell [data-p="home"] > .hero {
+  min-height: clamp(390px, 28vw, 465px) !important;
+  padding: 30px 0 !important;
+  background-position: center, center 53% !important;
+}
+.vtg-shell [data-p="home"] > .hero > .wrap {
+  width: calc(100% - 2 * clamp(24px, 5vw, 96px)) !important;
+  max-width: none !important;
+  margin-inline: auto !important;
+  text-align: start !important;
+}
+.vtg-shell [data-p="home"] > .hero h1,
+.vtg-shell [data-p="home"] > .hero p { text-align: start !important; }
+.vtg-shell [data-p="travel"] .banner#bn-travel {
+  min-height: clamp(390px, 28vw, 465px) !important;
+  background-size: cover !important;
+  background-position: center 46% !important;
+  position: relative;
+}
+.vtg-shell [data-p="travel"] .banner#bn-travel::before {
+  background: linear-gradient(90deg, rgba(9,43,34,.86) 0%, rgba(9,43,34,.55) 43%, rgba(9,43,34,.08) 100%) !important;
+}
+.vtg-shell [data-p="travel"] .banner#bn-travel .wrap {
+  min-height: clamp(390px, 28vw, 465px) !important;
+  width: calc(100% - 2 * clamp(24px, 5vw, 96px)) !important;
+  max-width: none !important;
+  margin-inline: auto !important;
+  text-align: start !important;
+}
+@media (max-width: 700px) {
+  .vtg-shell [data-p="home"] > .hero { min-height: 390px !important; padding: 30px 0 !important; }
+  .vtg-shell [data-p="home"] > .hero > .wrap,
+  .vtg-shell [data-p="travel"] .banner#bn-travel .wrap { width: calc(100% - 40px) !important; }
+  .vtg-shell [data-p="travel"] .banner#bn-travel,
+  .vtg-shell [data-p="travel"] .banner#bn-travel .wrap { min-height: 390px !important; }
+  .vtg-shell [data-p="travel"] .banner#bn-travel { background-position: 58% center !important; }
+}
