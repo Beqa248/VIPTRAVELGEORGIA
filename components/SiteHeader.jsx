@@ -76,7 +76,7 @@ export default function SiteHeader() {
               aria-haspopup="true" aria-expanded={activeDropdown === "language"}
               onClick={() => setActiveDropdown(activeDropdown === "language" ? null : "language")}
               onKeyDown={(event) => { if (event.key === "Escape") setActiveDropdown(null); }}>
-              {lang.toUpperCase()} <span aria-hidden="true">⌄</span>
+              {lang.toUpperCase()} <svg className={styles.dropdownChevron} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m5 7.5 5 5 5-5" /></svg>
             </button>
             {activeDropdown === "language" && <div className={styles.dropdownMenu} role="group" aria-label={labels.language}>
               {[["en", "EN"], ["ka", "KA"], ["ru", "RU"], ["he", "HE"]].map(([value, label]) => (
@@ -119,7 +119,7 @@ export default function SiteHeader() {
                 aria-haspopup="true" aria-expanded={activeDropdown === "currency"}
                 onClick={() => setActiveDropdown(activeDropdown === "currency" ? null : "currency")}
                 onKeyDown={(event) => { if (event.key === "Escape") setActiveDropdown(null); }}>
-                {currency === "USD" ? "USD $" : currency === "EUR" ? "EUR €" : "GEL ₾"} <span aria-hidden="true">⌄</span>
+                {currency === "USD" ? "USD $" : currency === "EUR" ? "EUR €" : "GEL ₾"} <svg className={styles.dropdownChevron} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m5 7.5 5 5 5-5" /></svg>
               </button>
               {activeDropdown === "currency" && <div className={styles.dropdownMenu} role="group" aria-label={labels.currency}>
                 {[["USD", "USD $"], ["EUR", "EUR €"], ["GEL", "GEL ₾"]].map(([value, label]) => (
