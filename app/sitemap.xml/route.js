@@ -5,7 +5,21 @@ import { getTourPath } from "../../lib/tourRoutes";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
+export async function GET(request) {
+  // შენი არსებული ლოგიკა საიტმაპის გენერაციისთვის...
+  
+  const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- შენი URL-ები -->
+</urlset>`;
 
+  return new Response(sitemapXml, {
+    headers: {
+      'Content-Type': 'application/xml; charset=utf-8',
+    },
+  });
+}
 const VALID_SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const XML_NS = "http://www.sitemaps.org/schemas/sitemap/0.9";
 const XHTML_NS = "http://www.w3.org/1999/xhtml";
