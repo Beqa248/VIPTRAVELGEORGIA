@@ -42,7 +42,36 @@ if(priceError)throw priceError;await load();setDraft(null);setNotice("Tour saved
   setBusy(false);
  }
  async function toggle(t){setBusy(true);const {error}=await supabase.from("custom_tours").update({published:!t.published}).eq("id",t.id);if(error)setError(error.message);await load();setBusy(false)}
- async function move(t,dir){const i=tours.findIndex(x=>x.id===t.id),j=i+dir;if(j<0||j>=tours.length)return;setBusy(true);setError("");const order=tours.map(x=>x.id);[order[i],order[j]]=[order[j],order[i]];for(let k=0;k<order.length;k++){const {error}=await supabase.from("custom_tours").update({sort_order:(k+1)*10}).eq("id",order[k]);if(error){setError(error.message);break}}await load();setBusy(false)}
+ async function move(t,dir){
+  if(busy || archivedOnly) return;
+  const visibleTours=tours.filter(x=>!x.archived && x.title.toLowerCase().includes(query.toLowerCase()));
+  const i=visibleTours.findIndex(x=>x.id===t.id),j=i+dir;
+  if(i<0 || j<0 || j>=visibleTours.length) return;
+  const reordered=[...visibleTours];
+  [reordered[i],reordered[j]]=[reordered[j],reordered[i]];
+  // Keep archived tours untouched; update only active tours in the intended display order.
+  const active=tours.filter(x=>!x.archived);
+  const positions=active.map(x=>x.id);
+  const from=positions.indexOf(t.id),to=positions.indexOf(visibleTours[j].id);
+  positions.splice(from,1);
+  positions.splice(to,0,t.id);
+  const byId=new Map(tours.map(x=>[x.id,x]));
+  const optimistic=[...positions.map(id=>byId.get(id)),...tours.filter(x=>x.archived)];
+  setTours(optimistic);
+  setBusy(true);setError("");setNotice("");
+  try{
+   // Verify every update: a successful HTTP response alone does not prove RLS allowed the write.
+   for(let k=0;k<positions.length;k++){
+    const {data,error}=await supabase.from("custom_tours")
+     .update({sort_order:(k+1)*10}).eq("id",positions[k]).select("id");
+    if(error) throw error;
+    if(!data?.some(row=>row.id===positions[k])) throw new Error("Tour order was not saved. Check Supabase admin update permissions.");
+   }
+   setNotice("Tour order saved successfully.");
+  }catch(e){setError(e.message||"Could not save tour order.");}
+  finally{await load();setBusy(false);}
+ }
+
  return <div className={css.manager}>
   <div className={css.heading}><div><span className={css.eyebrow}>TOUR MANAGEMENT</span><h2>{archivedOnly?"Archived Tours":"All Tours Manager"}</h2><p>{archivedOnly?"Restore archived tours or permanently delete custom tours.":"Edit existing tours and create new ones. Published changes appear on the public Tours page."}</p></div>{!archivedOnly&&<button className={css.primary} type="button" onClick={()=>start(null)}>＋ Add New Tour</button>}</div>
   <div className={css.stats}><div><small>Total tours</small><strong>{tours.length}</strong></div><div><small>Published</small><strong>{tours.filter(x=>x.published&&!x.archived).length}</strong></div><div><small>Drafts</small><strong>{tours.filter(x=>!x.published&&!x.archived).length}</strong></div></div>
@@ -77,7 +106,7 @@ if(priceError)throw priceError;await load();setDraft(null);setNotice("Tour saved
   {!!draft.gallery_images?.length&&<div className={css.photos}>{draft.gallery_images.map(url=><label key={url}><img src={url} alt="Tour gallery"/><input type="checkbox" checked={removed.includes(url)} onChange={e=>setRemoved(a=>e.target.checked?[...a,url]:a.filter(x=>x!==url))}/> Remove</label>)}</div>}
   <div className={css.actions}><label><input type="checkbox" checked={draft.published} onChange={e=>set("published",e.target.checked)}/> Publish on website</label><button className={css.primary} disabled={busy} type="submit">{busy?"Saving…":"Save tour"}</button></div></form>}
   <div className={css.listhead}><h3>Manage all tours</h3><input placeholder="Search tours..." value={query} onChange={e=>setQuery(e.target.value)}/></div>
-  {tours.filter(t=>!!t.archived===archivedOnly&&t.title.toLowerCase().includes(query.toLowerCase())).map((t,i)=><article className={css.tour} key={t.id}><div className={css.thumb}>{t.cover_url?<img src={t.cover_url} alt=""/>:"🏔️"}</div><div className={css.details}><strong>{t.title}</strong><small>{t.duration_days} day(s) · {t.category} · {t.published?"Published":"Draft"}</small><div className={css.actions}>{!archivedOnly&&<button disabled={busy} onClick={()=>start(t)}>Edit</button>}{!archivedOnly&&<button disabled={busy} onClick={()=>toggle(t)}>{t.published?"Hide":"Publish"}</button>}<button disabled={busy} onClick={()=>archive(t,archivedOnly)}>{archivedOnly?"Restore":"Archive"}</button>{!archivedOnly&&<button disabled={busy||i===0} onClick={()=>move(t,-1)}>↑ Up</button>}{!archivedOnly&&<button disabled={busy||i===tours.length-1} onClick={()=>move(t,1)}>↓ Down</button>}{!archivedOnly&&<a href={`/tour/${t.slug}`} target="_blank" rel="noreferrer">View ↗</a>}{archivedOnly&&!t.is_original&&<button className={css.danger} disabled={busy} onClick={()=>del(t)}>Delete</button>}</div></div></article>)}
+  {tours.filter(t=>!!t.archived===archivedOnly&&t.title.toLowerCase().includes(query.toLowerCase())).map((t,i,visibleList)=><article className={css.tour} key={t.id}><div className={css.thumb}>{t.cover_url?<img src={t.cover_url} alt=""/>:"🏔️"}</div><div className={css.details}><strong>{t.title}</strong><small>{t.duration_days} day(s) · {t.category} · {t.published?"Published":"Draft"}</small><div className={css.actions}>{!archivedOnly&&<button disabled={busy} onClick={()=>start(t)}>Edit</button>}{!archivedOnly&&<button disabled={busy} onClick={()=>toggle(t)}>{t.published?"Hide":"Publish"}</button>}<button disabled={busy} onClick={()=>archive(t,archivedOnly)}>{archivedOnly?"Restore":"Archive"}</button>{!archivedOnly&&<button disabled={busy||i===0} onClick={()=>move(t,-1)}>↑ Up</button>}{!archivedOnly&&<button disabled={busy||i===visibleList.length-1} onClick={()=>move(t,1)}>↓ Down</button>}{!archivedOnly&&<a href={`/tour/${t.slug}`} target="_blank" rel="noreferrer">View ↗</a>}{archivedOnly&&!t.is_original&&<button className={css.danger} disabled={busy} onClick={()=>del(t)}>Delete</button>}</div></div></article>)}
   {!tours.filter(t=>!!t.archived===archivedOnly).length&&<div className={css.empty}>{archivedOnly?"No archived tours yet. Archive a tour from either active tours section and it will appear here.":"No active tours found."}</div>}
  </div>
 }
