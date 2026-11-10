@@ -34,7 +34,7 @@ async function publishedUpdateDates(table, key) {
 }
 
 function sitemapHints(path) {
-  if (path === "") return { changefreq: "weekly", priority: "1.0" };
+  if (path === "/" || path === "") return { changefreq: "weekly", priority: "1.0" };
   if (path === "/tours") return { changefreq: "weekly", priority: "0.9" };
   if (path.startsWith("/tour/")) return { changefreq: "monthly", priority: "0.8" };
   if (path.startsWith("/regions/")) return { changefreq: "monthly", priority: "0.7" };
