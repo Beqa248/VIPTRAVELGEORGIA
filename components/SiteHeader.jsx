@@ -52,7 +52,7 @@ export default function SiteHeader() {
       <a className={styles.skip} href="#main-content">{labels.skip}</a>
       <div className={styles.main}>
         <Link href={href("/")} className={styles.brand} onClick={close}>
-          <Image src="/viptravelgeorgia-round-logo.webp" alt="" width={77} height={77} sizes="77px" priority className={styles.brandLogo} />
+          <Image src="/viptravelgeorgia-round-logo.webp" unoptimized alt="" width={77} height={77} sizes="77px" priority className={styles.brandLogo} />
           <span className={styles.brandText}>
             <strong>VIPTravel<span>Georgia</span></strong>
             <small>{labels.tagline}</small>

@@ -11,6 +11,7 @@ import "./final-approved-polish.css";
 import "./contact-layout-fix.css";
 import "./contact-unified-and-footer.css";
 import "./gallery-highlights-fixes.css";
+import "./lighthouse-accessibility-fix.css";
 import { headers } from "next/headers";
 import { getLocale, pageMetadata } from "../lib/seo";
 import { LanguageProvider } from "../components/site-context";

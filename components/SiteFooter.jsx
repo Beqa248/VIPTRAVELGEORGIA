@@ -18,7 +18,7 @@ export default function SiteFooter(){return <footer className={styles.footer}>
   <div className={styles.inner}>
     <div className={styles.main}>
       <div className={styles.brandColumn}>
-        <div className={styles.brand}><Image src="/viptravelgeorgia-round-logo.webp" alt="VIPTravelGeorgia logo" width={96} height={96} sizes="96px" /><div><strong>VIPTravel<span>Georgia</span></strong><small>PRIVATE TOURS & TRANSFERS</small></div></div>
+        <div className={styles.brand}><Image src="/viptravelgeorgia-round-logo.webp" unoptimized alt="VIPTravelGeorgia logo" width={96} height={96} sizes="96px" /><div><strong>VIPTravel<span>Georgia</span></strong><small>PRIVATE TOURS & TRANSFERS</small></div></div>
         <p className={styles.brandDescription}>Private tours and transfers across Georgia, tailored to your journey.</p>
         <p className={styles.brandTagline}>Personalized travel experiences</p>
       </div>

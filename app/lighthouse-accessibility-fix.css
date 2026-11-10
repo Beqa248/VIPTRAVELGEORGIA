@@ -1,0 +1,29 @@
+/* Lighthouse accessibility: only audited elements. Preserve page layout. */
+/* Small eyebrow text on pale sage backgrounds needs darker ink. */
+.vtg-shell [data-p="home"] .vtg-plan-header .vtg-eyebrow {
+  color: #72511f !important;
+}
+/* Planner description: readable against pale green. */
+.vtg-shell [data-p="home"] .vtg-plan-header p {
+  color: #3e5549 !important;
+}
+/* Gold actions: dark forest ink gives higher contrast than white on gold. */
+.vtg-shell [data-p="home"] .vtg-guide-actions .vtg-recent-tours-btn {
+  color: #173c35 !important;
+}
+/* Suggest tours button: preserve gold background and strengthen text contrast. */
+.vtg-shell [data-p="home"] .vtg-plan-row button[class*="discover"] {
+  color: #173c35 !important;
+}
+/* Social brand colors stay recognizable, with legible text. */
+.vtg-shell [data-p="home"] #contact .links #wa {
+  color: #083c24 !important;
+}
+.vtg-shell [data-p="home"] #contact .links #tg {
+  background: #0877a7 !important;
+  color: #fff !important;
+}
+.vtg-shell [data-p="home"] #contact .links #fb {
+  background: #145bb9 !important;
+  color: #fff !important;
+}
