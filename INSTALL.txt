@@ -1,7 +1,19 @@
-1. In Supabase SQL Editor run SUPABASE_RUN_ONCE.sql once.
-2. In GitHub replace only the five files from this ZIP, keeping their folder paths.
-3. Commit and wait for Vercel deployment.
-4. Admin > Cars > Edit a vehicle > set Passengers, Luggage capacity, Drivetrain > Save.
-5. Check homepage vehicle tiles and Cars detail page.
-This patch preserves the existing homepage Prices & Booking section, its exact deposit text, header, footer and other pages.
-NOTE: Full Next.js production build has not been run.
+VIPTravelGeorgia — targeted image optimization patch
+Based on VIPTRAVELGEORGIA-main(20261110-194957).zip
+
+Upload these four files to the same relative paths in your GitHub repository:
+- components/pages/home.jsx
+- components/CardPhoto.jsx
+- components/VehicleCards.jsx
+- next.config.mjs
+
+Changes:
+1. Home tour thumbnails request smaller responsive images on phones.
+2. Next.js image quality reduced modestly from default 75 to 70 for tour and vehicle thumbnails.
+3. Optimized images have a minimum 24-hour cache TTL (previous default: 4 hours).
+
+Does not change site layout, text, translations, SEO or admin.
+Does not fix /images/photo-001.jpg hero (original image was not included in uploaded project).
+Does not guarantee Lighthouse 95+, nor eliminate all red diagnostics.
+After Vercel deploy, run PageSpeed Insights 3 times on /en and compare medians.
+Note: caching may keep previously uploaded images for up to a day at unchanged URLs.

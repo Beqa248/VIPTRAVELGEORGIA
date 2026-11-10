@@ -8,7 +8,7 @@ export default function CardPhoto({ src, alt = "", sizes, className, priority = 
   const url = src.trim();
 
   if (isOptimizablePhoto(url)) {
-    return <Image src={url} alt={alt} fill sizes={sizes} className={className} priority={priority} style={style} />;
+    return <Image src={url} alt={alt} fill sizes={sizes} quality={70} className={className} priority={priority} style={style} />;
   }
 
   return <img src={url} alt={alt} className={className} style={style} loading={priority ? "eager" : "lazy"} fetchPriority={priority ? "high" : undefined} decoding="async" />;
