@@ -1,19 +1,18 @@
-VIPTravelGeorgia — targeted image optimization patch
-Based on VIPTRAVELGEORGIA-main(20261110-194957).zip
+VIPTravelGeorgia - conservative image-size patch
+Based on uploaded VIPTRAVELGEORGIA-main(20261110-201332).zip
 
-Upload these four files to the same relative paths in your GitHub repository:
-- components/pages/home.jsx
-- components/CardPhoto.jsx
-- components/VehicleCards.jsx
-- next.config.mjs
+Replace:
+  components/pages/home.jsx
+  components/VehicleCards.jsx
 
-Changes:
-1. Home tour thumbnails request smaller responsive images on phones.
-2. Next.js image quality reduced modestly from default 75 to 70 for tour and vehicle thumbnails.
-3. Optimized images have a minimum 24-hour cache TTL (previous default: 4 hours).
+What changed:
+- Home tour images now advertise the actual two-column mobile grid width
+  instead of full viewport width, reducing image download sizes.
+- Vehicle image sizes more closely match the mobile carousel card width.
 
-Does not change site layout, text, translations, SEO or admin.
-Does not fix /images/photo-001.jpg hero (original image was not included in uploaded project).
-Does not guarantee Lighthouse 95+, nor eliminate all red diagnostics.
-After Vercel deploy, run PageSpeed Insights 3 times on /en and compare medians.
-Note: caching may keep previously uploaded images for up to a day at unchanged URLs.
+No changes to CSS, JavaScript loading, layout, cache settings, SEO, translations or admin.
+This patch DOES NOT fix render-blocking CSS or legacy JavaScript diagnostics.
+Those require deeper profiling and validation. No Lighthouse score is guaranteed.
+
+Deploy, then compare 3 mobile Lighthouse runs against previous 3 runs.
+If the result worsens, restore the two previous files.

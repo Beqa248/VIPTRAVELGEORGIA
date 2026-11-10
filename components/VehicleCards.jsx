@@ -23,7 +23,7 @@ function VehicleCard({ car, labels }) {
       <Link className="vtg-modern-car-photo" href={`/cars?car=${encodeURIComponent(car.name)}`} aria-label={car.name}>
         {car.images?.[0] ? (isOptimizablePhoto(car.images[0]) ? (
           <Image src={car.images[0]} alt={car.name} width={480} height={360}
-            sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 1100px) 45vw, 320px"
+            sizes="(max-width: 600px) 85vw, (max-width: 1100px) 45vw, 320px"
             loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
         ) : (
           <img src={car.images[0]} alt={car.name} loading="lazy" decoding="async" />
