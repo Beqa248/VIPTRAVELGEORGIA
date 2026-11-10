@@ -210,3 +210,23 @@
     width: calc(100% - 32px);
   }
 }
+
+/* FINAL: compact Tours banner; do not change listing width or background. */
+.catalog .banner {
+  box-sizing: border-box;
+  height: 350px;
+  min-height: 350px;
+  padding-block: 0;
+  align-items: center;
+}
+.catalog .banner .wrap {
+  transform: none;
+}
+@media (max-width: 700px) {
+  .catalog .banner {
+    height: auto;
+    min-height: 330px;
+    padding-block: 34px;
+  }
+  .catalog .banner .wrap { transform: none; }
+}

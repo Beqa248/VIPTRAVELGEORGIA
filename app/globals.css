@@ -603,3 +603,39 @@ body:has(.adminSubRoot) .vtg-shell { min-height:0!important; }
     min-height: 420px !important;
   }
 }
+
+/* FINAL: compact matching Home and Georgia Highlights hero heights. */
+.vtg-shell [data-p="home"] > .hero,
+.vtg-shell [data-p="travel"] .banner#bn-travel {
+  box-sizing: border-box !important;
+  height: 350px !important;
+  min-height: 350px !important;
+  padding-block: 0 !important;
+}
+.vtg-shell [data-p="home"] > .hero {
+  align-items: center !important;
+}
+.vtg-shell [data-p="home"] > .hero > .wrap {
+  transform: none !important;
+}
+.vtg-shell [data-p="travel"] .banner#bn-travel > .wrap {
+  box-sizing: border-box !important;
+  height: 350px !important;
+  min-height: 350px !important;
+  padding-block: 0 !important;
+  justify-content: center !important;
+  transform: none !important;
+}
+@media (max-width: 700px) {
+  .vtg-shell [data-p="home"] > .hero,
+  .vtg-shell [data-p="travel"] .banner#bn-travel {
+    height: auto !important;
+    min-height: 330px !important;
+    padding-block: 30px !important;
+  }
+  .vtg-shell [data-p="travel"] .banner#bn-travel > .wrap {
+    height: auto !important;
+    min-height: 270px !important;
+    padding-block: 0 !important;
+  }
+}
