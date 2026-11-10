@@ -2,6 +2,7 @@ import { getPublishedRegionIds, getPublishedTourRoutes, getPublicDb } from "../.
 import { localizedPath } from "../../lib/localizedPath";
 import { INDEXABLE_PAGE_PATHS, SEO_LANGS, SITE_URL, alternateUrls } from "../../lib/seo";
 import { getTourPath } from "../../lib/tourRoutes";
+import { renderSitemapTree } from "../../lib/sitemapTree.mjs";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -32,7 +33,7 @@ async function publishedUpdateDates(table, key) {
   return new Map((data || []).map(item => [String(item[key]), validDate(item.updated_at)]));
 }
 
-export async function GET() {
+export async function GET(request) {
   const [tours, regionIds, tourDates, regionDates] = await Promise.all([
     getPublishedTourRoutes(),
     getPublishedRegionIds(),
@@ -48,6 +49,34 @@ export async function GET() {
   }
   for (const id of regionIds) {
     paths.set(`/regions/${encodeURIComponent(id)}`, regionDates.get(String(id)) || null);
+  }
+
+  // Browsers opening /sitemap.xml get a collapsible tree; crawlers get the XML.
+  // Force a view with ?view=tree or ?view=xml.
+  const view = new URL(request.url).searchParams.get("view");
+  const isBrowserNavigation =
+    (request.headers.get("accept") || "").includes("text/html") &&
+    request.headers.get("sec-fetch-dest") === "document";
+  const vary = "Accept, Sec-Fetch-Dest";
+
+  if (view === "tree" || (view !== "xml" && isBrowserNavigation)) {
+    return new Response(
+      renderSitemapTree({
+        entries: [...paths],
+        siteUrl: SITE_URL,
+        langs: SEO_LANGS,
+        localizedPath,
+        siteName: "VIPTravelGeorgia",
+      }),
+      {
+        headers: {
+          "Content-Type": "text/html; charset=utf-8",
+          "Cache-Control": "private, no-store",
+          "X-Robots-Tag": "noindex",
+          Vary: vary,
+        },
+      }
+    );
   }
 
   const urls = [];
@@ -70,7 +99,6 @@ export async function GET() {
 
   const xml = [
     '<?xml version="1.0" encoding="UTF-8"?>',
-    '<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>',
     `<urlset xmlns="${XML_NS}" xmlns:xhtml="${XHTML_NS}">`,
     ...urls,
     "</urlset>",
@@ -80,6 +108,7 @@ export async function GET() {
     headers: {
       "Content-Type": "application/xml; charset=utf-8",
       "Cache-Control": "public, max-age=0, s-maxage=300, stale-while-revalidate=600",
+      Vary: vary,
     },
   });
 }
