@@ -550,3 +550,56 @@ body:has(.adminSubRoot) .vtg-shell { min-height:0!important; }
   .vtg-shell [data-p="travel"] .banner#bn-travel .wrap { min-height: 390px !important; }
   .vtg-shell [data-p="travel"] .banner#bn-travel { background-position: 58% center !important; }
 }
+
+/* Unified hero sizing and content alignment — Home and Georgia Highlights.
+   Match the Tours hero at desktop and mobile widths. */
+.vtg-shell [data-p="home"] > .hero {
+  height: 460px !important;
+  min-height: 460px !important;
+  padding: 0 !important;
+  align-items: center !important;
+}
+.vtg-shell [data-p="home"] > .hero > .wrap {
+  width: calc(100% - 2 * clamp(24px, 5vw, 96px)) !important;
+  max-width: none !important;
+  margin-inline: auto !important;
+  padding: 0 !important;
+  transform: translateY(-16px);
+}
+.vtg-shell [data-p="travel"] .banner#bn-travel {
+  height: 460px !important;
+  min-height: 460px !important;
+  background-size: cover !important;
+}
+.vtg-shell [data-p="travel"] .banner#bn-travel::before {
+  background: linear-gradient(90deg, rgba(9,43,34,.88), rgba(9,43,34,.52) 45%, rgba(9,43,34,.06)) !important;
+}
+.vtg-shell [data-p="travel"] .banner#bn-travel > .wrap {
+  height: 460px !important;
+  min-height: 460px !important;
+  width: calc(100% - 2 * clamp(24px, 5vw, 96px)) !important;
+  max-width: none !important;
+  padding: 0 !important;
+  margin-inline: auto !important;
+  justify-content: center !important;
+  transform: translateY(-16px);
+}
+.vtg-shell [data-p="travel"] .banner#bn-travel > .wrap > span {
+  display: none !important;
+}
+@media (max-width: 700px) {
+  .vtg-shell [data-p="home"] > .hero,
+  .vtg-shell [data-p="travel"] .banner#bn-travel {
+    height: 420px !important;
+    min-height: 420px !important;
+  }
+  .vtg-shell [data-p="home"] > .hero > .wrap,
+  .vtg-shell [data-p="travel"] .banner#bn-travel > .wrap {
+    width: calc(100% - 40px) !important;
+    transform: none !important;
+  }
+  .vtg-shell [data-p="travel"] .banner#bn-travel > .wrap {
+    height: 420px !important;
+    min-height: 420px !important;
+  }
+}

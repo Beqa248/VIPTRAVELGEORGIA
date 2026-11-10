@@ -172,3 +172,29 @@
 @media (max-width: 700px) {
   .banner .wrap { width: calc(100% - 40px); }
 }
+
+/* Lift the Tours hero copy slightly while preserving the banner and image. */
+@media (min-width: 701px) {
+  .banner .wrap { transform: translateY(-38px); }
+}
+@media (max-width: 700px) {
+  .banner .wrap { transform: translateY(-12px); }
+}
+
+/* Shared hero proportions: Tours, Home and Georgia Highlights. */
+.catalog .banner {
+  height: 460px;
+  min-height: 460px;
+  padding-block: 0;
+}
+.catalog .banner .wrap {
+  transform: translateY(-16px);
+}
+@media (max-width: 700px) {
+  .catalog .banner {
+    height: 420px;
+    min-height: 420px;
+    padding-block: 0;
+  }
+  .catalog .banner .wrap { transform: none; }
+}
