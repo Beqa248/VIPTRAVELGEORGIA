@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import CurrencyTourPrice from "../../../components/CurrencyTourPrice";
+import TourSeoJsonLd from "../../../components/TourSeoJsonLd";
 import TranslatedText from "../../../components/TranslatedText";
 import { localizedPath } from "../../../lib/localizedPath";
 import { getPublicDb, getPublishedTour } from "../../../lib/publicContent";
@@ -75,6 +76,7 @@ export default async function CustomTourPage({ params }) {
 
   return (
     <div className={styles.page}>
+      <TourSeoJsonLd tour={tour} path={getTourPath(tour)} lang={lang} pricing={pricing} />
       <div className={styles.wrap}>
         <a href={localizedPath(lang, "/tours")} className={styles.back}>{direction} {labels.back}</a>
         <div className={styles.hero}>
