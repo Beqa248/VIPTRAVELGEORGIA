@@ -265,3 +265,31 @@
     align-items: flex-start;
   }
 }
+
+/* Mobile footer refinement: left-aligned Explore, tidy two-column links. */
+@media (max-width: 650px) {
+  .footer { padding: 26px 20px 18px; }
+  .main { gap: 28px; }
+  .explore,
+  .explore h3 { text-align: left; }
+  .exploreLinks {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    justify-content: start;
+    column-gap: 18px;
+    row-gap: 14px;
+    width: 100%;
+    max-width: 420px;
+  }
+  .exploreLinks a { font-size: 14px; }
+  .main h3 { font-size: 21px; margin-bottom: 16px; }
+  .brand { gap: 12px; }
+  .brand strong { font-size: clamp(18px, 5vw, 23px); overflow-wrap: anywhere; }
+  .brandDescription { margin-top: 12px; }
+  .contactDetails { gap: 12px; }
+  .socials { margin-top: 16px; }
+}
+@media (max-width: 370px) {
+  .footer { padding-inline: 16px; }
+  .exploreLinks { column-gap: 12px; }
+  .exploreLinks a { font-size: 13px; }
+}
