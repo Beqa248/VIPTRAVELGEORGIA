@@ -7,7 +7,7 @@ import { useLanguage } from "../site-context";
 import usePublished from "../usePublished";
 
 export default function Page() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const { rows } = usePublished("vehicles");
 
   const hiddenCars = [
@@ -74,6 +74,18 @@ const cars = [...rows].sort(
                 <span>❄ {t("vehicleAC")}: {car.air_conditioning === true ? t("vehicleYes") : t("vehicleNo")}</span>
               </div>
 
+              {Array.isArray(car.driver_languages) && car.driver_languages.length > 0 && (
+                <div style={{margin:"14px 0 20px"}}>
+                  <strong style={{display:"block",marginBottom:8}}>
+                    {({en:"Driver speaks",ka:"მძღოლი საუბრობს",ru:"Водитель говорит",he:"שפות הנהג"})[lang] || "Driver speaks"}:
+                  </strong>
+                  <div style={{display:"flex",flexWrap:"wrap",gap:8}}>
+                    {car.driver_languages.map(language => (
+                      <span key={language} style={{padding:"6px 12px",borderRadius:999,background:"#f5f4ee",color:"#153d35",border:"1px solid #d9b76b",fontSize:13,fontWeight:600}}>{language}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
               <div className="gal soft">
                 {(car.images || []).map((src, i) => (
                   <img

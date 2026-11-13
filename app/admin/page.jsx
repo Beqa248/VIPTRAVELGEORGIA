@@ -168,6 +168,7 @@ export default function Admin() {
           passengers: Number(f.get("passengers") || 0),
           luggage_capacity: String(f.get("luggage_capacity") || "").trim(),
           air_conditioning: f.get("air_conditioning") === "on",
+          driver_languages: f.getAll("driver_languages").map(String),
           published: f.get("published") === "on",
           images: [...(editing?.images || []).filter(url => !removed.includes(url)), ...newImages],
         };
@@ -326,6 +327,17 @@ export default function Admin() {
                     <label className={styles.formField}>Luggage capacity (e.g. 3–4 bags)<input type="text" name="luggage_capacity" maxLength={80} defaultValue={editing?.luggage_capacity || ""} placeholder="e.g. 3–4 bags, depending on size"/></label>
                     <label className={styles.formField}>Air conditioning (A/C)<span style={{display:"flex",alignItems:"center",gap:10,minHeight:42}}><input type="checkbox" name="air_conditioning" defaultChecked={editing?.air_conditioning ?? false}/> Available in this vehicle</span></label>
                   </>}
+                  {tab === "vehicles" && <fieldset className={`${styles.formField} ${styles.fullWidth}`} style={{border:"1px solid #d5d9d6",borderRadius:10,padding:14}}>
+                    <legend style={{fontWeight:700,padding:"0 6px"}}>Driver Languages</legend>
+                    <div style={{display:"flex",flexWrap:"wrap",gap:"10px 18px"}}>
+                      {["English","Georgian","Russian","Hebrew","Arabic","Turkish","German","French","Spanish","Italian"].map(language => (
+                        <label key={language} style={{display:"inline-flex",alignItems:"center",gap:7,cursor:"pointer"}}>
+                          <input type="checkbox" name="driver_languages" value={language} defaultChecked={(editing?.driver_languages || []).includes(language)}/>
+                          {language}
+                        </label>
+                      ))}
+                    </div>
+                  </fieldset>}
                   {tab === "recent_tours" && <label className={styles.formField}>Tour date<input type="date" name="tour_date" defaultValue={editing?.tour_date || ""}/></label>}
                   <label className={`${styles.formField} ${styles.fullWidth}`}>Description<textarea name="description" rows="3" defaultValue={editing?.description || ""} placeholder="Add a short description…"/></label>
                 </div>

@@ -9,10 +9,10 @@ import { useLanguage } from "./site-context";
 import { carIcon } from "../lib/defaultVehicles";
 
 const translations = {
-  en: { passengers: "Passengers", luggage: "Luggage", ac: "A/C", details: "Vehicle details", loading: "Loading available cars…", empty: "No vehicles are currently available.", yes: "Yes", no: "No" },
-  ka: { passengers: "მგზავრები", luggage: "ბარგი", ac: "კონდიციონერი", details: "მანქანის დეტალები", loading: "მანქანები იტვირთება…", empty: "ამჟამად მანქანები არ არის ხელმისაწვდომი.", yes: "კი", no: "არა" },
-  ru: { passengers: "Пассажиры", luggage: "Багаж", ac: "Кондиционер", details: "Детали автомобиля", loading: "Загрузка автомобилей…", empty: "Автомобили пока недоступны.", yes: "Да", no: "Нет" },
-  he: { passengers: "נוסעים", luggage: "מטען", ac: "מיזוג אוויר", details: "פרטי הרכב", loading: "טוען רכבים…", empty: "אין רכבים זמינים כרגע.", yes: "כן", no: "לא" },
+  en: { passengers: "Passengers", luggage: "Luggage", ac: "A/C", details: "Vehicle details", loading: "Loading available cars…", empty: "No vehicles are currently available.", yes: "Yes", no: "No", driverLanguages: "Driver speaks" },
+  ka: { passengers: "მგზავრები", luggage: "ბარგი", ac: "კონდიციონერი", details: "მანქანის დეტალები", loading: "მანქანები იტვირთება…", empty: "ამჟამად მანქანები არ არის ხელმისაწვდომი.", yes: "კი", no: "არა", driverLanguages: "მძღოლი საუბრობს" },
+  ru: { passengers: "Пассажиры", luggage: "Багаж", ac: "Кондиционер", details: "Детали автомобиля", loading: "Загрузка автомобилей…", empty: "Автомобили пока недоступны.", yes: "Да", no: "Нет", driverLanguages: "Водитель говорит" },
+  he: { passengers: "נוסעים", luggage: "מטען", ac: "מיזוג אוויר", details: "פרטי הרכב", loading: "טוען רכבים…", empty: "אין רכבים זמינים כרגע.", yes: "כן", no: "לא", driverLanguages: "שפות הנהג" },
 };
 
 function VehicleCard({ car, labels }) {
@@ -39,6 +39,14 @@ function VehicleCard({ car, labels }) {
           <div className="vtg-modern-car-feature"><span aria-hidden="true">♙</span><strong>{Number(car.passengers) || 0}</strong><small>{labels.passengers}</small></div>
           <div className="vtg-modern-car-feature"><span aria-hidden="true">▣</span><strong>{car.luggage_capacity || "—"}</strong><small>{labels.luggage}</small></div>
           <div className="vtg-modern-car-feature"><span aria-hidden="true">❄</span><strong>{hasAc ? labels.yes : labels.no}</strong><small>{labels.ac}</small></div>
+          {Array.isArray(car.driver_languages) && car.driver_languages.length > 0 && (
+            <div style={{gridColumn:"1 / -1",width:"100%",padding:"10px 2px 2px"}}>
+              <strong style={{fontSize:13,display:"block",marginBottom:7}}>{labels.driverLanguages}:</strong>
+              <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
+                {car.driver_languages.map(language => <span key={language} style={{border:"1px solid #d9b76b",borderRadius:999,padding:"5px 9px",fontSize:12,color:"#153d35",background:"#f5f4ee"}}>{language}</span>)}
+              </div>
+            </div>
+          )}
         </div>}
       </div>
     </article>
