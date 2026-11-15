@@ -73,7 +73,7 @@ export default function ContactForm({ initialTour = "" }) {
       <label><span data-k="fDates">{t("fDates")}</span><input name="dates" maxLength={180} placeholder="e.g. 12–16 June, 3 people" /></label>
       <label className="vtg-contact-message"><span data-k="fMsg">{t("fMsg")}</span><textarea name="message" maxLength={4000} rows={6} required /></label>
       <div className="vtg-honeypot" aria-hidden="true"><label>Website<input name="website" tabIndex={-1} autoComplete="off" /></label></div>
-      <label><span><input type="checkbox" name="consent" required /> I agree to be contacted about this inquiry.</span></label><div className="vtg-contact-actions"><button className="btn" type="submit" disabled={sending}>Send via WhatsApp</button><button className="btn vtg-email-button" type="button" onClick={email} disabled={sending}>{sending ? "Sending…" : "Send via Email"}</button></div>
+      <label className="vtg-contact-consent"><input type="checkbox" name="consent" required style={{ width: 16, height: 16, minWidth: 16, flex: "0 0 16px", margin: 0, padding: 0, accentColor: "#153D35" }} /><span>I agree to be contacted about this inquiry.</span></label><div className="vtg-contact-actions"><button className="btn" type="submit" disabled={sending}>Send via WhatsApp</button><button className="btn vtg-email-button" type="button" onClick={email} disabled={sending}>{sending ? "Sending…" : "Send via Email"}</button></div>
       {notice && <p className="vtg-contact-notice" role="status">{notice}</p>}
     </form>
     <div className="links vtg-contact-socials">{SOCIALS.map(([label, href, id]) => <a key={id} id={id} href={href} target="_blank" rel="noopener noreferrer">{label}</a>)}</div>
