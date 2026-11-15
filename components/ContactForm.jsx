@@ -42,7 +42,7 @@ export default function ContactForm({ initialTour = "" }) {
     const form = e.currentTarget;
     if (!form.reportValidity()) return;
     const d = details(form);
-    const body = [`VIP Travel Georgia inquiry`, `Name: ${d.name}`, `Email: ${d.email}`, `Tour or service: ${d.tour}`, `Vehicle: ${d.vehicle}`, `Dates and group size: ${d.dates}`, `Message: ${d.message}`].join("\n");
+    const body = [`VIP Tours Georgia inquiry`, `Name: ${d.name}`, `Email: ${d.email}`, `Tour or service: ${d.tour}`, `Vehicle: ${d.vehicle}`, `Dates and group size: ${d.dates}`, `Message: ${d.message}`].join("\n");
     window.open(`https://wa.me/${PHONE}?text=${encodeURIComponent(body)}`, "_blank", "noopener,noreferrer");
   }
   async function email(e) {

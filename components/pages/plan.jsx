@@ -45,7 +45,7 @@ export default function Page() {
   }, []);
 
   const message = useMemo(() => [
-    "VIP Travel Georgia — Custom trip request",
+    "VIP Tours Georgia — Custom trip request",
     `Name: ${name.trim() || "Not provided"}`,
     `Selected tours: ${selected.length ? selected.join(", ") : "None selected"}`,
     `Custom trip / not sure: ${custom ? "Yes" : "No"}`,
@@ -63,7 +63,7 @@ export default function Page() {
   const toggle = title => setSelected(old => old.includes(title) ? old.filter(x => x !== title) : [...old, title]);
 
   return <div className={styles.page} data-p="plan"><section className="wrap">
-    <div className={styles.heading}><span className={styles.eyebrow}>VIP TRAVEL GEORGIA</span><h2 data-k="planFormH">{t("planFormH")}</h2><p data-k="planFormT">{t("planFormT")}</p></div>
+    <div className={styles.heading}><span className={styles.eyebrow}>VIP TOURS GEORGIA</span><h2 data-k="planFormH">{t("planFormH")}</h2><p data-k="planFormT">{t("planFormT")}</p></div>
     <div className={styles.panel}>
       <div className={styles.sectionTitle}><span className={styles.number}>01</span><div><h3 data-k="pfWhere">{t("pfWhere")}</h3><p>Select one or more of our currently available tours, or request something custom.</p></div></div>
       {loading ? <p className={styles.status}>Loading available tours…</p> : loadError ? <p className={styles.error} role="alert">Tours could not be loaded. You can still request a custom trip below.</p> : tours.length === 0 ? <p className={styles.status}>No published tours at the moment. You can still request a custom trip.</p> : null}

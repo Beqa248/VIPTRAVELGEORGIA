@@ -4,7 +4,8 @@ export default function SeoBusinessJsonLd() {
     "@context": "https://schema.org",
     "@type": "TravelAgency",
     "@id": `${SITE_URL}/#organization`,
-    name: "VIPTravelGeorgia",
+    name: "VIP Tours Georgia",
+    alternateName: "VIPToursGeorgia",
     url: SITE_URL,
     logo: `${SITE_URL}/viptravelgeorgia-round-logo.png`,
     telephone: "+995558176108",
@@ -14,6 +15,6 @@ export default function SeoBusinessJsonLd() {
     sameAs: ["https://www.instagram.com/viptravelgeorgia/"],
   };
   return <script type="application/ld+json" dangerouslySetInnerHTML={{
-    __html: JSON.stringify(organization).replace(/</g, "\\u003c"),
+    __html: JSON.stringify([organization, { "@context": "https://schema.org", "@type": "WebSite", "@id": `${SITE_URL}/#website`, url: SITE_URL, name: "VIP Tours Georgia", alternateName: "VIPToursGeorgia", publisher: { "@id": `${SITE_URL}/#organization` } }]).replace(/</g, "\\u003c"),
   }} />;
 }

@@ -20,7 +20,7 @@ export async function POST(request) {
     const lines = [`Name: ${name}`, `Email: ${email}`, `Tour or service: ${tour}`, `Vehicle: ${vehicle}`, `Dates and group size: ${dates}`, "", "Message:", message];
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST", headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ from: process.env.CONTACT_FROM_EMAIL, to: [RECIPIENT], reply_to: email, subject: "VIPTravelGeorgia — New website inquiry", text: lines.join("\n") }),
+      body: JSON.stringify({ from: process.env.CONTACT_FROM_EMAIL, to: [RECIPIENT], reply_to: email, subject: "VIPToursGeorgia — New website inquiry", text: lines.join("\n") }),
       cache: "no-store"
     });
     if (!response.ok) {

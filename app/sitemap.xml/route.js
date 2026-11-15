@@ -75,7 +75,7 @@ export async function GET(request) {
         siteUrl: SITE_URL,
         langs: SEO_LANGS,
         localizedPath,
-        siteName: "VIPTravelGeorgia",
+        siteName: "VIPToursGeorgia",
         sitemapHints,
       }),
       {

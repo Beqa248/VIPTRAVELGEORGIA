@@ -1,0 +1,1 @@
+Upload the changed app, components, lib and public files at their existing paths. Keep domain and existing social handles. GetYourGuide provider label remains unchanged until provider account is renamed. No SQL required. Request homepage indexing after deployment. Database content and live build not verified. Logo lettering uses a close serif substitute.

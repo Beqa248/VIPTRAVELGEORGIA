@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Admin | VIPTravelGeorgia",
+  title: "Admin | VIPToursGeorgia",
   robots: { index: false, follow: false },
 };
 

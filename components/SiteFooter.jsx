@@ -18,7 +18,7 @@ export default function SiteFooter(){return <footer className={styles.footer}>
   <div className={styles.inner}>
     <div className={styles.main}>
       <div className={styles.brandColumn}>
-        <div className={styles.brand}><Image src="/viptravelgeorgia-round-logo.webp" unoptimized alt="VIPTravelGeorgia logo" width={96} height={96} sizes="96px" /><div><strong>VIPTravel<span>Georgia</span></strong><small>PRIVATE TOURS & TRANSFERS</small></div></div>
+        <div className={styles.brand}><Image src="/viptravelgeorgia-round-logo.webp" unoptimized alt="VIPToursGeorgia logo" width={96} height={96} sizes="96px" /><div><strong>VIPTours<span>Georgia</span></strong><small>PRIVATE TOURS & TRANSFERS</small></div></div>
         <p className={styles.brandDescription}>Private tours and transfers across Georgia, tailored to your journey.</p>
         <p className={styles.brandTagline}>Personalized travel experiences</p>
       </div>
@@ -26,6 +26,6 @@ export default function SiteFooter(){return <footer className={styles.footer}>
       <div className={styles.quickInfo}><h3>Travel with us</h3><p>Private tours</p><p>Flexible itineraries</p><p>Hotel assistance</p><p>Airport transfers</p></div>
       <div className={styles.contactBlock}><h3>Contact us 24/7</h3><div className={styles.contactDetails}><a href="tel:+995558176108">+995 558 17 61 08</a><a href="mailto:SubTravelGeorgia@gmail.com">SubTravelGeorgia@gmail.com</a></div><div className={styles.socials}>{socials.map(s=><a key={s.name} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={`Open ${s.name}`} title={s.name}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{icons[s.icon]}</svg></a>)}</div></div>
     </div>
-    <div className={styles.bottom}><p>© {new Date().getFullYear()} VIPTravelGeorgia. All rights reserved.</p><span>Private tours · Airport transfers · Custom itineraries</span></div>
+    <div className={styles.bottom}><p>© {new Date().getFullYear()} VIPToursGeorgia. All rights reserved.</p><span>Private tours · Airport transfers · Custom itineraries</span></div>
   </div>
 </footer>}

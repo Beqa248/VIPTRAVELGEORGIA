@@ -175,7 +175,7 @@ html,body,.vtg-shell{background:var(--vtg-page)!important}
 .vtg-shell [data-p="home"] .vtg-car-carousel-arrows button:disabled{opacity:.3;cursor:default;}
 @media(max-width:600px){.vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-card{flex-basis:100%;}}
 
-/* VIP Travel Georgia: compact 3-up carousel, draggable GOLD LINE (no dot). */
+/* VIP Tours Georgia: compact 3-up carousel, draggable GOLD LINE (no dot). */
 .vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-cars-grid{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;overflow-y:hidden!important;scrollbar-width:none!important;gap:10px!important;scroll-snap-type:x proximity!important;}
 .vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-card{flex:0 0 calc((100% - 20px)/3)!important;min-width:0!important;}
 .vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-photo{height:160px!important;}
@@ -224,7 +224,7 @@ html,body,.vtg-shell{background:var(--vtg-page)!important}
 .vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-photo:hover img{transform:none!important;}
 @media(max-width:700px){.vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-photo{aspect-ratio:4/3!important;}}
 
-/* VIPTravelGeorgia: consistent square vehicle previews, including future CMS vehicles. */
+/* VIPToursGeorgia: consistent square vehicle previews, including future CMS vehicles. */
 .vtg-shell [data-p="home"] .vtg-car-carousel .vtg-modern-car-photo {
   aspect-ratio: 1 / 1 !important;
   height: auto !important;
