@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import Analytics from "./Analytics";
 import GalleryLightbox from "./GalleryLightbox";
 import SiteFooter from "./SiteFooter";
 import SiteHeader from "./SiteHeader";
@@ -19,6 +20,7 @@ export default function ConditionalSiteChrome({ children }) {
       {!admin && (
         <>
           <SiteFooter />
+          <Analytics />
           <GalleryLightbox />
           <a className={styles.whatsapp} href="https://wa.me/995558176108" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

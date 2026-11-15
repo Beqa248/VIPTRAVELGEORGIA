@@ -1,4 +1,5 @@
 "use client";
+import { track } from "../lib/analytics";
 import { useState } from "react";
 import { useLanguage } from "./site-context";
 import usePublishedTours from "./usePublishedTours";
@@ -45,6 +46,7 @@ export default function ContactForm({ initialTour = "" }) {
       const response = await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(d) });
       const result = await response.json();
       if (!response.ok || !result.saved) throw new Error(result.error || "Request could not be saved.");
+      track("generate_lead", tours.some(tour => tour.title === d.tour) ? "tour" : "contact");
       setNotice(result.confirmed ? "Your request was received. Check your email for confirmation." : "Your request was received. We will contact you directly.");
       if (whatsapp) {
         const body = [`VIPToursGeorgia inquiry`, `Name: ${d.name}`, `Email: ${d.email}`, `Tour or service: ${d.tour}`, `Vehicle: ${d.vehicle}`, `Dates/group: ${d.dates}`, `Message: ${d.message}`].join("\n");
