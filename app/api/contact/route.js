@@ -1,42 +1,22 @@
-import { createClient } from "@supabase/supabase-js";
-
-export const runtime = "nodejs";
-const RECIPIENT = "SubTravelGeorgia@gmail.com";
-const clean = (value, max = 4000) => typeof value === "string" ? value.trim().slice(0, max) : "";
-export async function POST(request) {
-  try {
-    const body = await request.json();
-    if (clean(body.website)) return Response.json({ ok: true }); // honeypot
-    const name = clean(body.name, 100);
-    const email = clean(body.email, 180);
-    const tour = clean(body.tour, 200);
-    const vehicle = clean(body.vehicle, 100);
-    const dates = clean(body.dates, 180);
-    const message = clean(body.message, 4000);
-    if (name.length < 2 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !tour || !message)
-      return Response.json({ error: "Please enter your name, valid email, tour, and message." }, { status: 400 });
-    if (!process.env.RESEND_API_KEY || !process.env.CONTACT_FROM_EMAIL)
-      return Response.json({ error: "Email delivery is not configured yet. Please use WhatsApp." }, { status: 503 });
-    const lines = [`Name: ${name}`, `Email: ${email}`, `Tour or service: ${tour}`, `Vehicle: ${vehicle}`, `Dates and group size: ${dates}`, "", "Message:", message];
-    const response = await fetch("https://api.resend.com/emails", {
-      method: "POST", headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ from: process.env.CONTACT_FROM_EMAIL, to: [RECIPIENT], reply_to: email, subject: "VIPToursGeorgia — New website inquiry", text: lines.join("\n") }),
-      cache: "no-store"
-    });
-    if (!response.ok) {
-      console.error("Contact email provider failed:", response.status);
-      return Response.json({ error: "Email delivery failed. Please try again or use WhatsApp." }, { status: 502 });
-    }
-    // Persist to the existing admin inquiry table when server credentials are configured.
-    let saved = false;
-    if (process.env.SUPABASE_SERVICE_ROLE_KEY && process.env.NEXT_PUBLIC_SUPABASE_URL) {
-      try {
-        const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
-        const { error } = await db.from("inquiries").insert({ name, email, destinations: [tour], vehicle, interests: `Dates/group: ${dates}\n${message}`, source: "tour-builder", consent: false, status: "new" });
-        if (error) console.error("Inquiry storage failed:", error.message);
-        else saved = true;
-      } catch (error) { console.error("Inquiry storage error:", error.message); }
-    }
-    return Response.json({ ok: true, saved });
-  } catch { return Response.json({ error: "Unable to process this request." }, { status: 400 }); }
+import {clean,validEmail,validDate,language,deliverInquiry} from '../../../lib/inquiryDelivery';
+export const runtime='nodejs';
+export async function POST(request){
+ try {
+  const b=await request.json();
+  if(clean(b.website))return Response.json({ok:true,saved:true});
+  const name=clean(b.name,100),email=clean(b.email,180),vehicle=clean(b.vehicle,100);
+  if(name.length<2||!validEmail(email)||b.consent!==true)return Response.json({error:'Please enter your name, valid email and consent.'},{status:400});
+  const row={name,email,vehicle,language:language(b.lang),consent:true,status:'new',source:'tour-builder'};
+  if(b.custom===true){
+   const start=clean(b.start_date,10),end=clean(b.end_date,10),travelers=Number(b.travelers);
+   const destinations=Array.isArray(b.destinations)?b.destinations.slice(0,30).map(v=>clean(v,100)).filter(Boolean):[];
+   if(!validDate(start)||(end&&(!validDate(end)||end<start))||!Number.isInteger(travelers)||travelers<1||travelers>40||!destinations.length)return Response.json({error:'Please check dates, destinations and travelers.'},{status:400});
+   Object.assign(row,{phone:clean(b.phone,100),start_date:start,end_date:end||null,travelers,destinations,budget:clean(b.budget,100),interests:clean(b.interests)});
+  } else {
+   const tour=clean(b.tour,200),message=clean(b.message);
+   if(!tour||!message)return Response.json({error:'Please choose a service and enter a message.'},{status:400});
+   Object.assign(row,{destinations:[tour],interests:`Dates/group: ${clean(b.dates,180)}\n${message}`});
+  }
+  return await deliverInquiry(row);
+ } catch {return Response.json({error:'Unable to process request.'},{status:400});}
 }

@@ -1,0 +1,12 @@
+Upload the nine source files in this ZIP at their existing paths. Do not upload this instruction file unless desired.
+Vercel project Settings > Environment Variables (Production and Preview as needed):
+NEXT_PUBLIC_SUPABASE_URL = existing Supabase URL
+SUPABASE_SERVICE_ROLE_KEY = existing server-only service role key (never NEXT_PUBLIC)
+RESEND_API_KEY = Resend sending API key
+CONTACT_FROM_EMAIL = an address on a verified Resend sending domain, e.g. VIPToursGeorgia <bookings@your-verified-domain>
+CONTACT_TO_EMAIL = SubTravelGeorgia@gmail.com (optional; default is this address)
+Verify the sending domain in Resend and add the exact DNS records it provides at your DNS provider. Do not remove existing MX records. Redeploy after environment changes.
+No SQL migration needed for the schema bundled in your ZIP. Existing schema permits en/ru/he only in inquiries; Georgian requests therefore store en as fallback. Existing contact consent check now satisfied.
+Test each form with your own email; check Admin > Inquiries, owner inbox, customer inbox, and Resend logs. If notification fails, the inquiry should still be stored. Resend acceptance is not proof of inbox delivery.
+Direct WhatsApp links outside the forms remain direct links; they cannot automatically create inquiries without collecting customer information. Customer acknowledgement is in English. No durable retry queue or CAPTCHA included; configure rate limiting on public inquiry API endpoints before marketing at scale.
+SEO: submit https://viptravelgeorgia.com/sitemap.xml in Google Search Console; inspect /en/transfers and /en/transfers/batumi-to-tbilisi. Existing route publication and direction flags control sitemap inclusion. No indexing or ranking guarantees.

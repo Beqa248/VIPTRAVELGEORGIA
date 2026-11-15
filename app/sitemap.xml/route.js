@@ -37,6 +37,8 @@ async function publishedUpdateDates(table, key) {
 
 function sitemapHints(path) {
   if (path === "/" || path === "") return { changefreq: "weekly", priority: "1.0" };
+  if (path === "/transfers") return { changefreq: "weekly", priority: "0.9" };
+  if (path.startsWith("/transfers/")) return { changefreq: "weekly", priority: "0.8" };
   if (path === "/tours") return { changefreq: "weekly", priority: "0.9" };
   if (path.startsWith("/tour/")) return { changefreq: "monthly", priority: "0.8" };
   if (path.startsWith("/regions/")) return { changefreq: "monthly", priority: "0.7" };
@@ -53,7 +55,7 @@ export async function GET(request) {
   ]);
 
   const paths = new Map(INDEXABLE_PAGE_PATHS.map(path => [path, null]));
-  for(const route of await getTransfers()) for(const d of ["from","to"]) if(d==="from"?route.allow_from:route.allow_to) paths.set("/transfers/"+transferSlug(route,d),null);
+  for(const route of await getTransfers()) for(const d of ["from","to"]) if(VALID_SLUG.test(route.slug)&&(d==="from"?route.allow_from:route.allow_to)) paths.set("/transfers/"+transferSlug(route,d),null);
   for (const tour of tours) {
     if (VALID_SLUG.test(tour.slug) && tour.slug !== "airport-transfers") {
       paths.set(getTourPath(tour), tourDates.get(tour.slug) || null);
