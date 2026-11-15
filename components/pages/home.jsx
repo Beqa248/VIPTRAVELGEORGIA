@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase";
 import { tourPriceLabel } from "../../lib/tourPricing";
+import TransferPage from "../TransferPage";
 import VehicleCards from "../VehicleCards";
 import CardPhoto from "../CardPhoto";
 import ContactForm from "../ContactForm";
@@ -10,7 +11,7 @@ import TripPlanner from "../TripPlanner";
 
 import ReviewsList from "../ReviewsList";
 import { useLanguage } from "../site-context";
-export default function Page() {
+export default function Page({transfers=[]}) {
     const { t } = useLanguage();
     const [homePrices,setHomePrices] = useState({});
     const [homeTours,setHomeTours]=useState(null);
@@ -42,7 +43,7 @@ export default function Page() {
       const merged=homeTours||[];
       return (homeTours===null?[]:merged).filter(x=>x.published===true && !x.archived&&!x.archived).sort((a,b)=>(a.sort_order??100)-(b.sort_order??100)).slice(0,6).map(tour=><a key={tour.slug} className="tile" href={tour.slug==="airport-transfers"?"/contact":tour.is_original&&!tour.itinerary&&!tour.gallery_images?.length?`/${tour.slug}`:`/tour/${tour.slug}`}>{tour.cover_url && <CardPhoto src={tour.cover_url} alt={tour.title} sizes="(max-width: 560px) calc(50vw - 24px), (max-width: 850px) 45vw, (max-width: 1200px) 30vw, 360px" />}<span>{tour.title}{homePrices[tour.slug]&&<small className="vtg-home-tour-price">{homePrices[tour.slug]}</small>}</span></a>);
     })()}</div><p style={{ "marginTop": "16px" }}><a className="btn" href="/tours" data-k="allTours">{t("allTours")}</a></p></div></section>
-    <div className="vtg-plan-band"><div className="vtg-plan-inner"><div className="vtg-plan-header"><span className="vtg-eyebrow">{t("journeyStart")}</span><h2>{t("planH")}</h2><p>{t("journeyIntro")}</p><div className="vtg-extras vtg-plan-actions"><a href="/planner">{t("aiPlanner")}</a><a href="/custom-tour">{t("buildTour")}</a><a href="/assistant">{t("travelAssistant")}</a></div></div><div className="vtg-plan-row"><TripPlanner hideIntro hideFootnote /><section className="howsec"><div className="wrap"><h2 data-k="howH">{t("howH")}</h2><div className="steps"><div className="step"><b>1</b><h3 data-k="how1t">{t("how1t")}</h3><p data-k="how1d">{t("how1d")}</p></div><div className="step"><b>2</b><h3 data-k="how2t">{t("how2t")}</h3><p data-k="how2d">{t("how2d")}</p></div><div className="step"><b>3</b><h3 data-k="how3t">{t("how3t")}</h3><p data-k="how3d">{t("how3d")}</p></div></div></div></section></div></div></div>
+    <TransferPage home routes={transfers}/><div className="vtg-plan-band"><div className="vtg-plan-inner"><div className="vtg-plan-header"><span className="vtg-eyebrow">{t("journeyStart")}</span><h2>{t("planH")}</h2><p>{t("journeyIntro")}</p><div className="vtg-extras vtg-plan-actions"><a href="/planner">{t("aiPlanner")}</a><a href="/custom-tour">{t("buildTour")}</a><a href="/assistant">{t("travelAssistant")}</a></div></div><div className="vtg-plan-row"><TripPlanner hideIntro hideFootnote /><section className="howsec"><div className="wrap"><h2 data-k="howH">{t("howH")}</h2><div className="steps"><div className="step"><b>1</b><h3 data-k="how1t">{t("how1t")}</h3><p data-k="how1d">{t("how1d")}</p></div><div className="step"><b>2</b><h3 data-k="how2t">{t("how2t")}</h3><p data-k="how2d">{t("how2d")}</p></div><div className="step"><b>3</b><h3 data-k="how3t">{t("how3t")}</h3><p data-k="how3d">{t("how3d")}</p></div></div></div></section></div></div></div>
     <div className="vtg-about-row"><section id="hGuide"><div className="wrap guide"><div><div className="vtg-guide-title"><div className="gbadge" id="gbadge">🚙</div><h2 data-k="guideH">{t("guideH")}</h2></div><p data-k="guideT" style={{ "maxWidth": "640px" }}>{t("guideT")}</p>
     <ul className="gl"><li data-k="factLang">{t("factLang")}</li><li data-k="guideCar">{t("guideCar")}</li><li data-k="factPrivate">{t("factPrivate")}</li><li data-k="factStart">{t("factStart")}</li></ul>
     <div className="vtg-guide-actions"><a className="btn" href="/reviews" data-k="guideRev">{t("guideRev")}</a><a className="btn vtg-recent-tours-btn" href="/recent-tours">See Recent Tours</a></div></div></div></section>

@@ -1,0 +1,7 @@
+1. Run SUPABASE_TRANSFERS.sql in Supabase SQL Editor. It relies on existing is_site_admin().
+2. Upload all app/, components/, lib/ files in this ZIP preserving paths. Do not upload SQL to public/.
+3. Deploy on Vercel. Open /en/transfers and Admin > Transfers.
+4. Verify route prices, set vehicle-specific prices and cover image URLs. No images are supplied.
+5. Test WhatsApp and email inquiry. Email uses existing /api/contact and requires existing Resend configuration. Admin inquiry persistence requires service-role configuration. No payment is collected; deposit is arranged after confirmation.
+6. Test language and currency selectors, archived routes, sitemap and winter dates.
+Notes: reverse prices initialized equal to outbound, editable; standard price is a starting estimate, not availability. Vehicle-specific prices are blank until configured. No real-time availability or automatic payment. Winter date ranges recur annually. Tetnuldi winter starting quote $320. Existing logo/domain unchanged.

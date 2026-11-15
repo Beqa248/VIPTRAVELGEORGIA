@@ -12,6 +12,7 @@ import styles from "./SiteHeader.module.css";
 const nav = [
   ["/", "nHome"],
   ["/tours", "nTours"],
+  ["/transfers", "nTransfers"],
   ["/travel", "nTravel"],
   ["/cars", "nCars"],
   ["/videos", "nVid"],
@@ -97,7 +98,7 @@ export default function SiteHeader() {
         <div className={styles.navInner}>
           <ul className={styles.links}>
             {nav.map(([url, key]) => {
-              const current = path === url;
+              const current = path === url || (url === "/transfers" && path.startsWith("/transfers/"));
               return (
                 <li key={url}>
                   <Link href={href(url)} aria-current={current ? "page" : undefined} onClick={close}>

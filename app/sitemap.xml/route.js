@@ -1,3 +1,5 @@
+import {getTransfers} from "../../lib/transfers";
+import {transferSlug} from "../../lib/transferPricing";
 import { getPublishedRegionIds, getPublishedTourRoutes, getPublicDb } from "../../lib/publicContent";
 import { localizedPath } from "../../lib/localizedPath";
 import { INDEXABLE_PAGE_PATHS, SEO_LANGS, SITE_URL, alternateUrls } from "../../lib/seo";
@@ -51,6 +53,7 @@ export async function GET(request) {
   ]);
 
   const paths = new Map(INDEXABLE_PAGE_PATHS.map(path => [path, null]));
+  for(const route of await getTransfers()) for(const d of ["from","to"]) if(d==="from"?route.allow_from:route.allow_to) paths.set("/transfers/"+transferSlug(route,d),null);
   for (const tour of tours) {
     if (VALID_SLUG.test(tour.slug) && tour.slug !== "airport-transfers") {
       paths.set(getTourPath(tour), tourDates.get(tour.slug) || null);

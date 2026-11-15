@@ -1,15 +1,1 @@
-VIPTravelGeorgia - low-risk image caching patch
-
-Replace only next.config.mjs in the repository root, commit and deploy on Vercel.
-
-Changes:
-- Increase cache lifetime for static /images/* files and logo from 7 days to 30 days.
-- Set Next.js optimized image minimum cache TTL to 30 days.
-- Keep existing image domains, formats and page structure unchanged.
-
-Important:
-- This mainly improves repeat-visit caching. It does not guarantee a higher
-  Lighthouse score or fix the first-load LCP delay.
-- For any static image whose URL is unchanged, the browser may continue showing
-  an older version until cache expiration. Rename the image file when replacing it.
-- Lighthouse mobile scores naturally fluctuate; compare 3-5 runs after deploy.
+Apply after the original Transfers patch. Replace components/TransfersAdmin.jsx. No additional SQL needed if SUPABASE_TRANSFERS.sql was already applied. Test add, edit, archive, restore and delete using a temporary route. Do not rerun the original seed SQL after deleting default routes, as it can recreate them. Live deployment not tested.

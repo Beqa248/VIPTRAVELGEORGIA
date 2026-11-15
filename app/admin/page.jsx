@@ -3,12 +3,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase as client } from "../../lib/supabase";
 import styles from "./dashboard.module.css";
+import TransfersAdmin from "../../components/TransfersAdmin";
 import RegionsAdmin from "./regions/page";
 import InquiriesAdmin from "./inquiries/page";
 import TourPhotosAdmin from "./tour-photos/page";
 
 const tabs = [
   { id: "vehicles", label: "Cars", icon: "🚙" },
+  { id: "transfers", label: "Transfers", icon: "↔" },
   { id: "videos", label: "Videos", icon: "▶" },
   { id: "recent_tours", label: "Recent Tours", icon: "🏔" },
   { id: "reviews", label: "Guest Reviews", icon: "★" },
@@ -292,7 +294,8 @@ export default function Admin() {
           <div style={{ display: tab === "regions" ? "block" : "none" }}><RegionsAdmin embedded /></div>
           <div style={{ display: tab === "inquiries" ? "block" : "none" }}><InquiriesAdmin embedded /></div>
           <div style={{ display: tab === "tour_photos" ? "block" : "none" }}><TourPhotosAdmin embedded /></div>
-          {!["regions", "inquiries", "tour_photos"].includes(tab) && <div className={styles.content}>
+          {tab === "transfers" && <TransfersAdmin />}
+          {!["regions", "inquiries", "tour_photos", "transfers"].includes(tab) && <div className={styles.content}>
             <div className={styles.headingRow}>
               <div><div className={styles.eyebrow}>WEBSITE MANAGEMENT</div><h1>{sectionTitle}</h1><p>Manage content, photographs and visibility from one place.</p></div>
               {<button type="button" className={styles.primary} onClick={() => formOpen ? (setFormOpen(false), setEditing(null), setSelectedFiles({})) : openForm()}>{formOpen ? "× Close editor" : `＋ Add ${tab === "vehicles" ? "vehicle" : tab === "videos" ? "video" : tab === "reviews" ? "review" : "tour"}`}</button>}
