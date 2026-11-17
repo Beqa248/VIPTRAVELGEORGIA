@@ -184,12 +184,16 @@ export default function Admin() {
         payload = { title: String(f.get("title") || "").trim(), description: String(f.get("description") || ""), video_url: video, cover_url: cover, published: f.get("published") === "on" };
         if (!editing) payload.sort_order = Math.max(0, ...rows.map(item => Number(item.sort_order) || 0)) + 1;
       } else {
+        const startDate = f.get("tour_date") || null;
+        const endDate = f.get("tour_end_date") || null;
+        if (endDate && (!startDate || endDate < startDate)) throw Error("Enter a start date on or before the end date.");
         const images = await upload(f.getAll("images"), "image");
         const videos = await upload(f.getAll("recent_videos"), "video");
         const cover = (await upload(f.getAll("recent_cover"), "image"))[0] || editing?.cover_url || images[0] || null;
         payload = {
           title: String(f.get("title") || "").trim(), description: String(f.get("description") || ""),
-          tour_date: f.get("tour_date") || null,
+          tour_date: startDate,
+          tour_end_date: endDate,
           images: [...(editing?.images || []).filter(url => !removed.includes(url)), ...images],
           cover_url: cover,
           video_urls: [...(editing?.video_urls || []).filter(url => !removed.includes(url)), ...videos],
@@ -344,7 +348,9 @@ export default function Admin() {
                       ))}
                     </div>
                   </fieldset>}
-                  {tab === "recent_tours" && <label className={styles.formField}>Tour date<input type="date" name="tour_date" defaultValue={editing?.tour_date || ""}/></label>}
+                  {tab === "recent_tours" && <label className={styles.formField}>Start date (optional)<input type="date" name="tour_date" autoComplete="off" defaultValue={editing?.tour_date || ""}/></label>}
+                  {tab === "recent_tours" && <label className={styles.formField}>End date (optional)<input type="date" name="tour_end_date" autoComplete="off" defaultValue={editing?.tour_end_date || ""}/></label>}
+                  {tab === "recent_tours" && <small className={styles.fullWidth}>Leave both blank for undated photos, or enter only a start date for a day trip. Enter both for a multi-day trip.</small>}
                   <label className={`${styles.formField} ${styles.fullWidth}`}>Description<textarea name="description" rows="3" defaultValue={editing?.description || ""} placeholder="Add a short description…"/></label>
                 </div>
                 <div className={styles.uploadGrid}>
@@ -373,7 +379,7 @@ export default function Admin() {
                   <div className={styles.itemPhoto}>{photo ? <img src={photo} alt={row.name || row.title || "Content thumbnail"}/> : <span>{tab === "vehicles" ? "🚙" : tab === "videos" ? "▶" : tab === "reviews" ? "★" : "🏔"}</span>}</div>
                   <div className={styles.itemDetails}><div className={styles.itemTop}><h3>{row.name || row.title || "Guest review"}</h3><span className={`${styles.status} ${visible ? styles.statusOn : styles.statusOff}`}>{visible ? (tab === "reviews" ? "Approved" : "Published") : (tab === "reviews" ? "Pending" : "Hidden")}</span></div>
                     {tab === "reviews" && <p className={styles.reviewText}>{"★".repeat(Math.max(0, Math.min(5, Number(row.rating) || 0)))} · {row.country || ""} · {row.text || ""}</p>}
-                    {tab === "reviews" && <small className={styles.meta}>{row.source || "Website"}{row.tour ? ` · ${row.tour}` : ""}{row.review_date ? ` · ${row.review_date}` : ""}</small>}{row.description && <p className={styles.description}>{row.description}</p>}{tab === "recent_tours" && <small className={styles.meta}>{row.tour_date || "No tour date"} · {(row.images || []).length} photos · {(row.video_urls || []).length} videos</small>}
+                    {tab === "reviews" && <small className={styles.meta}>{row.source || "Website"}{row.tour ? ` · ${row.tour}` : ""}{row.review_date ? ` · ${row.review_date}` : ""}</small>}{row.description && <p className={styles.description}>{row.description}</p>}{tab === "recent_tours" && <small className={styles.meta}>{row.tour_date ? (row.tour_end_date && row.tour_end_date !== row.tour_date ? `${row.tour_date} – ${row.tour_end_date}` : row.tour_date) : "No tour date"} · {(row.images || []).length} photos · {(row.video_urls || []).length} videos</small>}
                     {tab === "vehicles" && <small className={styles.meta}>Position {actualIndex + 1} · {row.passengers || 0} passengers · {(row.images || []).length} photos · {(row.video_urls || []).length} videos</small>}
                     <div className={styles.itemActions}>
                       {tab === "reviews" ? <><button type="button" className={styles.secondary} disabled={busy} onClick={() => openForm(row)}>✎ Edit review</button><button type="button" className={styles.secondary} disabled={busy} onClick={() => change(row.id, { approved: !row.approved })}>{row.approved ? "◉ Hide" : "✓ Approve"}</button></>
