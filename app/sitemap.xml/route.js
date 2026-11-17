@@ -1,3 +1,4 @@
+import {getLandingPages,ready} from "../../lib/landingPages";
 import {getTransfers} from "../../lib/transfers";
 import {transferSlug} from "../../lib/transferPricing";
 import { getPublishedRegionIds, getPublishedTourRoutes, getPublicDb } from "../../lib/publicContent";
@@ -95,6 +96,13 @@ export async function GET(request) {
   }
 
   const urls = [];
+  for (const row of await getLandingPages()) {
+    const path = "/experiences/"+row.slug;
+    const langs = SEO_LANGS.filter(l=>ready(row,l));
+    const alternatives = langs.map(l=>`    <xhtml:link rel="alternate" hreflang="${l}" href="${escapeXml(SITE_URL+localizedPath(l,path))}" />`);
+    if(langs.includes("en")) alternatives.push(`    <xhtml:link rel="alternate" hreflang="x-default" href="${escapeXml(SITE_URL+localizedPath("en",path))}" />`);
+    for(const l of langs) urls.push(["  <url>",`    <loc>${escapeXml(SITE_URL+localizedPath(l,path))}</loc>`, ...(validDate(row.updated_at)?[`    <lastmod>${validDate(row.updated_at)}</lastmod>`]:[]),...alternatives,"  </url>"].join("\n"));
+  }
   for (const [path, lastmod] of paths) {
     const { changefreq, priority } = sitemapHints(path);
     const alternatives = alternateUrls(path);
