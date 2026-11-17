@@ -77,7 +77,7 @@ export async function GET(request) {
   if (view === "tree" || (view !== "xml" && isBrowserNavigation)) {
     return new Response(
       renderSitemapTree({
-        entries: [...paths],
+        entries: [...paths, ...(await getLandingPages()).filter(r=>SEO_LANGS.some(l=>ready(r,l))).map(r=>["/experiences/"+r.slug,validDate(r.updated_at),SEO_LANGS.filter(l=>ready(r,l))])],
         siteUrl: SITE_URL,
         langs: SEO_LANGS,
         localizedPath,
