@@ -16,11 +16,12 @@ const translations = {
 };
 
 function VehicleCard({ car, labels }) {
+  const { lang } = useLanguage();
   const [expanded, setExpanded] = useState(false);
   const hasAc = car.air_conditioning === true;
   return (
     <article className="vtg-modern-car-card">
-      <Link className="vtg-modern-car-photo" href={`/cars?car=${encodeURIComponent(car.name)}`} aria-label={car.name}>
+      <Link className="vtg-modern-car-photo" href={`/${lang}/cars?car=${encodeURIComponent(car.name)}`} aria-label={car.name}>
         {car.images?.[0] ? (isOptimizablePhoto(car.images[0]) ? (
           <Image src={car.images[0]} alt={car.name} width={480} height={360}
             sizes="(max-width: 600px) 85vw, (max-width: 1100px) 45vw, 320px"
@@ -30,7 +31,7 @@ function VehicleCard({ car, labels }) {
         )) : <span className="vtg-modern-car-fallback">{carIcon(car.name)}</span>}
       </Link>
       <div className="vtg-modern-car-body">
-        <Link className="vtg-modern-car-title" href={`/cars?car=${encodeURIComponent(car.name)}`}>{car.name}</Link>
+        <Link className="vtg-modern-car-title" href={`/${lang}/cars?car=${encodeURIComponent(car.name)}`}>{car.name}</Link>
         <p className="vtg-modern-car-summary"><span aria-hidden="true">♙</span> {labels.passengers}: {Number(car.passengers) || 0}</p>
         <button type="button" className="vtg-modern-car-toggle" aria-expanded={expanded} onClick={() => setExpanded(v => !v)}>
           <span>{labels.details}</span><span className={`vtg-modern-car-chevron ${expanded ? "open" : ""}`} aria-hidden="true">⌄</span>

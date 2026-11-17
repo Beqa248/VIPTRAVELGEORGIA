@@ -1,10 +1,11 @@
 "use client";
+import LocalizedAnchor from "../LocalizedAnchor";
 import { useLanguage } from "../site-context";
 export default function Page() {
     const { t } = useLanguage();
     return (<>
     <div className="" data-p="svaneti">
-    <div className="banner" style={{ "backgroundImage": "url(images/photo-025.jpg)" }}><div className="wrap"><a className="bk" href="/tours" data-k="back">{t("back")}</a><div><h1 data-k="t4">{t("t4")}</h1><p className="sub" data-k="d4">{t("d4")}</p></div></div></div>
+    <div className="banner" style={{ "backgroundImage": "url(images/photo-025.jpg)" }}><div className="wrap"><LocalizedAnchor className="bk" href="/tours" data-k="back">{t("back")}</LocalizedAnchor><div><h1 data-k="t4">{t("t4")}</h1><p className="sub" data-k="d4">{t("d4")}</p></div></div></div>
     <section style={{ "paddingTop": "30px" }}><div className="wrap"><div className="gal soft" id="gal4">
     <img src="/images/photo-026.jpg" alt="Alpine lake reflecting the Svaneti peaks" loading="lazy"/>
     <img src="/images/photo-027.jpg" alt="Green valley and river below snowy peaks" loading="lazy"/>

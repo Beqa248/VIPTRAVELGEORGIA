@@ -1,6 +1,8 @@
 "use client";
+import LocalizedAnchor from "./LocalizedAnchor";
 import { useMemo, useState } from "react";
 import { useLanguage } from "./site-context";
+import { localizedPath } from "../lib/localizedPath";
 import usePublishedTours from "./usePublishedTours";
 import styles from "./TripPlanner.module.css";
 
@@ -32,7 +34,7 @@ function classify(tour) {
 }
 function tourHref(tour) { return tour.slug === "airport-transfers" ? "/contact" : `/tour/${encodeURIComponent(tour.slug)}`; }
 export default function TripPlanner({ hideIntro = false, hideFootnote = false }) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [days, setDays] = useState(3);
   const [people, setPeople] = useState(2);
   const [interests, setInterests] = useState([]);
@@ -50,7 +52,7 @@ export default function TripPlanner({ hideIntro = false, hideFootnote = false })
   const customText = `Hello! I would like a custom Georgia itinerary for ${days} day${days === 1 ? "" : "s"}, ${people} traveler${people === 1 ? "" : "s"}. Interests: ${options.filter(o => interests.includes(o.key)).map(o => o.label).join(", ") || "open to suggestions"}. Please recommend a route and price.`;
   const whatsapp = `https://wa.me/995558176108?text=${encodeURIComponent(customText)}`;
   return <section id="hPlan" className={styles.section}><div className="wrap">
-    {!hideIntro && <div className="vtg-plan-head"><div className={styles.intro}><span className={styles.eyebrow}>YOUR JOURNEY STARTS HERE</span><h2>{t("planH")}</h2><p>Tell us what you love. Discover private tours that fit your journey in Georgia.</p></div><div className="vtg-extras vtg-plan-actions"><a href="/planner">✨ AI Travel Planner</a><a href="/custom-tour">Build a custom tour</a><a href="/assistant">Travel Assistant</a></div></div>}
+    {!hideIntro && <div className="vtg-plan-head"><div className={styles.intro}><span className={styles.eyebrow}>YOUR JOURNEY STARTS HERE</span><h2>{t("planH")}</h2><p>Tell us what you love. Discover private tours that fit your journey in Georgia.</p></div><div className="vtg-extras vtg-plan-actions"><LocalizedAnchor href="/planner">✨ AI Travel Planner</LocalizedAnchor><LocalizedAnchor href="/custom-tour">Build a custom tour</LocalizedAnchor><LocalizedAnchor href="/assistant">Travel Assistant</LocalizedAnchor></div></div>}
     <div className={styles.panel}>
       <div className={styles.fields}>
         <label className={styles.field}><span>▦ &nbsp;{t("planDays")}</span><select value={days} onChange={e => { setDays(Number(e.target.value)); setSearched(false); }}>{Array.from({length:14},(_,i)=><option key={i+1} value={i+1}>{i+1} {i===0?"day":"days"}</option>)}</select></label>
@@ -59,7 +61,7 @@ export default function TripPlanner({ hideIntro = false, hideFootnote = false })
       <div className={styles.rule}/><h3>{t("planInt")}</h3><p className={styles.hint}>Select as many as you like</p>
       <div className={styles.interests}>{options.map((o,i)=><button key={o.key} type="button" className={`${styles.interest} ${interests.includes(o.key)?styles.selected:""}`} aria-pressed={interests.includes(o.key)} onClick={()=>toggle(o.key)}><span className={styles.interestTop}><span className={styles.emoji}>{o.icon}</span><span className={styles.check}>{interests.includes(o.key)?"✓":"○"}</span></span><span>{t(`pi${i+1}`) || o.label}</span></button>)}</div>
       <button className={styles.discover} type="button" onClick={()=>setSearched(true)} disabled={loading}>{loading ? "Loading tours…" : t("planBtn")} <span>→</span></button>
-      {searched && <div className={styles.results} aria-live="polite"><h3>{matches.length?"Recommended trips for you":"Let's create your perfect route"}</h3><p className={styles.hint}>{loadError?"Tour recommendations are temporarily unavailable. You can still request a custom itinerary.":matches.length?"Explore current published tours that match your interests, or request a personalized itinerary.":"No published tour currently matches your selected interests and trip duration. You can request a custom itinerary."}</p>{matches.length>0&&<div className={styles.resultGrid}>{matches.map(tour=><a key={tour.slug} href={tourHref(tour)} className={styles.result}>{tour.cover_url?<img src={tour.cover_url} alt={tour.title} loading="lazy"/>:<div className={styles.resultPlaceholder}>Explore Georgia</div>}<span><strong>{tour.title}</strong><small>{tour.duration} {tour.duration===1?"day":"days"} · View tour details →</small></span></a>)}</div>}<div className={styles.custom}><div><strong>Want something more personal?</strong><p>Get a route tailored to your dates, group, and interests.</p></div><div className={styles.customActions}><a href={`/custom-tour?days=${days}&travelers=${people}&interests=${encodeURIComponent(options.filter(o=>interests.includes(o.key)).map(o=>o.label).join(", "))}`} className={styles.customLink}>Build custom itinerary →</a><a href={whatsapp} target="_blank" rel="noopener noreferrer" className={styles.whatsapp}>Ask on WhatsApp</a></div></div></div>}
+      {searched && <div className={styles.results} aria-live="polite"><h3>{matches.length?"Recommended trips for you":"Let's create your perfect route"}</h3><p className={styles.hint}>{loadError?"Tour recommendations are temporarily unavailable. You can still request a custom itinerary.":matches.length?"Explore current published tours that match your interests, or request a personalized itinerary.":"No published tour currently matches your selected interests and trip duration. You can request a custom itinerary."}</p>{matches.length>0&&<div className={styles.resultGrid}>{matches.map(tour=><a key={tour.slug} href={localizedPath(lang, tourHref(tour))} className={styles.result}>{tour.cover_url?<img src={tour.cover_url} alt={tour.title} loading="lazy"/>:<div className={styles.resultPlaceholder}>Explore Georgia</div>}<span><strong>{tour.title}</strong><small>{tour.duration} {tour.duration===1?"day":"days"} · View tour details →</small></span></a>)}</div>}<div className={styles.custom}><div><strong>Want something more personal?</strong><p>Get a route tailored to your dates, group, and interests.</p></div><div className={styles.customActions}><a href={`/${lang}/custom-tour?days=${days}&travelers=${people}&interests=${encodeURIComponent(options.filter(o=>interests.includes(o.key)).map(o=>o.label).join(", "))}`} className={styles.customLink}>Build custom itinerary →</a><a href={whatsapp} target="_blank" rel="noopener noreferrer" className={styles.whatsapp}>Ask on WhatsApp</a></div></div></div>}
     </div>{!hideFootnote && <p className={styles.footnote}>✓ Private tours &nbsp; · &nbsp; ✓ Flexible itineraries &nbsp; · &nbsp; ✓ Local driver-guide</p>}
   </div></section>;
 }

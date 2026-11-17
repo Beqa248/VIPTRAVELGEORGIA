@@ -1,4 +1,5 @@
 "use client";
+import LocalizedAnchor from "./LocalizedAnchor";
 import TranslatedText from "./TranslatedText";
 import CardPhoto from "./CardPhoto";
 import {useEffect,useState} from "react";
@@ -14,6 +15,6 @@ export default function RegionTiles(){
  const title=r.title||(r.titleKey?t(r.titleKey):r.slug);
  const url=r.image_url||r.image||"/images/photo-027.jpg";
  const href=r.id?`/regions/${r.id}`:(r.link_url||r.href||"/tours");
- return <div key={r.id||r.slug} className="vtg-highlight-item"><a className="rtile" style={{alignItems:"stretch",justifyContent:"flex-end",textAlign:"center",containerType:"inline-size",padding:"12px 10px 20px"}} href={href}><CardPhoto src={url} sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 360px" /><TranslatedText as="div" text={title} className="vtg-region-heading" style={{position:"relative",zIndex:2,display:"block",width:"100%",boxSizing:"border-box",padding:"0 4px",margin:0,color:"#fff",fontFamily:"Arial,Helvetica,sans-serif",fontSize:`clamp(12px, ${Math.min(9, 145 / Math.max(String(title).length, 8)).toFixed(2)}cqw, 34px)`,fontWeight:650,lineHeight:1.15,letterSpacing:"-0.02em",textAlign:"center",whiteSpace:"nowrap",overflowWrap:"normal",textShadow:"0 3px 12px rgba(0,0,0,.9)"}}/></a></div>
+ return <div key={r.id||r.slug} className="vtg-highlight-item"><LocalizedAnchor className="rtile" style={{alignItems:"stretch",justifyContent:"flex-end",textAlign:"center",containerType:"inline-size",padding:"12px 10px 20px"}} href={href}><CardPhoto src={url} sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 360px" /><TranslatedText as="div" text={title} className="vtg-region-heading" style={{position:"relative",zIndex:2,display:"block",width:"100%",boxSizing:"border-box",padding:"0 4px",margin:0,color:"#fff",fontFamily:"Arial,Helvetica,sans-serif",fontSize:`clamp(12px, ${Math.min(9, 145 / Math.max(String(title).length, 8)).toFixed(2)}cqw, 34px)`,fontWeight:650,lineHeight:1.15,letterSpacing:"-0.02em",textAlign:"center",whiteSpace:"nowrap",overflowWrap:"normal",textShadow:"0 3px 12px rgba(0,0,0,.9)"}}/></LocalizedAnchor></div>
  })}</div>
 }

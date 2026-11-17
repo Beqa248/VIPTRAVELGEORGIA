@@ -1,0 +1,1 @@
+Replace files preserving paths. No SQL required. Existing locale redirects and noindex booking pages retained. After deploying inspect /en and the /en/tour/... URL, test live and request indexing for canonical pages. Search Console may retain intentional redirects.

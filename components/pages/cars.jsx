@@ -106,7 +106,7 @@ const cars = [...rows].sort(
               <p>
                 <a
                   className="btn"
-                  href={`/contact?vehicle=${encodeURIComponent(
+                  href={`/${lang}/contact?vehicle=${encodeURIComponent(
                     car.name
                   )}`}
                 >
