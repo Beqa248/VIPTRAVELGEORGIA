@@ -23,6 +23,43 @@ const tabs = [
 const allowedImages = ["image/jpeg", "image/png", "image/webp"];
 const allowedVideos = ["video/mp4", "video/webm", "video/quicktime"];
 
+const VIDEO_LIMIT = 50 * 1000 * 1000;
+const PHOTO_LIMIT = 6 * 1000 * 1000;
+
+async function compressPhoto(file) {
+  const url = URL.createObjectURL(file);
+  try {
+    const image = new Image();
+    image.src = url;
+    await image.decode();
+    const scale = Math.min(1, 1920 / Math.max(image.naturalWidth, image.naturalHeight));
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+    canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw Error("Image processing unavailable.");
+    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+    let blob;
+    for (const quality of [0.85, 0.78, 0.70, 0.62]) {
+      blob = await new Promise(resolve => canvas.toBlob(resolve, "image/webp", quality));
+      if (!blob) throw Error("Image encoding failed.");
+      if (blob.type !== "image/webp") {
+        if (file.size <= PHOTO_LIMIT) return file;
+        throw Error("WebP compression unavailable in this browser.");
+      }
+      if (blob.size <= 600000) break;
+    }
+    if (blob.size > PHOTO_LIMIT) throw Error("Compressed image exceeds 6 MB.");
+    if (scale === 1 && file.size <= blob.size && file.size <= PHOTO_LIMIT) return file;
+    return new File([blob], file.name.replace(/\.[^.]+$/, "") + ".webp", { type: blob.type });
+  } finally { URL.revokeObjectURL(url); }
+}
+
+function validateMedia(file, video) {
+  if (!(video ? allowedVideos : allowedImages).includes(file.type)) throw Error(`${file.name}: unsupported file format.`);
+  if (video && file.size > VIDEO_LIMIT) throw Error(`${file.name}: exceeds 50 MB. Compress the video before uploading.`);
+}
+
 function PhotoPicker({ name, multiple = false, label, help, onSelected }) {
   return (
     <label className={styles.uploadBox}>
@@ -128,18 +165,17 @@ export default function Admin() {
 
   async function upload(files, kind) {
     const urls = [];
-    for (const file of Array.from(files || []).filter(f => f?.size)) {
+    for (const original of Array.from(files || []).filter(f => f?.size)) {
       const video = kind === "video";
-      const types = video ? allowedVideos : allowedImages;
-      const limit = video ? 100 * 1024 * 1024 : 6 * 1024 * 1024;
-      if (!types.includes(file.type) || file.size > limit) {
-        throw Error(video ? "Use MP4/WebM/MOV videos up to 100 MB." : "Use JPG/PNG/WebP images up to 6 MB.");
-      }
-      const bucket = video ? "tour-videos" : "tour-media";
-      const name = `${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "")}`;
-      const { error: uploadError } = await client.storage.from(bucket).upload(name, file, { upsert: false, contentType: file.type, ...(video ? {} : { cacheControl: "86400" }) });
-      if (uploadError) throw uploadError;
-      urls.push(client.storage.from(bucket).getPublicUrl(name).data.publicUrl);
+      try {
+        validateMedia(original, video);
+        const file = video ? original : await compressPhoto(original);
+        const bucket = video ? "tour-videos" : "tour-media";
+        const name = `${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "")}`;
+        const { error: uploadError } = await client.storage.from(bucket).upload(name, file, { upsert: false, contentType: file.type, ...(video ? {} : { cacheControl: "86400" }) });
+        if (uploadError) throw uploadError;
+        urls.push(client.storage.from(bucket).getPublicUrl(name).data.publicUrl);
+      } catch (err) { throw Error(`${original.name}: ${err.message || "Upload failed"}`); }
     }
     return urls;
   }
@@ -150,6 +186,10 @@ export default function Admin() {
     const form = e.currentTarget;
     const f = new FormData(form);
     try {
+      // Reject oversized videos before uploading any photos.
+      for (const key of ["video", "recent_videos"]) {
+        for (const file of f.getAll(key).filter(file => file?.size)) validateMedia(file, true);
+      }
       let payload;
       if (tab === "reviews") {
         payload = {
@@ -354,8 +394,8 @@ export default function Admin() {
                   <label className={`${styles.formField} ${styles.fullWidth}`}>Description<textarea name="description" rows="3" defaultValue={editing?.description || ""} placeholder="Add a short description…"/></label>
                 </div>
                 <div className={styles.uploadGrid}>
-                  {tab === "videos" ? <><PhotoPicker name="video" label="Upload video" help="MP4, WebM or MOV · up to 100 MB" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/><PhotoPicker name="cover" label="Cover photograph" help="JPG, PNG or WebP · up to 6 MB" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/></>
-                  : tab === "recent_tours" ? <><PhotoPicker name="recent_cover" label="Cover photo" help="Main card image · JPG/PNG/WebP · 6 MB" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/><PhotoPicker name="images" multiple label="Tour photographs" help="Multiple JPG, PNG or WebP · 6 MB each" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/><PhotoPicker name="recent_videos" multiple label="Tour videos" help="Multiple MP4, WebM or MOV · up to 100 MB each" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/></> : <PhotoPicker name="images" multiple label="Add photographs" help="Select multiple JPG, PNG or WebP files · 6 MB each" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/>}
+                  {tab === "videos" ? <><PhotoPicker name="video" label="Upload video" help="MP4, WebM or MOV · up to 50 MB" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/><PhotoPicker name="cover" label="Cover photograph" help="JPG, PNG or WebP · auto-compressed" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/></>
+                  : tab === "recent_tours" ? <><PhotoPicker name="recent_cover" label="Cover photo" help="Main card image · JPG/PNG/WebP · auto-compressed" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/><PhotoPicker name="images" multiple label="Tour photographs" help="Multiple JPG, PNG or WebP · auto-compressed" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/><PhotoPicker name="recent_videos" multiple label="Tour videos" help="Multiple MP4, WebM or MOV · up to 50 MB each" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/></> : <PhotoPicker name="images" multiple label="Add photographs" help="Select multiple JPG, PNG or WebP files · auto-compressed" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/>}
                 </div>
                 {Object.values(selectedFiles).flat().length > 0 && <p className={styles.fileNote}>✓ Selected: {Object.values(selectedFiles).flat().map(f => f.name).join(", ")}</p>}
                 {editing?.video_url && tab === "videos" && <video controls className={styles.videoPreview} src={editing.video_url}/>}
