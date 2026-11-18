@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase as client } from "../../lib/supabase";
+import { compressVideo } from "../../lib/compressVideo";
 import styles from "./dashboard.module.css";
 import LandingAdmin from "../../components/LandingAdmin";
 import TransfersAdmin from "../../components/TransfersAdmin";
@@ -57,7 +58,7 @@ async function compressPhoto(file) {
 
 function validateMedia(file, video) {
   if (!(video ? allowedVideos : allowedImages).includes(file.type)) throw Error(`${file.name}: unsupported file format.`);
-  if (video && file.size > VIDEO_LIMIT) throw Error(`${file.name}: exceeds 50 MB. Compress the video before uploading.`);
+
 }
 
 function PhotoPicker({ name, multiple = false, label, help, onSelected }) {
@@ -163,13 +164,15 @@ export default function Admin() {
     setBusy(false);
   }
 
-  async function upload(files, kind) {
+  async function upload(files, kind, prepared = null) {
     const urls = [];
     for (const original of Array.from(files || []).filter(f => f?.size)) {
       const video = kind === "video";
       try {
         validateMedia(original, video);
-        const file = video ? original : await compressPhoto(original);
+        const file = video ? (prepared?.get(original) || await compressVideo(original, pct => setNotice(`Compressing ${original.name}: ${pct}%`))) : await compressPhoto(original);
+        if (video && file.size > VIDEO_LIMIT) throw Error("Video exceeds 50 MB after compression.");
+        setNotice(`Uploading ${original.name}…`);
         const bucket = video ? "tour-videos" : "tour-media";
         const name = `${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "")}`;
         const { error: uploadError } = await client.storage.from(bucket).upload(name, file, { upsert: false, contentType: file.type, ...(video ? {} : { cacheControl: "86400" }) });
@@ -186,9 +189,12 @@ export default function Admin() {
     const form = e.currentTarget;
     const f = new FormData(form);
     try {
-      // Reject oversized videos before uploading any photos.
+      // Prepare videos before uploading any photos.
+      const prepared = new Map();
       for (const key of ["video", "recent_videos"]) {
-        for (const file of f.getAll(key).filter(file => file?.size)) validateMedia(file, true);
+        for (const file of f.getAll(key).filter(file => file?.size)) {
+          try { validateMedia(file, true); setNotice(`Preparing ${file.name}…`); prepared.set(file, await compressVideo(file, pct => setNotice(`Compressing ${file.name}: ${pct}%`))); } catch (err) { throw Error(`${file.name}: ${err.message}`); }
+        }
       }
       let payload;
       if (tab === "reviews") {
@@ -218,7 +224,7 @@ export default function Admin() {
         };
         if (!editing) payload.sort_order = Math.max(0, ...rows.map(car => Number(car.sort_order) || 0)) + 1;
       } else if (tab === "videos") {
-        const video = (await upload(f.getAll("video"), "video"))[0] || editing?.video_url;
+        const video = (await upload(f.getAll("video"), "video", prepared))[0] || editing?.video_url;
         const cover = (await upload(f.getAll("cover"), "image"))[0] || editing?.cover_url || null;
         if (!video) throw Error("Select a video file.");
         payload = { title: String(f.get("title") || "").trim(), description: String(f.get("description") || ""), video_url: video, cover_url: cover, published: f.get("published") === "on" };
@@ -228,7 +234,7 @@ export default function Admin() {
         const endDate = f.get("tour_end_date") || null;
         if (endDate && (!startDate || endDate < startDate)) throw Error("Enter a start date on or before the end date.");
         const images = await upload(f.getAll("images"), "image");
-        const videos = await upload(f.getAll("recent_videos"), "video");
+        const videos = await upload(f.getAll("recent_videos"), "video", prepared);
         const cover = (await upload(f.getAll("recent_cover"), "image"))[0] || editing?.cover_url || images[0] || null;
         payload = {
           title: String(f.get("title") || "").trim(), description: String(f.get("description") || ""),
@@ -248,7 +254,7 @@ export default function Admin() {
       setEditing(null); setFormOpen(false); setRemoved([]); setSelectedFiles({});
       setNotice("Saved successfully. Your changes are now in Supabase.");
       await refresh(tab);
-    } catch (saveError) { setError(saveError.message || "Could not save."); }
+    } catch (saveError) { setNotice(""); setError(saveError.message || "Could not save."); }
     finally { setBusy(false); }
   }
 
@@ -345,7 +351,7 @@ export default function Admin() {
           {!["regions", "inquiries", "tour_photos", "transfers", "landing"].includes(tab) && <div className={styles.content}>
             <div className={styles.headingRow}>
               <div><div className={styles.eyebrow}>WEBSITE MANAGEMENT</div><h1>{sectionTitle}</h1><p>Manage content, photographs and visibility from one place.</p></div>
-              {<button type="button" className={styles.primary} onClick={() => formOpen ? (setFormOpen(false), setEditing(null), setSelectedFiles({})) : openForm()}>{formOpen ? "× Close editor" : `＋ Add ${tab === "vehicles" ? "vehicle" : tab === "videos" ? "video" : tab === "reviews" ? "review" : "tour"}`}</button>}
+              {<button type="button" className={styles.primary} disabled={busy} onClick={() => formOpen ? (setFormOpen(false), setEditing(null), setSelectedFiles({})) : openForm()}>{formOpen ? "× Close editor" : `＋ Add ${tab === "vehicles" ? "vehicle" : tab === "videos" ? "video" : tab === "reviews" ? "review" : "tour"}`}</button>}
             </div>
             <div className={styles.stats}>
               <div className={styles.stat}><small>Total {sectionTitle.toLowerCase()}</small><strong>{rows.length}</strong></div>
@@ -355,7 +361,7 @@ export default function Admin() {
             {error && <div role="alert" className={styles.error}>{error}</div>}
             {notice && <div role="status" className={styles.notice}>✓ {notice}</div>}
             {formOpen && <section ref={formRef} className={styles.editor}>
-              <div className={styles.editorHeader}><div><h2>{editing ? "Edit" : "Add new"} {tab === "vehicles" ? "vehicle" : tab === "videos" ? "video" : tab === "reviews" ? "guest review" : "recent tour"}</h2><p>Changes are saved to your existing Supabase database.</p></div><button type="button" className={styles.iconButton} aria-label="Close editor" onClick={() => { setFormOpen(false); setEditing(null); }}>×</button></div>
+              <div className={styles.editorHeader}><div><h2>{editing ? "Edit" : "Add new"} {tab === "vehicles" ? "vehicle" : tab === "videos" ? "video" : tab === "reviews" ? "guest review" : "recent tour"}</h2><p>Changes are saved to your existing Supabase database.</p></div><button type="button" className={styles.iconButton} disabled={busy} aria-label="Close editor" onClick={() => { setFormOpen(false); setEditing(null); }}>×</button></div>
               <form key={`${tab}-${editing?.id || "new"}`} onSubmit={save}>
                 {tab === "reviews" ? <>
                   <div className={styles.formGrid}>
@@ -368,7 +374,7 @@ export default function Admin() {
                     <label className={styles.formField}>Original language<select name="language" defaultValue={editing?.language || "en"}><option value="en">English</option><option value="ru">Russian</option><option value="he">Hebrew</option></select></label>
                     <label className={`${styles.formField} ${styles.fullWidth}`}>Guest review<textarea name="text" required minLength={10} maxLength={1500} rows={6} defaultValue={editing?.text || ""} placeholder="Paste the review exactly as the guest wrote it…"/></label>
                   </div>
-                  <div className={styles.formActions}><label className={styles.publishToggle}><input type="checkbox" name="approved" defaultChecked={editing?.approved ?? true}/> Publish on website</label><div className={styles.actionButtons}><button type="button" className={styles.secondary} onClick={() => { setFormOpen(false); setEditing(null); }}>Cancel</button><button className={styles.primary} type="submit" disabled={busy}>{busy ? "Saving…" : editing ? "Save review" : "Publish review"}</button></div></div>
+                  <div className={styles.formActions}><label className={styles.publishToggle}><input type="checkbox" name="approved" defaultChecked={editing?.approved ?? true}/> Publish on website</label><div className={styles.actionButtons}><button type="button" className={styles.secondary} disabled={busy} onClick={() => { setFormOpen(false); setEditing(null); }}>Cancel</button><button className={styles.primary} type="submit" disabled={busy}>{busy ? "Saving…" : editing ? "Save review" : "Publish review"}</button></div></div>
                 </> : <>
                 <div className={styles.formGrid}>
                   <label className={styles.formField}>{tab === "vehicles" ? "Vehicle name" : "Title"}<input type="text" name={tab === "vehicles" ? "name" : "title"} defaultValue={editing?.name || editing?.title || ""} required placeholder={tab === "vehicles" ? "e.g. Subaru Crosstrek 4x4" : "Enter a title"}/></label>
@@ -394,15 +400,15 @@ export default function Admin() {
                   <label className={`${styles.formField} ${styles.fullWidth}`}>Description<textarea name="description" rows="3" defaultValue={editing?.description || ""} placeholder="Add a short description…"/></label>
                 </div>
                 <div className={styles.uploadGrid}>
-                  {tab === "videos" ? <><PhotoPicker name="video" label="Upload video" help="MP4, WebM or MOV · up to 50 MB" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/><PhotoPicker name="cover" label="Cover photograph" help="JPG, PNG or WebP · auto-compressed" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/></>
-                  : tab === "recent_tours" ? <><PhotoPicker name="recent_cover" label="Cover photo" help="Main card image · JPG/PNG/WebP · auto-compressed" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/><PhotoPicker name="images" multiple label="Tour photographs" help="Multiple JPG, PNG or WebP · auto-compressed" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/><PhotoPicker name="recent_videos" multiple label="Tour videos" help="Multiple MP4, WebM or MOV · up to 50 MB each" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/></> : <PhotoPicker name="images" multiple label="Add photographs" help="Select multiple JPG, PNG or WebP files · auto-compressed" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/>}
+                  {tab === "videos" ? <><PhotoPicker name="video" label="Upload video" help="MP4, WebM or MOV · auto-compressed to fit 50 MB" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/><PhotoPicker name="cover" label="Cover photograph" help="JPG, PNG or WebP · auto-compressed" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/></>
+                  : tab === "recent_tours" ? <><PhotoPicker name="recent_cover" label="Cover photo" help="Main card image · JPG/PNG/WebP · auto-compressed" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/><PhotoPicker name="images" multiple label="Tour photographs" help="Multiple JPG, PNG or WebP · auto-compressed" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/><PhotoPicker name="recent_videos" multiple label="Tour videos" help="Multiple MP4, WebM or MOV · auto-compressed to fit 50 MB each" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/></> : <PhotoPicker name="images" multiple label="Add photographs" help="Select multiple JPG, PNG or WebP files · auto-compressed" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/>}
                 </div>
                 {Object.values(selectedFiles).flat().length > 0 && <p className={styles.fileNote}>✓ Selected: {Object.values(selectedFiles).flat().map(f => f.name).join(", ")}</p>}
                 {editing?.video_url && tab === "videos" && <video controls className={styles.videoPreview} src={editing.video_url}/>}
                 {tab === "recent_tours" && editing?.cover_url && <div className={styles.existingPhotos}><div className={styles.photoTile}><img src={editing.cover_url} alt="Current cover photo"/></div></div>}
                 {tab === "recent_tours" && editing?.video_urls?.length > 0 && <><h3 className={styles.subheading}>Current videos <small>Tick videos to remove when saving</small></h3><div className={styles.existingPhotos}>{editing.video_urls.map(url => <label key={url} className={styles.photoTile}><video src={url} controls preload="metadata" style={{width:"100%",maxHeight:170}}/><span><input type="checkbox" checked={removed.includes(url)} onChange={e => setRemoved(old => e.target.checked ? [...old,url] : old.filter(item => item !== url))}/> Remove</span></label>)}</div></>}
                 {tab !== "videos" && editing?.images?.length > 0 && <><h3 className={styles.subheading}>Current photographs <small>Tick photos to remove when saving</small></h3><div className={styles.existingPhotos}>{editing.images.map((url, index) => <label key={`${url}-${index}`} className={`${styles.photoTile} ${removed.includes(url) ? styles.photoRemoved : ""}`}><img src={url} alt={`Photo ${index + 1}`} /><span><input type="checkbox" checked={removed.includes(url)} onChange={e => setRemoved(old => e.target.checked ? [...old, url] : old.filter(item => item !== url))}/> Remove</span></label>)}</div></>}
-                <div className={styles.formActions}><label className={styles.publishToggle}><input type="checkbox" name="published" defaultChecked={editing?.published ?? true}/> Published on website</label><div className={styles.actionButtons}><button type="button" className={styles.secondary} onClick={() => { setFormOpen(false); setEditing(null); setRemoved([]); }}>Cancel</button><button type="submit" className={styles.primary} disabled={busy}>{busy ? "Saving / uploading…" : editing ? "Save changes" : "Create content"}</button></div></div>
+                <div className={styles.formActions}><label className={styles.publishToggle}><input type="checkbox" name="published" defaultChecked={editing?.published ?? true}/> Published on website</label><div className={styles.actionButtons}><button type="button" className={styles.secondary} disabled={busy} onClick={() => { setFormOpen(false); setEditing(null); setRemoved([]); }}>Cancel</button><button type="submit" className={styles.primary} disabled={busy}>{busy ? "Saving / uploading…" : editing ? "Save changes" : "Create content"}</button></div></div>
                 </>}
               </form>
             </section>}
