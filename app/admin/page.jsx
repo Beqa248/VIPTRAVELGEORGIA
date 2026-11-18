@@ -72,7 +72,7 @@ function PhotoPicker({ name, multiple = false, label, help, onSelected, clearAft
   );
 }
 
-function GalleryThumbnail({item,index}) {
+function GalleryThumbnail({item,index,video=false}) {
   const [preview,setPreview] = useState(null);
   useEffect(()=>{
     if (!item.file) return;
@@ -81,7 +81,7 @@ function GalleryThumbnail({item,index}) {
     return ()=>URL.revokeObjectURL(url);
   },[item.file]);
   const src = item.url || preview;
-  return src ? <img src={src} alt={`Gallery photo ${index+1}`} style={{width:"100%",aspectRatio:"4 / 3",objectFit:"cover",borderRadius:6}}/> : null;
+  return src ? video ? <video src={src} controls playsInline preload="metadata" style={{width:"100%",aspectRatio:"16 / 9",objectFit:"cover",borderRadius:6}}/> : <img src={src} alt={`Gallery photo ${index+1}`} style={{width:"100%",aspectRatio:"4 / 3",objectFit:"cover",borderRadius:6}}/> : null;
 }
 
 export default function Admin() {
@@ -104,6 +104,13 @@ export default function Admin() {
   }
   function selectGallery(name, files) {
     setGalleryOrder(old => [...old, ...files.map(file => ({ id: crypto.randomUUID(), file }))]);
+  }
+  const [videoOrder, setVideoOrder] = useState([]);
+  function moveVideo(index, direction) {
+    setVideoOrder(old => { const next = [...old]; const target = index + direction; if (target < 0 || target >= next.length) return old; [next[index], next[target]] = [next[target], next[index]]; return next; });
+  }
+  function selectVideos(name, files) {
+    setVideoOrder(old => [...old, ...files.map(file => ({ id: crypto.randomUUID(), file }))]);
   }
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
@@ -210,8 +217,8 @@ export default function Admin() {
     try {
       // Prepare videos before uploading any photos.
       const prepared = new Map();
-      for (const key of ["video", "recent_videos"]) {
-        for (const file of f.getAll(key).filter(file => file?.size)) {
+      for (const files of [f.getAll("video"), tab === "recent_tours" ? videoOrder.map(item => item.file) : []]) {
+        for (const file of files.filter(file => file?.size)) {
           try { validateMedia(file, true); setNotice(`Preparing ${file.name}…`); prepared.set(file, await compressVideo(file, pct => setNotice(`Compressing ${file.name}: ${pct}%`))); } catch (err) { throw Error(`${file.name}: ${err.message}`); }
         }
       }
@@ -257,7 +264,11 @@ export default function Admin() {
           if (item.url) images.push(item.url);
           else images.push(...await upload([item.file], "image"));
         }
-        const videos = await upload(f.getAll("recent_videos"), "video", prepared);
+        const videos = [];
+        for (const item of videoOrder) {
+          if (item.url) videos.push(item.url);
+          else videos.push(...await upload([item.file], "video", prepared));
+        }
         const cover = (await upload(f.getAll("recent_cover"), "image"))[0] || editing?.cover_url || images[0] || null;
         payload = {
           title: String(f.get("title") || "").trim(), description: String(f.get("description") || ""),
@@ -265,7 +276,7 @@ export default function Admin() {
           tour_end_date: endDate,
           images,
           cover_url: cover,
-          video_urls: [...(editing?.video_urls || []).filter(url => !removed.includes(url)), ...videos],
+          video_urls: videos,
           published: f.get("published") === "on",
         };
         if (!payload.images.length && !payload.cover_url && !payload.video_urls.length) throw Error("Add a cover photo, tour photograph, or video.");
@@ -320,6 +331,7 @@ export default function Admin() {
   }
 
   function openForm(row = null) {
+    setVideoOrder((row?.video_urls || []).map(url => ({ id: crypto.randomUUID(), url })));
     setGalleryOrder((row?.images || []).map(url => ({ id: crypto.randomUUID(), url }))); setEditing(row); setRemoved([]); setSelectedFiles({}); setError(""); setNotice(""); setFormOpen(true);
     requestAnimationFrame(() => formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
   }
@@ -424,7 +436,7 @@ export default function Admin() {
                 </div>
                 <div className={styles.uploadGrid}>
                   {tab === "videos" ? <><PhotoPicker name="video" label="Upload video" help="MP4, WebM or MOV · auto-compressed to fit 50 MB" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/><PhotoPicker name="cover" label="Cover photograph" help="JPG, PNG or WebP · auto-compressed" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/></>
-                  : tab === "recent_tours" ? <><PhotoPicker name="recent_cover" label="Cover photo" help="Main card image · JPG/PNG/WebP · auto-compressed" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/><PhotoPicker name="images" multiple label="Tour photographs" help="Multiple JPG, PNG or WebP · auto-compressed" clearAfterSelect onSelected={selectGallery}/><PhotoPicker name="recent_videos" multiple label="Tour videos" help="Multiple MP4, WebM or MOV · auto-compressed to fit 50 MB each" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/></> : <PhotoPicker name="images" multiple label="Add photographs" help="Select multiple JPG, PNG or WebP files · auto-compressed" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/>}
+                  : tab === "recent_tours" ? <><PhotoPicker name="recent_cover" label="Cover photo" help="Main card image · JPG/PNG/WebP · auto-compressed" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/><PhotoPicker name="images" multiple label="Tour photographs" help="Multiple JPG, PNG or WebP · auto-compressed" clearAfterSelect onSelected={selectGallery}/><PhotoPicker name="recent_videos" multiple label="Tour videos" help="Multiple MP4, WebM or MOV · auto-compressed to fit 50 MB each" clearAfterSelect onSelected={selectVideos}/></> : <PhotoPicker name="images" multiple label="Add photographs" help="Select multiple JPG, PNG or WebP files · auto-compressed" onSelected={(name, files) => setSelectedFiles(prev => ({ ...prev, [name]: files }))}/>}
                 </div>
                 {Object.values(selectedFiles).flat().length > 0 && <p className={styles.fileNote}>✓ Selected: {Object.values(selectedFiles).flat().map(f => f.name).join(", ")}</p>}
                 {editing?.video_url && tab === "videos" && <video controls className={styles.videoPreview} src={editing.video_url}/>}
@@ -443,7 +455,20 @@ export default function Admin() {
                   </div>
                 </>}
                 {tab === "recent_tours" && editing?.cover_url && <div className={styles.existingPhotos}><div className={styles.photoTile}><img src={editing.cover_url} alt="Current cover photo"/></div></div>}
-                {tab === "recent_tours" && editing?.video_urls?.length > 0 && <><h3 className={styles.subheading}>Current videos <small>Tick videos to remove when saving</small></h3><div className={styles.existingPhotos}>{editing.video_urls.map(url => <label key={url} className={styles.photoTile}><video src={url} controls preload="metadata" style={{width:"100%",maxHeight:170}}/><span><input type="checkbox" checked={removed.includes(url)} onChange={e => setRemoved(old => e.target.checked ? [...old,url] : old.filter(item => item !== url))}/> Remove</span></label>)}</div></>}
+                {tab === "recent_tours" && videoOrder.length > 0 && <>
+                  <h3 className={styles.subheading}>Video order <small>Use arrows, then Save changes. </small></h3>
+                  <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(130px,1fr))",gap:12}}>
+                    {videoOrder.map((item,index) => <div key={item.id} style={{border:"1px solid #cfdbd3",borderRadius:10,padding:8,minWidth:0}}>
+                      <GalleryThumbnail video item={item} index={index}/>
+                      <small style={{display:"block",overflowWrap:"anywhere"}}>{index+1}. {item.file ? item.file.name : "Uploaded video"}</small>
+                      <div style={{display:"flex",gap:5,marginTop:8}}>
+                        <button type="button" className={styles.moveButton} disabled={busy || index===0} onClick={()=>moveVideo(index,-1)} aria-label={`Move video ${index+1} up`}>↑</button>
+                        <button type="button" className={styles.moveButton} disabled={busy || index===videoOrder.length-1} onClick={()=>moveVideo(index,1)} aria-label={`Move video ${index+1} down`}>↓</button>
+                        <button type="button" className={styles.moveButton} disabled={busy} onClick={()=>setVideoOrder(old=>old.filter(video=>video.id!==item.id))} aria-label={`Remove video ${index+1}`}>×</button>
+                      </div>
+                    </div>)}
+                  </div>
+                </>}
                 {tab !== "videos" && tab !== "recent_tours" && editing?.images?.length > 0 && <><h3 className={styles.subheading}>Current photographs <small>Tick photos to remove when saving</small></h3><div className={styles.existingPhotos}>{editing.images.map((url, index) => <label key={`${url}-${index}`} className={`${styles.photoTile} ${removed.includes(url) ? styles.photoRemoved : ""}`}><img src={url} alt={`Photo ${index + 1}`} /><span><input type="checkbox" checked={removed.includes(url)} onChange={e => setRemoved(old => e.target.checked ? [...old, url] : old.filter(item => item !== url))}/> Remove</span></label>)}</div></>}
                 <div className={styles.formActions}><label className={styles.publishToggle}><input type="checkbox" name="published" defaultChecked={editing?.published ?? true}/> Published on website</label><div className={styles.actionButtons}><button type="button" className={styles.secondary} disabled={busy} onClick={() => { setFormOpen(false); setEditing(null); setRemoved([]); }}>Cancel</button><button type="submit" className={styles.primary} disabled={busy}>{busy ? "Saving / uploading…" : editing ? "Save changes" : "Create content"}</button></div></div>
                 </>}
