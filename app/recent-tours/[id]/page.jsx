@@ -22,6 +22,6 @@ export default async function Trip({params}){
  {cover&&<img className={styles.hero} src={cover} alt={row.title} decoding="async"/>}
  {row.description&&<p className={styles.story}><TranslatedText text={row.description}/></p>}
  {photos.length>0&&<div className={styles.gallery}><h2>{copy[2]}</h2><RegionGallery photos={photos} title={row.title} labels={{gallery:copy[2],openPhoto:copy[2],closePhoto:'×'}}/></div>}
- {!!row.video_urls?.length&&<div><h2>{copy[3]}</h2><div className={styles.videos}>{row.video_urls.map((url,i)=><video key={i} controls playsInline preload="none" poster={cover||undefined} src={url}/>)}</div></div>}
+ {!!row.video_urls?.length&&<div><h2>{copy[3]}</h2><div className={styles.videos}>{row.video_urls.map((url,i)=><video key={i} controls playsInline preload="metadata" src={url}/>)}</div></div>}
  <Link className={styles.action} href={localizedPath(lang,'/custom-tour')}>{copy[4]} →</Link></article></main>;
 }

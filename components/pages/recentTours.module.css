@@ -15,7 +15,8 @@
 .story{white-space:pre-wrap;line-height:1.8;font-size:17px;margin:24px 0}
 .gallery,.videos{margin:24px 0}
 .videos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.videos video{width:100%;max-height:520px;background:#111;border-radius:12px}
+.videos{align-items:start;justify-items:stretch}
+.videos video{display:block;width:100%;height:auto;aspect-ratio:16/9;max-width:100%;max-height:none;object-fit:cover;object-position:center;border-radius:12px;background:transparent}
 @media(max-width:900px){.posts{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(max-width:600px){.posts,.videos{grid-template-columns:1fr}
