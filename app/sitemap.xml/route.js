@@ -1,3 +1,4 @@
+import {getRecentTours,recentPath} from "../../lib/recentTours";
 import {getLandingPages,ready} from "../../lib/landingPages";
 import {getTransfers} from "../../lib/transfers";
 import {transferSlug} from "../../lib/transferPricing";
@@ -56,6 +57,7 @@ export async function GET(request) {
   ]);
 
   const paths = new Map(INDEXABLE_PAGE_PATHS.map(path => [path, null]));
+  for (const trip of await getRecentTours()) paths.set(recentPath(trip.id),validDate(trip.updated_at || trip.created_at));
   for(const route of await getTransfers()) for(const d of ["from","to"]) if(VALID_SLUG.test(route.slug)&&(d==="from"?route.allow_from:route.allow_to)) paths.set("/transfers/"+transferSlug(route,d),null);
   for (const tour of tours) {
     if (VALID_SLUG.test(tour.slug) && tour.slug !== "airport-transfers") {
