@@ -24,3 +24,5 @@
 .shell .dashboard > .topbar .signOut {background:#245747!important;color:#fff!important;border:1px solid #9ab9aa!important;font-weight:700!important;opacity:1!important;}
 .shell .dashboard > .topbar .signOut:hover {background:#346e59!important;}
 .shell .dashboard > .topbar .signOut:focus-visible {outline:2px solid #c6e4d5;outline-offset:2px;}
+
+.shell .navActive,.shell .navActive:hover{background:#e6c69a!important;color:#173c35!important;border-color:#e6c69a!important}.shell .content .headingRow h1{margin:7px 0}.shell .dashboard{width:95%;max-width:1300px}.shell .content{width:100%;box-sizing:border-box}@media(max-width:620px){.shell .content{padding:24px 15px!important}}

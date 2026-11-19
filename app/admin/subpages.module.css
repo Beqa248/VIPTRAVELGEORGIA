@@ -20,3 +20,5 @@
   position: static !important;
   transform: none !important;
 }
+
+ .root{width:100%;min-width:0}.frame{width:100%;max-width:1300px;margin:auto}.embedded{width:100%}.nav{display:flex;gap:9px;flex-wrap:wrap;background:#173c35;padding:20px}.navLink{color:white;padding:10px;border:1px solid #78958b;border-radius:9px}.active{background:#e6c69a;color:#173c35}
