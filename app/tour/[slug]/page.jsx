@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import CurrencyTourPrice from "../../../components/CurrencyTourPrice";
 import TourSeoJsonLd from "../../../components/TourSeoJsonLd";
 import TranslatedText from "../../../components/TranslatedText";
@@ -67,6 +67,7 @@ export default async function CustomTourPage({ params }) {
   const { data: pricing } = await getPublicDb().from("tour_prices")
     .select("price_mode,price_amount,price_currency,price_unit").eq("slug", slug).maybeSingle();
   const lang = getLocale(requestHeaders.get("x-vtg-locale"));
+  if (getTourPath(tour) !== `/tour/${slug}`) permanentRedirect(localizedPath(lang, getTourPath(tour)));
   const labels = copy[lang];
   const savedItinerary = tour.translations?.[lang]?.itinerary?.trim();
   const parts = itineraryParts(savedItinerary || tour.itinerary);

@@ -1,0 +1,7 @@
+SEO UPDATE — install changed files at their original paths.
+1. Back up repository and database. Run SEO_REGION_TRANSLATIONS.sql in Supabase SQL editor BEFORE deploying. It adds a JSONB column only.
+2. Copy app/, components/ and lib/ over existing files, preserving paths. Commit and deploy.
+3. Admin > Regions: add reviewed Georgian, Russian and Hebrew title/description. Existing tours: fill saved title, description and itinerary translations. Pages with missing saved translations remain browsable with the existing client translation fallback but receive noindex and are omitted from sitemap/hreflang until completed. English is assumed to be source language. Legacy tours and recent trips retain existing policy.
+4. Check NEXT_PUBLIC_SITE_URL in production is https://viptravelgeorgia.com if that is your primary domain.
+5. Test /sitemap.xml?view=xml, a transfer, a region with/without translations and a tour with/without translations. Verify canonical, hreflang and robots in rendered HTML. Test booking and admin region save. Submit sitemap in Search Console after checks. Do not bulk request indexing of noindex pages.
+Notes: 18 seeded destinations have four-language planning notes; future routes use generic fallback. No invented distances, times or prices. Existing booking form logic is unchanged. No production access or installed Next dependencies; syntax and isolated helper checks only. Indexing is not guaranteed. Noindex can temporarily reduce indexed count; approve this policy before deployment if maintaining all indexed translations is more important.

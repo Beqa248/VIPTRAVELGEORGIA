@@ -28,7 +28,7 @@ export default function TransferPage({routes,vehicles=[],initialSlug='',initialD
  const destination=<select value={slug} onChange={e=>{setSlug(e.target.value);setBack('');setVehicle('');}}><option value="">{l[12]}</option>{list.map(r=><option key={r.slug} value={r.slug}>{routeName(r,lang)}</option>)}</select>;
  const batumi=<input value={batumiNames[lang]||'Batumi'} readOnly/>;
  return <div className={`${s.wrap} ${s.transferWide}`}><div className={s.bookingShell}>{!initialSlug&&<img className={s.panorama} src="/images/transfers-road-cover.webp" alt="Mountain road in Georgia"/>}<form className={s.booking} onSubmit={submit}>
- <div className={initialSlug?`${s.heading} ${s.routeHeading}`:s.heading}><h1>{initialSlug&&route?tripName(route,direction,lang):l[0]}</h1><p>{extra[5]}</p></div>
+ <div className={initialSlug?`${s.heading} ${s.routeHeading}`:s.heading}><h1>{initialSlug&&routes.find(r=>r.slug===initialSlug)?tripName(routes.find(r=>r.slug===initialSlug),initialDirection,lang):l[0]}</h1><p>{extra[5]}</p></div>
  <div className={s.toggle}>{['from','to'].map((d,i)=><button key={d} type="button" aria-pressed={direction===d} onClick={()=>{setDirection(d);if(route&&!(d==='from'?route.allow_from:route.allow_to))setSlug('');setBack('');setVehicle('');}}>{l[i+1]}</button>)}</div>
  <div className={s.bookingGrid}>
  <label className={s.field}>{extra[0]}{direction==='from'?batumi:destination}</label><label className={s.field}>{l[3]}{direction==='from'?destination:batumi}</label>{!route&&field('custom',l[12],'text',true)}

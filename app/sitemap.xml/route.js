@@ -2,9 +2,10 @@ import {getRecentTours,recentPath} from "../../lib/recentTours";
 import {getLandingPages,ready} from "../../lib/landingPages";
 import {getTransfers} from "../../lib/transfers";
 import {transferSlug} from "../../lib/transferPricing";
-import { getPublishedRegionIds, getPublishedTourRoutes, getPublicDb } from "../../lib/publicContent";
+import { getPublishedRegionIds, getPublishedTours, getPublishedRegion, getPublicDb } from "../../lib/publicContent";
 import { localizedPath } from "../../lib/localizedPath";
 import { INDEXABLE_PAGE_PATHS, SEO_LANGS, SITE_URL, alternateUrls } from "../../lib/seo";
+import { contentLocales, transferLocales } from "../../lib/contentLocales";
 import { getTourPath } from "../../lib/tourRoutes";
 import { renderSitemapTree } from "../../lib/sitemapTree.mjs";
 
@@ -50,22 +51,28 @@ function sitemapHints(path) {
 
 export async function GET(request) {
   const [tours, regionIds, tourDates, regionDates] = await Promise.all([
-    getPublishedTourRoutes(),
+    getPublishedTours(),
     getPublishedRegionIds(),
     publishedUpdateDates("custom_tours", "slug"),
     publishedUpdateDates("travel_regions", "id"),
   ]);
 
+  const languageSets = new Map();
   const paths = new Map(INDEXABLE_PAGE_PATHS.map(path => [path, null]));
   for (const trip of await getRecentTours()) paths.set(recentPath(trip.id),validDate(trip.updated_at || trip.created_at));
-  for(const route of await getTransfers()) for(const d of ["from","to"]) if(VALID_SLUG.test(route.slug)&&(d==="from"?route.allow_from:route.allow_to)) paths.set("/transfers/"+transferSlug(route,d),null);
-  for (const tour of tours) {
+  for(const route of await getTransfers()) for(const d of ["from","to"]) if(VALID_SLUG.test(route.slug)&&(d==="from"?route.allow_from:route.allow_to)) { const path="/transfers/"+transferSlug(route,d); paths.set(path,null); languageSets.set(path,transferLocales(route)); }
+  for (const tour of tours || []) {
     if (VALID_SLUG.test(tour.slug) && tour.slug !== "airport-transfers") {
-      paths.set(getTourPath(tour), tourDates.get(tour.slug) || null);
+      const path = getTourPath(tour);
+      paths.set(path, tourDates.get(tour.slug) || null);
+      if(path.startsWith("/tour/")) languageSets.set(path, contentLocales(tour,["title","description","itinerary"]));
     }
   }
-  for (const id of regionIds) {
-    paths.set(`/regions/${encodeURIComponent(id)}`, regionDates.get(String(id)) || null);
+  for (const region of await Promise.all(regionIds.map(getPublishedRegion))) {
+    if (!region) continue;
+    const path = `/regions/${encodeURIComponent(region.id)}`;
+    paths.set(path, regionDates.get(String(region.id)) || null);
+    languageSets.set(path, contentLocales(region));
   }
 
   // Browsers opening /sitemap.xml get a collapsible tree; crawlers get the XML.
@@ -79,7 +86,7 @@ export async function GET(request) {
   if (view === "tree" || (view !== "xml" && isBrowserNavigation)) {
     return new Response(
       renderSitemapTree({
-        entries: [...paths, ...(await getLandingPages()).filter(r=>SEO_LANGS.some(l=>ready(r,l))).map(r=>["/experiences/"+r.slug,validDate(r.updated_at),SEO_LANGS.filter(l=>ready(r,l))])],
+        entries: [...Array.from(paths, ([path,date])=>[path,date,languageSets.get(path)||SEO_LANGS]), ...(await getLandingPages()).filter(r=>SEO_LANGS.some(l=>ready(r,l))).map(r=>["/experiences/"+r.slug,validDate(r.updated_at),SEO_LANGS.filter(l=>ready(r,l))])],
         siteUrl: SITE_URL,
         langs: SEO_LANGS,
         localizedPath,
@@ -107,8 +114,9 @@ export async function GET(request) {
   }
   for (const [path, lastmod] of paths) {
     const { changefreq, priority } = sitemapHints(path);
-    const alternatives = alternateUrls(path);
-    for (const lang of SEO_LANGS) {
+    const langs = languageSets.get(path) || SEO_LANGS;
+    const alternatives = alternateUrls(path, langs);
+    for (const lang of langs) {
       const loc = SITE_URL + localizedPath(lang, path);
       const alternateTags = Object.entries(alternatives).map(([language, href]) =>
         `    <xhtml:link rel="alternate" hreflang="${escapeXml(language)}" href="${escapeXml(href)}" />`

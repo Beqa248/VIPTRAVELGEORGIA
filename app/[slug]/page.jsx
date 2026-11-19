@@ -57,7 +57,10 @@ export default async function DynamicPage({ params }) {
 
   const Page = pages[slug];
   if (!LEGACY_TOUR_SLUGS.includes(slug)) return <Page />;
-  if (!(await getPublishedTour(slug))) notFound();
+  const tour = await getPublishedTour(slug);
+  if (!tour) notFound();
+  const path = getTourPath(tour);
+  if (path !== `/${slug}`) permanentRedirect(localizedPath(getLocale((await headers()).get("x-vtg-locale")), path));
 
   return <><Page /><TourEditableContent slug={slug} /><TourMedia slug={slug} /></>;
 }

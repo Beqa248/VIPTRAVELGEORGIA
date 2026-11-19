@@ -35,8 +35,8 @@ export default async function RegionDetail({ params }) {
         {lang === "he" ? "→" : "←"} {back}
       </a>
       <div className={styles.body}>
-        <h1><TranslatedText text={region.title} /></h1>
-        {region.description && <p><TranslatedText text={region.description} /></p>}
+        <h1><TranslatedText text={region.title} translations={region.translations} field="title" /></h1>
+        {region.description && <p><TranslatedText text={region.description} translations={region.translations} field="description" /></p>}
         {photos.length > 0 && (
           <section>
             <h2>{gallery}</h2>
