@@ -5,3 +5,5 @@ SEO UPDATE — install changed files at their original paths.
 4. Check NEXT_PUBLIC_SITE_URL in production is https://viptravelgeorgia.com if that is your primary domain.
 5. Test /sitemap.xml?view=xml, a transfer, a region with/without translations and a tour with/without translations. Verify canonical, hreflang and robots in rendered HTML. Test booking and admin region save. Submit sitemap in Search Console after checks. Do not bulk request indexing of noindex pages.
 Notes: 18 seeded destinations have four-language planning notes; future routes use generic fallback. No invented distances, times or prices. Existing booking form logic is unchanged. No production access or installed Next dependencies; syntax and isolated helper checks only. Indexing is not guaranteed. Noindex can temporarily reduce indexed count; approve this policy before deployment if maintaining all indexed translations is more important.
+
+COMBINED PATCH: includes Grok legacy tour JSON-LD and guarded pricing queries. Original cookie-dependent middleware is retained (not included). If you already installed Grok middleware, restore the original middleware.js from your original project.

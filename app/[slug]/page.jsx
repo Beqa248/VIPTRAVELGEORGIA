@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { notFound, permanentRedirect } from "next/navigation";
 import TourMedia from "../../components/TourMedia";
 import TourEditableContent from "../../components/TourEditableContent";
+import TourSeoJsonLd from "../../components/TourSeoJsonLd";
 import Adjara from "../../components/pages/adjara";
 import Martvili from "../../components/pages/martvili";
 import Gomis from "../../components/pages/gomis";
@@ -16,7 +17,7 @@ import Highlights from "../../components/pages/highlights";
 import Plan from "../../components/pages/plan";
 import Videos from "../../components/pages/videos";
 import { localizedPath } from "../../lib/localizedPath";
-import { getPublishedTour } from "../../lib/publicContent";
+import { getPublicDb, getPublishedTour } from "../../lib/publicContent";
 import { NO_INDEX, getLocale, pageMetadata, tourMetadata } from "../../lib/seo";
 import { LEGACY_TOUR_SLUGS, getTourPath } from "../../lib/tourRoutes";
 
@@ -59,8 +60,24 @@ export default async function DynamicPage({ params }) {
   if (!LEGACY_TOUR_SLUGS.includes(slug)) return <Page />;
   const tour = await getPublishedTour(slug);
   if (!tour) notFound();
+  const lang = getLocale((await headers()).get("x-vtg-locale"));
   const path = getTourPath(tour);
-  if (path !== `/${slug}`) permanentRedirect(localizedPath(getLocale((await headers()).get("x-vtg-locale")), path));
+  if (path !== `/${slug}`) permanentRedirect(localizedPath(lang, path));
 
-  return <><Page /><TourEditableContent slug={slug} /><TourMedia slug={slug} /></>;
+  const db = getPublicDb();
+  const { data: pricing } = db
+    ? await db.from("tour_prices")
+        .select("price_mode,price_amount,price_currency,price_unit")
+        .eq("slug", slug)
+        .maybeSingle()
+    : { data: null };
+
+  return (
+    <>
+      <TourSeoJsonLd tour={tour} path={path} lang={lang} pricing={pricing} />
+      <Page />
+      <TourEditableContent slug={slug} />
+      <TourMedia slug={slug} />
+    </>
+  );
 }

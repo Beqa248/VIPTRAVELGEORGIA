@@ -64,8 +64,13 @@ export default async function CustomTourPage({ params }) {
   const tour = await getPublishedTour(slug);
   if (!tour) notFound();
 
-  const { data: pricing } = await getPublicDb().from("tour_prices")
-    .select("price_mode,price_amount,price_currency,price_unit").eq("slug", slug).maybeSingle();
+  const db = getPublicDb();
+  const { data: pricing } = db
+    ? await db.from("tour_prices")
+        .select("price_mode,price_amount,price_currency,price_unit")
+        .eq("slug", slug)
+        .maybeSingle()
+    : { data: null };
   const lang = getLocale(requestHeaders.get("x-vtg-locale"));
   if (getTourPath(tour) !== `/tour/${slug}`) permanentRedirect(localizedPath(lang, getTourPath(tour)));
   const labels = copy[lang];

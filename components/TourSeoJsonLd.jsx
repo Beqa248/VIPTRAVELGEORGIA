@@ -23,6 +23,7 @@ function absoluteImage(value) {
 }
 
 export default function TourSeoJsonLd({ tour, path, lang, pricing }) {
+  if (!tour) return null;
   const [homeLabel, toursLabel] = breadcrumbLabels[lang] || breadcrumbLabels.en;
   const title = clean(tour.translations?.[lang]?.title || tour.title);
   const description = clean(tour.translations?.[lang]?.description || tour.description);
