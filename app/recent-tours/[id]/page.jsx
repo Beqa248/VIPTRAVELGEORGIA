@@ -3,7 +3,7 @@ import {notFound} from 'next/navigation';
 import Link from 'next/link';
 import TranslatedText from '../../../components/TranslatedText';
 import RegionGallery from '../../regions/[id]/RegionGallery';
-import {getLocale,localizedMetadata,NO_INDEX} from '../../../lib/seo';
+import {getLocale,localizedMetadata,NO_INDEX,firstSocialImage} from '../../../lib/seo';
 import {localizedPath} from '../../../lib/localizedPath';
 import {getRecentTour,recentPath,tripDate,recentCopy} from '../../../lib/recentTours';
 import styles from '../../../components/pages/recentTours.module.css';
@@ -11,7 +11,7 @@ export const dynamic='force-dynamic';
 export async function generateMetadata({params}){
  const {id}=await params; const row=await getRecentTour(id); if(!row)return NO_INDEX;
  const lang=getLocale((await headers()).get('x-vtg-locale'));
- return localizedMetadata(recentPath(id),row.title,(row.description||row.title).replace(/\s+/g,' ').slice(0,160),row.cover_url||row.images?.[0],lang);
+ return localizedMetadata(recentPath(id),row.title,(row.description||row.title).replace(/\s+/g,' ').slice(0,160),firstSocialImage(row.cover_url,...(row.images||[])),lang);
 }
 export default async function Trip({params}){
  const {id}=await params; const row=await getRecentTour(id); if(!row)notFound();
