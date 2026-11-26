@@ -11,7 +11,7 @@ export const dynamic='force-dynamic';
 export async function generateMetadata({params}){
  const {id}=await params; const row=await getRecentTour(id); if(!row)return NO_INDEX;
  const lang=getLocale((await headers()).get('x-vtg-locale'));
- return localizedMetadata(recentPath(id),row.title,(row.description||row.title).replace(/\s+/g,' ').slice(0,160),firstSocialImage(row.cover_url,...(row.images||[])),lang);
+ return localizedMetadata(recentPath(id),row.title,(row.description||row.title).replace(/\s+/g,' ').slice(0,160),firstSocialImage(row.cover_url,...(row.images||[])),lang, ["en"]);
 }
 export default async function Trip({params}){
  const {id}=await params; const row=await getRecentTour(id); if(!row)notFound();

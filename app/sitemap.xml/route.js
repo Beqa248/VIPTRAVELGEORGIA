@@ -59,7 +59,11 @@ export async function GET(request) {
 
   const languageSets = new Map();
   const paths = new Map(INDEXABLE_PAGE_PATHS.map(path => [path, null]));
-  for (const trip of await getRecentTours()) paths.set(recentPath(trip.id),validDate(trip.updated_at || trip.created_at));
+  for (const trip of await getRecentTours()) {
+    const path = recentPath(trip.id);
+    paths.set(path, validDate(trip.updated_at || trip.created_at));
+    languageSets.set(path, ["en"]);
+  }
   for(const route of await getTransfers()) for(const d of ["from","to"]) if(VALID_SLUG.test(route.slug)&&(d==="from"?route.allow_from:route.allow_to)) { const path="/transfers/"+transferSlug(route,d); paths.set(path,null); languageSets.set(path,transferLocales(route)); }
   for (const tour of tours || []) {
     if (VALID_SLUG.test(tour.slug) && tour.slug !== "airport-transfers") {

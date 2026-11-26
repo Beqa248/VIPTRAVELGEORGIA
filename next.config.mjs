@@ -3,6 +3,8 @@ import { storageImagePatterns } from "./lib/imageSources.mjs";
 // Keep image optimizations and allow browser/CDN caches to retain
 // already-optimized image variants longer across repeat visits.
 const nextConfig = {
+  // Deliver metadata in the initial HTML head, including to Googlebot.
+  htmlLimitedBots: /.*/,
   images: {
     localPatterns: [{ pathname: "/images/**", search: "" }],
     remotePatterns: storageImagePatterns,
